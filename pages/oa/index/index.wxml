@@ -1,0 +1,31 @@
+<!--index.wxml-->
+<view id='other' style='padding-bottom:20rpx;'>
+  <swiper indicator-dots="true" autoplay="true"  interval="5000" indicator-active-color="#2089DC" circular="true">
+  <block wx:for="{{bannerUrl}}">
+      <swiper-item>
+      <image  src="{{item}}" style="width:100%;"></image>
+    </swiper-item>
+  </block>
+  </swiper>
+</view>
+
+
+<scroll-view scroll-y='true' bindscrolltolower="getMoreData"   bindscrolltoupper="getPreviousData"	bindscroll="onScroll" style='height: {{scrollHeight + "px"}}'>
+  <view class="news_info" wx:for="{{newsItems}}" data-id="{{index}}" wx:key="item.ID"  bindtap="getDetail">
+    <!--左边-->
+    <view class="left" >
+      <view class="news_title">{{item.DOCSUBJECT}}</view>
+      <view class="date_group">
+        <image class="date_image" src="/icon/shizhong.png" class="imagestyle" style='padding-left:30rpx;' />
+        <view class="date lightgray">{{item.DOCVALIDDATE}}</view>
+      </view> 
+    </view>
+      <!--右边-->
+      <view class="right" >
+        <view class="author blue">{{item.SUBCOMPANYNAME}}</view>
+      </view>
+  </view>
+  <view class="content-ending">{{remind}}</view>
+</scroll-view>
+
+

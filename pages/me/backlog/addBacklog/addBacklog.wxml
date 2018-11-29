@@ -1,0 +1,23 @@
+<view class='greyBackground'>
+  <view style='height:30rpx;background:#F6F6F6;'></view>
+  <view class='page'>
+    <view class='pageTop'>
+      <picker mode="multiSelector" value="{{dateTime}}" bindchange="changeDateTime" bindcolumnchange="changeDateTimeColumn" range="{{dateTimeArray}}">
+      <view style='display:flex;flex-direction:row'>
+        <image src='/image/clock.png' class='icon'></image>
+        <view class='timeText'>{{timeText}}</view>
+      </view>
+      </picker>
+    </view>
+    <textarea wx:if="{{!isview}}" class='textArea' placeholder='请输入吧^_^' minlength="{{min}}" maxlength="{{max}}" auto-focus='true' bindinput="inputs">
+      <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+    </textarea>
+    <textarea wx:if="{{isview}}" class='textArea' minlength="{{min}}" maxlength="{{max}}" auto-focus='true' bindinput="inputs" value='{{texts}}'>
+      <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+    </textarea>
+    <view style='display:flex;flex-direction:row'>
+    <button class='buttonClass' style='margin:30rpx 20rpx 0 50rpx;' bindtap='cancal' hover-class='bg_orange'>取消</button>
+    <button class='buttonClass' bindtap='save' hover-class='bg_orange'>保存</button>
+    </view>
+  </view>
+</view>

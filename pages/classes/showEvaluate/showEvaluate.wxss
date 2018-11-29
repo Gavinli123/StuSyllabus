@@ -1,0 +1,66 @@
+/* pages/classes/showEvaluate/showEvaluate.wxss */
+.page{
+  display: flex;
+  flex-direction: column;
+}
+.top{
+  height:400rpx;
+  width:100%;
+  background-color:#2d8cf0;
+  color:#fff;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+}
+.infoList{
+  font-size: 35rpx;
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  height: 100rpx;
+  margin-left:5%;
+  align-items: flex-start;
+  border-bottom: 1rpx solid #bfbfbf;
+}
+.icon{
+  width: 50rpx;
+  height: 50rpx;
+  padding: 20rpx ;
+}
+.star{
+  margin-top: 15rpx;
+  width:50rpx;
+  height: 50rpx;
+}
+.listText{
+  padding: 20rpx 30rpx 20rpx 20rpx;
+  color: #bfbfbf;
+  font-weight: bold;
+}
+.listContent{
+  color: #000;
+  padding: 20rpx 0rpx 20rpx 50rpx;
+}
+.change{
+  margin: 15rpx 0 0 150rpx;
+  padding-top:5rpx;
+  text-align: center;
+  width:105rpx;
+  height:70rpx;
+  border-radius: 30rpx;
+  color: #fff;
+  background: #ffcc00;
+}
+.tag_color{
+  width:120rpx;
+  height:60rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #fff;
+  border: 1rpx solid #FFF;
+  margin: 20rpx;
+  align-items: center;
+  text-align: center;
+  padding: 10rpx;
+}

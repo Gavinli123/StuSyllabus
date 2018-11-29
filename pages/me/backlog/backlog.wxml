@@ -1,0 +1,26 @@
+<view style='height:120rpx;width:95%;margin:30rpx 0 30rpx 2.5%;background:#fff;display:flex;flex-direction:row;align-items:center;' bindtap='addBacklog' >
+  <image src='../../../image/jiahao.png' style='width:50rpx;height:50rpx;padding:30rpx;'></image>
+  <text style='color:#ffcc00;font-size:35rpx;'>按一下新建</text>
+</view>
+<view wx:for="{{backlogList}}" >
+  <view style='height:150rpx;width:95%;margin:0 0 30rpx 2.5%;display:flex;flex-direction:row;align-items:center;background:#fff;' bindlongpress='longTap' data-id="{{item.id}}">
+  <image src="{{item.finished?'../../../image/fangkuangxuanzhong.png':'../../../image/fangkuang.png'}}" style='width:40rpx;height:40rpx;padding-left:30rpx;padding-right:30rpx;' bindtap='changeFinish' data-id="{{item.id}}"></image>
+  <view style='display:flex;flex-direction:column;width:70%;height:100%;'>
+  <text class="{{item.finished?'text_finish':'text'}}" data-id="{{item.id}}" bindtap='ToAddBacklog' >{{item.content}}</text>
+  <view>
+  <image src='/image/clock.png' class='icon'></image>
+  <text class='{{item.finished?"time_finish":"time"}}'>{{item.time}}</text>
+  </view>  
+  </view>
+  <image wx:if="{{showchoose}}" src="{{item.choose?'../../../image/yuangou.png':'../../../image/yuan.png'}}" style='width:40rpx;height:40rpx;padding-left:30rpx;' data-id="{{item.id}}" bindtap='changeChoose'></image>
+  </view>
+</view>
+
+<view wx:if="{{showchoose}}" style='position:fixed;bottom:0;height:100rpx;margin-top:30rpx;width:100%;background:#fff;display:flex:flex-direction:row;align-items:center;'>
+  <image src='../../../image/quxiao.png' style='width:80rpx;height:80rpx;padding-left:50rpx;padding-right:50rpx;'  bindtap='cancal'></image>
+  <image src='../../../image/shanchu.png' style='width:80rpx;height:80rpx;padding-left:155rpx;padding-right:155rpx;' bindtap='delete'>
+  </image>
+  <image src='{{allchoose?"../../../image/yuan_o.png":"../../../image/yuangou.png"}}' style='width:80rpx;height:80rpx;padding-left:50rpx;padding-right:50rpx;' bindtap='allchoose'>
+  </image>
+</view>
+

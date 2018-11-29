@@ -1,0 +1,103 @@
+.star-image {
+  position: absolute;
+  top: 150rpx;
+  width: 150rpx;
+  height: 150rpx;
+  src: "../../images/normal.png";
+}
+
+.item {
+  position: absolute;
+  top: 50rpx;
+  width: 75rpx;
+  height: 150rpx;
+}
+
+.textClass{
+  margin-top:75rpx;
+  align-items: center;
+  text-align: center;
+  font-size: 28rpx;
+  color: #bfbfbf;
+}
+
+.tarrow{
+  width:40rpx;
+  height:40rpx;
+}
+.tag_no{
+  width:100rpx;
+  height:60rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #bfbfbf;
+  border: 1rpx solid #bfbfbf;
+  margin: 20rpx;
+  align-items: center;
+  text-align: center;
+  padding: 10rpx;
+}
+.tag_color{
+  width:100rpx;
+  height:60rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #ffcc00;
+  border: 1rpx solid #ffcc00;
+  margin: 20rpx;
+  align-items: center;
+  text-align: center;
+  padding: 10rpx;
+}
+.class1{
+  width:100%;
+  height:auto;
+  margin-top:200rpx;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+  font-size:28rpx;
+}
+
+.conts{
+  width: 750rpx;
+  height: auto;
+  border: 1rpx soldi red;
+  margin-top: 30rpx;
+}
+.areas{
+  height:152rpx;
+  font-size: 30rpx;
+  text-indent: 28rpx;
+  border: 1rpx solid gainsboro;
+  padding-top: 30rpx;
+  margin: 0 auto;
+  overflow: hidden;   
+  position: relative; 
+}
+.currentWordNumber{
+  font-size: 28rpx;
+  color: gray;
+  position: absolute;
+  left: 500rpx;
+  top: -6rpx;
+}
+.hint{
+   font-size: 28rpx;
+   position: absolute;
+   top: 120rpx;
+   left: 30rpx;
+   color: #FF6600;
+}
+.button{
+  width:120rpx;
+  height:80rpx;
+  color: #ffcc00;
+  border: 1rpx solid #ffcc00;
+  background: transparent;
+  position: absolute;
+  top: 20rpx;
+  right: 30rpx;
+  font-size:28rpx;
+}

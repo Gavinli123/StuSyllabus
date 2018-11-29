@@ -1,0 +1,18 @@
+<!--pages/discover/manage/manage.wxml-->
+<view class='top'>
+    <view class='{{isSelected0?"selected":"normal"}}' bindtap='switchItem' data-item='0' hover-class='bg_grey'><text class='{{isSelected0?"border":""}}'>校园动态</text></view>
+    <view class='{{isSelected1?"selected":"normal"}}' bindtap='switchItem' data-item='1' hover-class='bg_grey'><text class='{{isSelected1?"border":""}}'>失物招领</text></view>
+    <view class='{{isSelected2?"selected":"normal"}}' bindtap='switchItem' data-item='2' hover-class='bg_grey'><text class='{{isSelected2?"border":""}}'>表白墙</text></view>
+</view>
+<block wx:for="{{showList}}" wx:key="*this">
+  <view class='listItem'>
+    <view class='left'>
+      <view class='title'>{{item.title}}</view>
+      <view wx:if="{{!isSelected2}}" class='mode'>模块：{{item.mode}}</view>
+      <view class='time'>11-14 14:54</view>
+    </view>
+    <view class='right'>
+    <image src='../../../image/bianji_cdcdcd.png' style='height:40rpx;width:40rpx;padding-top:50rpx;padding-left:70rpx;'></image>
+    </view>
+  </view>
+</block>

@@ -1,0 +1,55 @@
+.currentWordNumber{
+  font-size: 28rpx;
+  color: gray;
+  position: absolute;
+  left: 550rpx;
+  bottom: -50rpx;
+}
+.greyBackground{
+  width:100%;
+  height:1205rpx;
+  background:#F6F6F6;
+}
+.page{
+  height:1140rpx;
+  width:95%;
+  margin:0 2.5% 0 2.5%;
+  display:flex;
+  flex-direction:column;
+  background:#FFF;
+}
+.pageTop{
+  background:#fff;
+  width:90%;
+  margin:30rpx 5% 30rpx 5%;
+  border-bottom:1rpx solid #bfbfbf;
+  display:flex;
+  flex-direction:row;
+}
+.icon{
+  width:50rpx;
+  height:50rpx;
+  margin:20rpx;
+}
+.timeText{
+  font-size:28rpx;
+  color:#bfbfbf;
+  margin:25rpx 20rpx 20rpx 20rpx;
+}
+.textArea{
+  height:700rpx;
+  width:90%;
+  margin:0 5% 30rpx 5%;
+  border:1rpx solid #bfbfbf;
+}
+.buttonClass{
+  width:250rpx;
+  height:100rpx;
+  margin:30rpx 20rpx 0 90rpx;
+  background:#2d8cf0;
+  color:#fff;
+  border-radius:50rpx;
+}
+.bg_orange{
+  background: #ffcc00;
+}

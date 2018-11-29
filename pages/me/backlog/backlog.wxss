@@ -1,0 +1,41 @@
+page{
+  background-color: #f6f6f6;
+}
+.text{
+  height:70%;
+  color: #000;
+  width:100%;
+  font-size:38rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding-top: 30rpx; 
+}
+.text_finish{
+  height:70%;
+  color: #e6e6e6;
+  text-decoration: line-through;
+  width:100%;
+  font-size:38rpx;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding-top: 30rpx; 
+}
+.icon{
+  width:30rpx;
+  height:30rpx;
+  margin-right: 30rpx;
+}
+.time{
+  font-size:30rpx;
+  color:#ffcc00;
+}
+.time_finish{
+  font-size: 30rpx;
+  color: #e6e6e6;
+  text-decoration: line-through;
+}
+.grey{
+  background: #f0f0f0;
+}

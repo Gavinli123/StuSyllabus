@@ -1,0 +1,44 @@
+<view class='textClass'>
+  <text>{{text}}</text>
+</view>
+<block wx:for="{{stars}}">
+  <image class="star-image" style="left: {{item*150}}rpx" src="{{key > item ?(key-item == 0.5?halfSrc:selectedSrc) : normalSrc}}">
+    <view class="item" style="left:0rpx" data-key="{{item+0.5}}" bindtap="selectLeft"></view>
+    <view class="item" style="left:75rpx" data-key="{{item+1}}" bindtap="selectRight"></view>
+  </image>
+</block>
+
+<view class='class1'>
+  <view style='display:flex;flex-direction:row;'>
+    <text style='color:#bfbfbf'>选择标签</text>
+    <image class='tarrow' src='{{isdown?"/image/upTarrow.png":"/image/downTarrow.png"}}' bindtap='clickTarrow'></image>
+  </view>
+  <view style='display:flex;flex-direction:column;'>
+    <view style='display:flex;flex-direction:row;margin-top:20rpx;'>
+      <view wx:for="{{tagg}}" wx:if="{{isdown}}">
+        <text wx:if="{{index<4}}" class='{{item.isSelected?"tag_color":"tag_no"}}' data-tagvalue="{{item.value}}" data-tagid="{{index}}" bindtap="clicktag">{{item.value}}</text>
+      </view>
+    </view>
+    <view style='display:flex;flex-direction:row;margin-top:30rpx;justify-content: center;'>
+      <view wx:for="{{tagg}}" wx:if="{{isdown}}">
+        <text wx:if="{{index>=4&&index<7}}" class='{{item.isSelected?"tag_color":"tag_no"}}' data-tagvalue="{{item.value}}" data-tagid="{{index}}" bindtap="clicktag">{{item.value}}</text>
+      </view>
+    </view>
+    <view style='display:flex;flex-direction:row;margin-top:30rpx;'>
+      <view wx:for="{{tagg}}" wx:if="{{isdown}}">
+        <text wx:if="{{index>=7&&index<11}}" class='{{item.isSelected?"tag_color":"tag_no"}}' data-tagvalue="{{item.value}}" data-tagid="{{index}}" bindtap="clicktag">{{item.value}}</text>
+      </view>
+    </view>
+    <view style='display:flex;flex-direction:row;margin-top:30rpx;justify-content: center;'>
+      <view wx:for="{{tagg}}" wx:if="{{isdown}}">
+        <text wx:if="{{index>=11&&index<14}}" class='{{item.isSelected?"tag_color":"tag_no"}}' data-tagValue="{{item.value}}" data-tagid="{{index}}" bindtap="clicktag">{{item.value}}</text>
+      </view>
+    </view>
+  </view>
+</view>
+<view class="conts">
+    <textarea class="areas" placeholder='写下你对这位老师的评价吧' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs"> 
+        <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+    </textarea>
+</view>
+<button class='button' bindtap='submit'>提交</button>

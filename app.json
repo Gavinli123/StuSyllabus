@@ -1,0 +1,63 @@
+{
+  "pages": [
+    "pages/classes/classes",
+    "pages/classes/addClass/addClass",
+    "pages/classes/addClass/selectClassTime",
+    "pages/classes/classmate/classmate",
+    "pages/me/about_us/about_us",
+    "pages/classes/share/share",
+    "pages/classes/detail/detail",
+    "pages/classes/setting/setting",
+    "pages/me/me",
+    "pages/me/account/account",
+    "pages/me/update_log/update_log",
+    "pages/start/show/show",
+    "pages/me/click/click",
+    "pages/me/more/more",
+    "pages/me/more/notify_setting/notify_setting",
+    "pages/me/more/notify_rule/notify_rule",
+    "pages/me/information/information",
+    "pages/me/more/admire/admire",
+    "pages/classes/evaluate/evaluate",
+    "pages/classes/showEvaluate/showEvaluate",
+    "pages/me/backlog/backlog",
+    "pages/me/backlog/addBacklog/addBacklog",
+    "pages/discover/addContent/addContent",
+    "pages/discover/discover",
+    "pages/discover/contentDetail/contentDetail",
+    "pages/oa/index/index",
+    "pages/oa/content/content",
+    "pages/discover/manage/manage"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#2d8cf0",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "selectedColor": "#495060",
+    "backgroundColor": "#fff",
+    "list": [
+      {
+        "pagePath": "pages/classes/classes",
+        "text": "课表",
+        "iconPath": "/image/idea.png",
+        "selectedIconPath": "/image/idea_on.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "/image/person-center.png",
+        "selectedIconPath": "/image/person-center_on.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 30000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
+  },
+  "debug": true
+}
