@@ -1,4 +1,9 @@
 // pages/discover/discover.js
+const testUrl ="http://118.126.92.214:8083/interaction/api/v2/posts"
+const likeUrl ="http://118.126.92.214:8083/interaction/api/v2/like"
+const stuUrl = "https://stuapps.com/interaction/api/v2/posts"
+const myuid=5
+const mytoken="100004"
 Page({
 
   /**
@@ -12,6 +17,7 @@ Page({
     isSelected1:false,
     isSelected2:false,
     jiahao:true,
+    schoolSelected:[true,false,false,false],
     schoolSelected0:true,
     schoolSelected1: false,
     schoolSelected2: false,
@@ -50,19 +56,72 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    let currentModeList=wx.getStorageSync('messageList')
-    console.log(currentModeList)
-    let that=this
-    let showList=[]
-    for(var i in currentModeList){
-      if(currentModeList[i].mode=='生活'){
-        showList.push(currentModeList[i])
-      } 
-    }
-    that.setData({
-      currentModeList,
-      showList
+    let that = this
+    wx.showLoading({
+      title: '加载中',
+      mask:true
     })
+    function init_load(){
+      let currentModeList = wx.getStorageSync('post_list')
+      let showList = []
+      for (let i in currentModeList) {
+        currentModeList[i].myid=i
+        currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
+        currentModeList[i].commentNumber=currentModeList[i].comments.length
+        currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        let isLike=false
+        for(let j in currentModeList[i].thumb_ups){
+          if(currentModeList[i].thumb_ups[j].uid==myuid){
+            isLike=true
+            break
+          }
+        }
+        currentModeList[i].isLike=isLike
+        if (currentModeList[i].description == "生活")
+          showList.push(currentModeList[i])
+      }
+      wx.setStorageSync('post_list', currentModeList)
+      console.log(currentModeList)
+      that.setData({
+        currentModeList,
+        showList
+      })
+    }
+
+    wx.request({
+      url: testUrl,
+      method:"GET",
+      data:{
+        count:20
+      },
+      success(res){
+        console.log(res)
+        wx.setStorageSync('post_list', res.data.post_list)
+        init_load()
+        wx.hideLoading()
+      },
+      fail(res){
+        wx.showToast({
+          title: '请求失败',
+          icon:'none',
+          duration:2000,
+        })
+      }
+    })
+
+    //let currentModeList=wx.getStorageSync('messageList')
+    //console.log(currentModeList)
+    // let that=this
+    // let showList=[]
+    // for(var i in currentModeList){
+    //   if(currentModeList[i].mode=='生活'){
+    //     showList.push(currentModeList[i])
+    //   } 
+    // }
+    // that.setData({
+    //   currentModeList,
+    //   showList
+    // })
   },
 
   /**
@@ -121,6 +180,8 @@ Page({
     let currentModeList=[]
     let showList=[]
     if(isSelected0){
+      if (e.currentTarget.dataset.item =="0")
+        return
       if(e.currentTarget.dataset.item=="1"){
         currentModeList=wx.getStorageSync('thingsList')
         for(let i in currentModeList){
@@ -139,10 +200,13 @@ Page({
       }
     }
     else if (isSelected1) {
+      if (e.currentTarget.dataset.item == "1")
+        return
       if (e.currentTarget.dataset.item == "0") {
-        currentModeList = wx.getStorageSync('messageList')
+        currentModeList = wx.getStorageSync('post_list')
         for (let i in currentModeList) {
-          if (currentModeList[i].mode == '生活') {
+          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          if (currentModeList[i].description == '生活') {
             showList.push(currentModeList[i])
           }
         }
@@ -157,10 +221,13 @@ Page({
       }
     }
     else if (isSelected2) {
+      if (e.currentTarget.dataset.item == "2")
+        return
       if (e.currentTarget.dataset.item == "0") {
-        currentModeList = wx.getStorageSync('messageList')
+        currentModeList = wx.getStorageSync('post_list')
         for (let i in currentModeList) {
-          if (currentModeList[i].mode == '生活') {
+          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          if (currentModeList[i].description == '生活') {
             showList.push(currentModeList[i])
           }
         }
@@ -188,154 +255,50 @@ Page({
   },
   switchSchool:function(e){
     let that=this
-    let schoolSelected0 = that.data.schoolSelected0
-    let schoolSelected1 = that.data.schoolSelected1
-    let schoolSelected2 = that.data.schoolSelected2
-    let schoolSelected3 = that.data.schoolSelected3
-    let current = Number.parseInt(e.currentTarget.dataset.item)
+    let schoolSelected=that.data.schoolSelected
+    let current=Number.parseInt(e.currentTarget.dataset.item)
     let showList=[]
     let currentModeList=that.data.currentModeList
-    if (schoolSelected0){
-      switch(current){
-        case 1:{
-          for(var i in currentModeList){
-            if(currentModeList[i].mode=='兼职'){
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0=false
-          schoolSelected1=true
-        }
-        break
-        case 2: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '研究') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0 = false
-          schoolSelected2 = true
-        }
-          break
-        case 3: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '学习') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0 = false
-          schoolSelected3 = true
-        }
-          break
-      }
+    if(schoolSelected[current]==true){
+      return
     }
-    if (schoolSelected1) {
-      switch (current) {
-        case 0: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '生活') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0 = true
-          schoolSelected1 = false
-        }
-          break
-        case 2: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '研究') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected1 = false
-          schoolSelected2 = true
-        }
-          break
-        case 3: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '学习') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected1 = false
-          schoolSelected3 = true
-        }
-          break
-      }
+    for(let i=0;i<schoolSelected.length;i++){
+      schoolSelected[i]=false
     }
-    if (schoolSelected2) {
-      switch (current) {
-        case 0: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '生活') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0 = true
-          schoolSelected2 = false
+    if(current==0){
+      for(let i in currentModeList){
+        if(currentModeList[i].description=='生活'){
+          showList.push(currentModeList[i])
         }
-          break
-        case 1: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '兼职') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected2 = false
-          schoolSelected1 = true
-        }
-          break
-        case 3: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '学习') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected2 = false
-          schoolSelected3 = true
-        }
-          break
       }
+      schoolSelected[0]=true
     }
-    if (schoolSelected3) {
-      switch (current) {
-        case 0: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '生活') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected0 = true
-          schoolSelected3 = false
+    else if (current == 1) {
+      for (let i in currentModeList) {
+        if (currentModeList[i].description == '兼职') {
+          showList.push(currentModeList[i])
         }
-          break
-        case 1: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '兼职') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected3 = false
-          schoolSelected1 = true
-        }
-          break
-        case 2: {
-          for (var i in currentModeList) {
-            if (currentModeList[i].mode == '研究') {
-              showList.push(currentModeList[i])
-            }
-          }
-          schoolSelected3 = false
-          schoolSelected2 = true
-        }
-          break
       }
+      schoolSelected[1] = true
+    }
+    else if (current == 2) {
+      for (let i in currentModeList) {
+        if (currentModeList[i].description == '研究') {
+          showList.push(currentModeList[i])
+        }
+      }
+      schoolSelected[2] = true
+    }
+    else if (current == 3) {
+      for (let i in currentModeList) {
+        if (currentModeList[i].description == '学习') {
+          showList.push(currentModeList[i])
+        }
+      }
+      schoolSelected[3] = true
     }
     that.setData({
-      schoolSelected0: schoolSelected0,
-      schoolSelected1: schoolSelected1,
-      schoolSelected2: schoolSelected2,
-      schoolSelected3: schoolSelected3,
+      schoolSelected, 
       showList
     })
   },
@@ -346,6 +309,10 @@ Page({
     let current = Number.parseInt(e.currentTarget.dataset.item)
     let currentModeList=that.data.currentModeList
     let showList=[]
+    if(ThingSelected0&&current==0)
+      return
+    if (ThingSelected1 && current == 1)
+      return
     if(ThingSelected0&&current==1){
       for(let i in currentModeList){
         if(currentModeList[i].mode=='寻主'){
@@ -425,10 +392,62 @@ Page({
     })
   },
   toDetail:function(e){
-    console.log(e.currentTarget.dataset.id)
+    console.log(e)
+    let id = e.currentTarget.dataset.id
+    let mode = e.currentTarget.dataset.mode
+    let category = e.currentTarget.dataset.category
+    wx.navigateTo({
+       url: 'contentDetail/contentDetail?id='+id+'&mode='+mode+'&category='+category,
+    })
   },
   dianzan:function(e){
-    console.log('aaa')
+    let id=e.currentTarget.dataset.id
+    let myid=Number.parseInt(e.currentTarget.dataset.myid)
+    let that=this
+    let showList=that.data.showList
+    if(!showList[myid].isLike){
+      showList[myid].isLike=true
+      showList[myid].likeNumber++
+      wx.request({
+        url: likeUrl,
+        method:"POST",
+        data:{
+          uid:myuid,
+          token:mytoken,
+          post_id:id,
+        },
+        success(res){
+          console.log(res)
+        }
+      })
+    }
+    else{
+      showList[myid].isLike = false
+      showList[myid].likeNumber--
+      let like_id=-1
+      for(let i in showList[myid].thumb_ups){
+        if(myuid==showList[myid].thumb_ups[i].uid){
+          like_id = showList[myid].thumb_ups[i].id
+          break
+        }
+      }
+      console.log(like_id)
+      wx.request({
+        url: likeUrl,
+        header: {
+          uid: myuid,
+          token: mytoken,
+          id: like_id,
+        },
+        method:"delete",
+        success(res){
+          console.log(res)
+        }
+      })
+    }
+    that.setData({
+      showList
+    })
   },
   previewIcon:function(e){
     wx.previewImage({
@@ -448,5 +467,5 @@ Page({
     wx.navigateTo({
       url: 'manage/manage',
     })
-  }
+  },
 })

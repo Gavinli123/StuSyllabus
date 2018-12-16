@@ -1,4 +1,9 @@
 // pages/discover/manage/manage.js
+
+const testUrl ="http://118.126.92.214:8083/interaction/api/v2/personal_post"
+const deleteUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
+const testUid = "5"
+const testToken = "100004"
 Page({
 
   /**
@@ -6,9 +11,9 @@ Page({
    */
   data: {
     showList:[],
-    isSelected0:true,
-    isSelected1: false,
-    isSelected2: false,
+    addList:[],
+    isSelected:[true,false,false],
+    page_index:1,
   },
 
   /**
@@ -16,11 +21,44 @@ Page({
    */
   onLoad: function (options) {
     let that=this
-    let showList=wx.getStorageSync('messageList')||[]
-    console.log(showList)
-    that.setData({
-      showList
+    wx.showLoading({
+      title: '加载中',
+      mask:true
     })
+    wx.request({
+      url: testUrl,
+      method:'GET',
+      data:{
+        token:testToken,
+        uid:testUid,
+        page_index:that.data.page_index,
+      },
+      success(res){
+        console.log(res)
+        let addList=res.data.data
+        let showList=that.data.showList
+        console.log(addList)
+        showList=showList.concat(addList)
+        that.setData({
+          showList,
+          addList
+        })
+        wx.hideLoading()
+      },
+      fail(){
+        wx.hideLoading()
+        wx.showToast({
+          title: '网络出错',
+          icon:"none"
+        })
+      }
+    })
+
+    // let showList=wx.getStorageSync('messageList')||[]
+    // console.log(showList)
+    // that.setData({
+    //   showList
+    // })
   },
 
   /**
@@ -70,5 +108,109 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  switchItem:function(e){
+    let that=this
+    let item=e.currentTarget.dataset.item
+    let isSelected=that.data.isSelected
+    if(isSelected[item]==true){
+      return
+    }
+    for(let i=0;i<isSelected.length;i++){
+      isSelected[i]=false
+    }
+    isSelected[item]=true
+    let showList=[]
+    if(item==0){
+      showList=wx.getStorageSync('messageList')
+    }
+    else if(item==1){
+      showList = wx.getStorageSync('thingsList')
+    }
+    else{
+      showList = wx.getStorageSync('wallList')
+    }
+    that.setData({
+      isSelected,
+      showList
+    })
+  },
+  toDetail: function (e) {
+    let id = e.currentTarget.dataset.id
+    let mode = e.currentTarget.dataset.mode || '表白墙'
+    console.log(id)
+    let that=this
+    let isSelected=that.data.isSelected
+    let category='message'
+    if(isSelected[1]){
+      category = 'things'
+    }
+    else if(isSelected[2]){
+      category='wall'
+    }
+    wx.navigateTo({
+      url: '../contentDetail/contentDetail?id=' + id + '&mode=' + mode + '&category=' + category,
+    })
+  },
+  loadMore:function(){
+    let that=this
+    let page_index=that.data.page_index+1
+    wx.request({
+      url: testUrl,
+      method:"GET",
+      data:{
+        token:testToken,
+        uid:testUid,
+        page_index:page_index
+      },
+      success(res){
+        let addList=res.data.data||[]
+        console.log(addList)
+        let showList=that.data.showList
+        showList=showList.concat(addList)
+        console.log(showList)
+        that.setData({
+          addList,
+          showList,
+          page_index
+        })
+      },
+      fail(){
+        wx.showToast({
+          title: '网络出错',
+          icon:"none"
+        })
+      }
+    })
+  },
+  delete:function(e){
+    let that=this
+    wx.showModal({
+      title: '提示',
+      content: '确认删除？',
+      success:function(res){
+        if(res.confirm){
+          let id = e.currentTarget.dataset.id
+          let index = e.currentTarget.dataset.index
+          let showList=that.data.showList
+          showList.splice(index,1)
+          that.setData({
+            showList
+          })
+          wx.request({
+            url: deleteUrl,
+            method:"DELETE",
+            header:{
+              token:testToken,
+              uid:testUid,
+              id:id
+            },
+            success(res){
+              console.log(res)
+            }
+          })  
+        }
+      }
+    })
   }
 })

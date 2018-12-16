@@ -23,9 +23,6 @@ page{
   text-align:center;
   width:33%;
 }
-.bg_grey{
-  background: #efefef;
-}
 .border{
   padding-bottom:15rpx;
   border-bottom: 5rpx solid #2d8cf0;
@@ -63,4 +60,7 @@ page{
   width:30%;
   display: flex;
   flex-direction: row;
+}
+.bg_grey{
+  background: #efefef;
 }

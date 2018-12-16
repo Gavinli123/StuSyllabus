@@ -46,6 +46,12 @@
         "selectedIconPath": "/image/idea_on.png"
       },
       {
+        "pagePath": "pages/discover/discover",
+        "text": "发现",
+        "iconPath": "/image/faxian_black.png",
+        "selectedIconPath": "/image/faxian_blue.png"
+      },
+      {
         "pagePath": "pages/me/me",
         "text": "我的",
         "iconPath": "/image/person-center.png",

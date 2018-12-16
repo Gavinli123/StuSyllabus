@@ -1,4 +1,9 @@
 // pages/discover/addContent/addContent.js
+
+const stuUrl ="https://stuapps.com/interaction/api/v2/post"
+const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
+const testUid="5"
+const testToken="100004"
 Page({
 
   /**
@@ -245,6 +250,7 @@ Page({
   },
   submit:function(){
     let that=this
+
     if(that.data.type=='news'){
       let formData=that.data.formData
       if(formData.title==''){
@@ -261,15 +267,40 @@ Page({
         })
         return
       }
-      let messageList=wx.getStorageSync('messageList')||[]
-      let id=messageList.length
-      formData.id=id
-      messageList.push(formData)
-      wx.setStorage({
-        key: 'messageList',
-        data: messageList,
+      wx.request({
+        url: testUrl,
+        method:'POST',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data:{
+          uid:testUid,
+          token:testToken,
+          post_type:0,
+          content:formData.content,
+          title:formData.title,
+          description:formData.mode,
+          source:"小程序",
+        },
+        success(res){
+          console.log(res)
+          wx.reLaunch({
+            url: '../discover',
+          })
+        },
+        fail(res){
+          console.log("出现错误！")
+        }
       })
-      console.log(messageList)
+      // let messageList=wx.getStorageSync('messageList')||[]
+      // let id=messageList.length
+      // formData.id=id
+      // messageList.push(formData)
+      // wx.setStorage({
+      //   key: 'messageList',
+      //   data: messageList,
+      // })
+      // console.log(messageList)
     }
     else if(that.data.type=='things'){
       let formData2=that.data.formData2
@@ -310,6 +341,9 @@ Page({
         data: thingsList,
       })
       console.log(thingsList)
+      wx.reLaunch({
+        url: '../discover',
+      })
     }
     else if(that.data.type=='wall'){
       let formData3=that.data.formData3
@@ -329,10 +363,10 @@ Page({
         data: wallList,
       })
       console.log(wallList)
+      wx.reLaunch({
+        url: '../discover',
+      })
     }
-    wx.reLaunch({
-      url: '../discover',
-    })
   },
 
   radiochange:function(e){

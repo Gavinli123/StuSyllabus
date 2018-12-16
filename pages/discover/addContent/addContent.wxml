@@ -5,7 +5,8 @@
     <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
   </textarea>
 
-  <view style='width:90%;margin-left:5%;'>
+  <!--暂时关闭选择图片-->
+  <!-- <view style='width:90%;margin-left:5%;'>
     <text class="issues-label">选择图片（可选）</text>
     <view class="issues-img-panel {{uploading?'error':''}}">
       <view class="issues-photo-item" wx:if="{{uploading}}">
@@ -16,7 +17,7 @@
         <image src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
       </view>
     </view>
-  </view>
+  </view> -->
 
   <view style='width:90%;margin-left:5%;margin-top:5%'>
     <text class="issues-label">请选择板块</text>
@@ -44,7 +45,8 @@
     <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
   </textarea>
 
-  <view style='width:90%;margin-left:5%;'>
+  <!--暂时关闭选择图片-->
+  <!-- <view style='width:90%;margin-left:5%;'>
     <text class="issues-label">选择图片（可选）</text>
     <view class="issues-img-panel {{uploading?'error':''}}">
       <view class="issues-photo-item" wx:if="{{uploading}}">
@@ -55,7 +57,7 @@
         <image src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
       </view>
     </view>
-  </view>
+  </view> -->
 
   <view style='width:90%;margin-left:5%;margin-top:5%'>
     <text class="issues-label">请选择类型</text>

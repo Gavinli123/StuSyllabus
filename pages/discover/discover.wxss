@@ -6,7 +6,7 @@
 }
 .top{
   background: #fff;
-  height:100rpx;
+  height:80rpx;
   width:100%;
   display: flex;
   flex-direction: row;
@@ -38,9 +38,6 @@
   font-size: 35rpx;
   font-weight: bold;
   color: #c0c0c0;
-}
-.bg_grey{
-  background: #efefef;
 }
 .add{
   background: transparent;
@@ -169,4 +166,7 @@
 .border2{
   padding-bottom:15rpx;
   border-bottom: 5rpx solid #ffcc00;
+}
+.bg_grey{
+  background: #efefef;
 }

@@ -33,19 +33,19 @@
     <view class='{{isSelected2?"selected":"normal"}}' bindtap='switchItem' data-item='2' hover-class='bg_grey'><text class='{{isSelected2?"border":""}}'>表白墙</text></view>
   </view>
 
-  <view wx:if="{{isSelected0}}" class='top' style='margin-top:10rpx;'>
-    <view class='{{schoolSelected0?"selected1":"normal1"}}' bindtap='switchSchool' data-item='0' hover-class='bg_grey'><text class='{{schoolSelected0?"border2":""}}'>生活</text></view>
-    <view class='{{schoolSelected1?"selected1":"normal1"}}' bindtap='switchSchool' data-item='1' hover-class='bg_grey'><text class='{{schoolSelected1?"border2":""}}'>兼职</text></view>
-    <view class='{{schoolSelected2?"selected1":"normal1"}}' bindtap='switchSchool' data-item='2' hover-class='bg_grey'><text class='{{schoolSelected2?"border2":""}}'>研究</text></view>
-    <view class='{{schoolSelected3?"selected1":"normal1"}}' bindtap='switchSchool' data-item='3' hover-class='bg_grey'><text class='{{schoolSelected3?"border2":""}}'>学习</text></view>
+  <view wx:if="{{isSelected0}}" class='top' style='margin-top:5rpx;'>
+    <view class='{{schoolSelected[0]?"selected1":"normal1"}}' bindtap='switchSchool' data-item='0' hover-class='bg_grey'><text class='{{schoolSelected[0]?"border2":""}}'>生活</text></view>
+    <view class='{{schoolSelected[1]?"selected1":"normal1"}}' bindtap='switchSchool' data-item='1' hover-class='bg_grey'><text class='{{schoolSelected[1]?"border2":""}}'>兼职</text></view>
+    <view class='{{schoolSelected[2]?"selected1":"normal1"}}' bindtap='switchSchool' data-item='2' hover-class='bg_grey'><text class='{{schoolSelected[2]?"border2":""}}'>研究</text></view>
+    <view class='{{schoolSelected[3]?"selected1":"normal1"}}' bindtap='switchSchool' data-item='3' hover-class='bg_grey'><text class='{{schoolSelected[3]?"border2":""}}'>学习</text></view>
   </view>
 
-  <view wx:if="{{isSelected1}}" class='top' style='margin-top:10rpx;'>
+  <view wx:if="{{isSelected1}}" class='top' style='margin-top:5rpx;'>
     <view style='width:50%;' class='{{ThingSelected0?"selected1":"normal"}}' bindtap='switchThing' data-item='0' hover-class='bg_grey'><text class='{{ThingSelected0?"border2":""}}'>寻找失物</text></view>
     <view style='width:50%;' class='{{ThingSelected1?"selected1":"normal"}}' bindtap='switchThing' data-item='1' hover-class='bg_grey'><text class='{{ThingSelected1?"border2":""}}'>寻找失主</text></view>
   </view>
 
-  <view wx:if="{{isSelected2}}" class='top' style='margin-top:10rpx;'>
+  <view wx:if="{{isSelected2}}" class='top' style='margin-top:5rpx;'>
     <view style='width:50%;' class='{{WallSelected0?"selected1":"normal"}}' bindtap='switchWall' data-item='0' hover-class='bg_grey'><text class='{{WallSelected0?"border2":""}}'>按热度</text></view>
     <view style='width:50%;' class='{{WallSelected1?"selected1":"normal"}}' bindtap='switchWall' data-item='1' hover-class='bg_grey'><text class='{{WallSelected1?"border2":""}}'>按时间</text></view>
   </view>
@@ -53,18 +53,18 @@
   <scroll-view scroll-y style='height:{{showSearch?"800rpx":"900rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
     <!--校园动态-->
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
-      <view class='showItem'>
+      <view class='showItem' bindtap='toDetail' data-id="{{item.myid}}" data-mode="{{item.description}}" data-category="message">
         <view class='userInfo' hover-class='bg_grey'>
-          <image src='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132' class='avatar' bindtap='previewIcon'></image>
+          <image src="{{item.user.image}}" class='avatar' catchtap='previewIcon'></image>
           <view class='right-info'>
-            <text class='nickname'>16eyhuang</text>
-            <text class='time'>10-18 10:51</text>
+            <text class='nickname'>{{item.user.nickname}}</text>
+            <text class='time'>{{item.post_time}}</text>
           </view>
         </view>
         <view style='margin:0 0 20rpx 5%;' class='itemTitle'>
           <text>{{item.title}}</text>
         </view>
-        <view style='margin:0 0 20rpx 5%;width:90%' data-id="{{index}}" bindtap='toDetail' hover-class='bg_grey'>
+        <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
           <text class='itemContent'>{{item.content}}</text>
         </view>
         <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
@@ -74,22 +74,22 @@
         </view>
       </view>
       <view class='comment'>
-          <view class='comment-box' bindtap='dianzan'>
-            <image src='/image/dianzan.png/' class='icon'></image>
-            <text class='iconText'>10</text>
+          <view class='comment-box'>
+            <image src='{{item.isLike?"/image/dianzan_red.png/":"/image/dianzan.png/"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <text class='iconText'>{{item.likeNumber}}</text>
           </view>
           <view class='comment-box'>
             <image src='/image/pinglun.png/' class='icon'></image>
-            <text class='iconText'>10</text>
+            <text class='iconText'>{{item.commentNumber}}</text>
           </view>
         </view>
     </block>
     
     <!--失物招领-->
     <block wx:if="{{isSelected1}}" wx:for="{{showList}}" wx:key="*this">
-      <view class='showItem'>
+      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-mode="{{item.mode}}" data-category="things">
         <view class='userInfo'>
-          <image src='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132' class='avatar'></image>
+          <image src='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132' class='avatar' catchtap='previewIcon'></image>
           <view class='right-info'>
             <text class='nickname'>16eyhuang</text>
             <text class='time'>10-18 10:51</text>
@@ -123,8 +123,8 @@
 
     <!--表白墙-->
     <block wx:if="{{isSelected2}}" wx:for="{{showList}}" wx:key="*this">
-        <view style='width:100%;background:#fff;margin-top:10rpx;height:auto;' data-id="{{index}}" bindtap='toDetail' hover-class='bg_grey'>
-          <text class='itemContent' style='padding-left:5%;'>{{item.content}}</text>
+        <view style='width:100%;background:#fff;margin-top:10rpx;min-height:100rpx;height:auto;padding-left:5%;' data-id="{{item.id}}" bindtap='toDetail' data-mode="表白墙" data-category="wall" >
+          <text class='itemContent' >{{item.content}}</text>
         </view>
       <view class='comment'>
           <view class='comment-box' bindtap='dianzan'>

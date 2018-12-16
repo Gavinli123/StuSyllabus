@@ -1,4 +1,7 @@
 /* pages/discover/addContent/addContent.wxss */
+page{
+  background: #f8f8f8;
+}
 .page{
   background: #f8f8f8;
   height:100%;
