@@ -267,6 +267,15 @@ Page({
         })
         return
       }
+
+      /*确定topic_id 1为生活，2为兼职，3为学习，4为研究 */
+      let topic_id=1
+      if(formData.mode=='兼职')
+        topic_id=2
+      else if(formData.mode=='研究')
+        topic_id=3
+      else if(formData.mode=='学习')
+        topic_id=4
       wx.request({
         url: testUrl,
         method:'POST',
@@ -280,6 +289,7 @@ Page({
           content:formData.content,
           title:formData.title,
           description:formData.mode,
+          topic_id:topic_id,
           source:"小程序",
         },
         success(res){

@@ -84,6 +84,13 @@
           </view>
         </view>
     </block>
+    <view wx:if="{{addList.length==10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+    点击加载更多
+    </view>
+    <view wx:if="{{addList.length!=10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+    没有更多了
+    </view>
+    
     
     <!--失物招领-->
     <block wx:if="{{isSelected1}}" wx:for="{{showList}}" wx:key="*this">

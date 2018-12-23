@@ -212,5 +212,36 @@ Page({
         }
       }
     })
+  },
+
+  /*点击修改后的函数 */
+  modify:function(e){
+    let that=this
+    console.log(e)
+    /*以下参数从e中获取 */
+    let content=e.currentTarget.dataset.content
+    let id=e.currentTarget.dataset.id
+    let mode=e.currentTarget.dataset.mode
+    let photo=e.currentTarget.dataset.photo
+    let title=e.currentTarget.dataset.title
+    let uid=e.currentTarget.dataset.uid
+    let topic=e.currentTarget.dataset.topic
+
+    let topic_id=topic.id
+
+    /*加一个参数判断类别 */
+    let isSelected=that.data.isSelected
+    let category=''
+    if(isSelected[0])
+      category='校园动态'
+    else if(isSelected[1])
+      category='失物招领'
+    else if(isSelected[2])
+      category='表白墙'
+
+    /*跳转至page/discover/modify页面并传递相关参数*/  
+    wx.navigateTo({
+      url: '../modify/modify?content='+content+'&id='+id+'&mode='+mode+'&photo='+photo+'&title='+title+'&uid='+uid+'&category='+category+'&topic_id='+topic_id,
+    })
   }
 })

@@ -1,5 +1,5 @@
 // pages/discover/discover.js
-const testUrl ="http://118.126.92.214:8083/interaction/api/v2/posts"
+const testUrl ="http://118.126.92.214:8083/interaction/api/v2/"
 const likeUrl ="http://118.126.92.214:8083/interaction/api/v2/like"
 const stuUrl = "https://stuapps.com/interaction/api/v2/posts"
 const myuid=5
@@ -28,7 +28,10 @@ Page({
     WallSelected1:false,
 
     currentModeList:[],
-    showList:[]
+    showList:[],
+    page_index:1,
+    topic_id:1,
+    addList:[],
   },
   showInput: function () {
     this.setData({
@@ -57,6 +60,8 @@ Page({
    */
   onLoad: function (options) {
     let that = this
+    /*page_index的初始值为1，即当前请求第一页 */
+    let page_index=that.data.page_index
     wx.showLoading({
       title: '加载中',
       mask:true
@@ -64,6 +69,8 @@ Page({
     function init_load(){
       let currentModeList = wx.getStorageSync('post_list')
       let showList = []
+      /*addList为增加的数组，用来判断显示加载更多还是已加载完毕 */
+      let addList=[]
       for (let i in currentModeList) {
         currentModeList[i].myid=i
         currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
@@ -79,24 +86,28 @@ Page({
         currentModeList[i].isLike=isLike
         if (currentModeList[i].description == "生活")
           showList.push(currentModeList[i])
+          addList.push(currentModeList[i])
       }
       wx.setStorageSync('post_list', currentModeList)
       console.log(currentModeList)
       that.setData({
         currentModeList,
-        showList
+        showList,
+        addList
       })
     }
 
     wx.request({
-      url: testUrl,
+      url: testUrl+'post_sort',
       method:"GET",
       data:{
-        count:20
+        topic_id:1,
+        page_index:page_index,
+        page_size:10
       },
       success(res){
         console.log(res)
-        wx.setStorageSync('post_list', res.data.post_list)
+        wx.setStorageSync('post_list', res.data.data)
         init_load()
         wx.hideLoading()
       },
@@ -156,7 +167,68 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
+    /*init_load()函数的作用主要是为请求回来的数据增加一些参数
+      包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个） */
+    function init_load(list) {
+      for (let i in list) {
+        list[i].myid = i
+        list[i].likeNumber = list[i].thumb_ups.length
+        list[i].commentNumber = list[i].comments.length
+        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        let isLike = false
+        for (let j in list[i].thumb_ups) {
+          if (list[i].thumb_ups[j].uid == myuid) {
+            isLike = true
+            break
+          }
+        }
+        list[i].isLike = isLike
+        currentModeList.push(list[i])
+        showList.push(list[i])
+        addList.push(list[i])
+      }
+      wx.setStorageSync('post_list', currentModeList)
+      that.setData({
+        showList,
+        currentModeList,
+        addList,
+        page_index,
+        topic_id
+      })
+    }
 
+    let showList=[]
+    let currentModeList=[]
+    let addList=[]
+    let that=this
+    let isSelected0=that.data.isSelected0
+    let topic_id=that.data.topic_id
+    let page_index=1
+    console.log('111')
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.request({
+      url: testUrl + 'post_sort',
+      method: "GET",
+      data: {
+        topic_id: topic_id,
+        page_index: page_index,
+        page_size: 10
+      },
+      success(res) {
+        console.log(res)
+        init_load(res.data.data)
+        wx.hideLoading()
+      },
+      fail(res) {
+        wx.showToast({
+          title: '请求失败',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
   },
 
   /**
@@ -254,11 +326,47 @@ Page({
     })
   },
   switchSchool:function(e){
+    /*init_load()函数的作用主要是为请求回来的数据增加一些参数
+      包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个） */
+    function init_load(list) {
+      for (let i in list) {
+        list[i].myid = i
+        list[i].likeNumber = list[i].thumb_ups.length
+        list[i].commentNumber = list[i].comments.length
+        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        let isLike = false
+        for (let j in list[i].thumb_ups) {
+          if (list[i].thumb_ups[j].uid == myuid) {
+            isLike = true
+            break
+          }
+        }
+        list[i].isLike = isLike
+        currentModeList.push(list[i])
+        showList.push(list[i])
+        addList.push(list[i])
+      }
+      wx.setStorageSync('post_list', currentModeList)
+      that.setData({
+        schoolSelected,
+        showList,
+        currentModeList,
+        addList,
+        page_index,
+        topic_id
+      })
+    }
+
     let that=this
     let schoolSelected=that.data.schoolSelected
     let current=Number.parseInt(e.currentTarget.dataset.item)
     let showList=[]
-    let currentModeList=that.data.currentModeList
+    let currentModeList=[]
+    let addList=[]
+    /*若切换则将请求页重设为1 */
+    let page_index=1
+    /*定义请求的模块id 为点击的模块加1*/
+    let topic_id=current+1
     if(schoolSelected[current]==true){
       return
     }
@@ -266,40 +374,40 @@ Page({
       schoolSelected[i]=false
     }
     if(current==0){
-      for(let i in currentModeList){
-        if(currentModeList[i].description=='生活'){
-          showList.push(currentModeList[i])
-        }
-      }
       schoolSelected[0]=true
     }
     else if (current == 1) {
-      for (let i in currentModeList) {
-        if (currentModeList[i].description == '兼职') {
-          showList.push(currentModeList[i])
-        }
-      }
       schoolSelected[1] = true
     }
     else if (current == 2) {
-      for (let i in currentModeList) {
-        if (currentModeList[i].description == '研究') {
-          showList.push(currentModeList[i])
-        }
-      }
       schoolSelected[2] = true
     }
     else if (current == 3) {
-      for (let i in currentModeList) {
-        if (currentModeList[i].description == '学习') {
-          showList.push(currentModeList[i])
-        }
-      }
       schoolSelected[3] = true
     }
-    that.setData({
-      schoolSelected, 
-      showList
+    wx.showLoading({
+      title: '加载中',
+    })
+    wx.request({
+      url: testUrl + 'post_sort',
+      method: "GET",
+      data: {
+        topic_id: topic_id,
+        page_index: page_index,
+        page_size: 10
+      },
+      success(res) {
+        console.log(res)
+        init_load(res.data.data)
+        wx.hideLoading()
+      },
+      fail(res) {
+        wx.showToast({
+          title: '请求失败',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
     })
   },
   switchThing:function(e){
@@ -468,4 +576,70 @@ Page({
       url: 'manage/manage',
     })
   },
+  //加载更多
+  loadMore:function(){
+    let that=this
+    let addList=[]
+    
+    /*获取当前的一系列信息*/
+    let currentModeList=that.data.currentModeList
+    let showList=that.data.showList
+    let topic_id=that.data.topic_id
+    let page_index=that.data.page_index+1
+
+    /*init_load()函数的作用主要是为请求回来的数据增加一些参数
+      包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个） */
+    function init_load(list){
+      /*获取当前本地存储中的post_list,目的时拿到它的长度*/
+      let current_postList=wx.getStorageSync('post_list')
+      let list_length=current_postList.length
+      for(let i in list){
+        list[i].myid=list_length
+        list_length++
+        list[i].likeNumber =list[i].thumb_ups.length
+        list[i].commentNumber =list[i].comments.length
+        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        let isLike = false
+        for (let j in list[i].thumb_ups) {
+          if (list[i].thumb_ups[j].uid == myuid) {
+            isLike = true
+            break
+          }
+        }
+        list[i].isLike = isLike
+        currentModeList.push(list[i])
+        showList.push(list[i])
+        addList.push(list[i])
+      }
+      wx.setStorageSync('post_list', currentModeList)
+      that.setData({
+        addList,
+        currentModeList,
+        showList,
+        page_index
+      })
+    }
+
+    /*请求新的一页 */
+    wx.request({
+      url: testUrl + 'post_sort',
+      method: "GET",
+      data: {
+        topic_id: topic_id,
+        page_index: page_index,
+        page_size: 10
+      },
+      success(res) {
+        console.log(res)
+        init_load(res.data.data)
+      },
+      fail(res) {
+        wx.showToast({
+          title: '请求失败',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
+  }
 })

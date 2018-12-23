@@ -1,0 +1,42 @@
+<!--pages/discover/modify/modify.wxml
+  本页面主要与addContent页面类似，只是输入框中多了一些预设值
+-->
+<!--信息发布-->
+<view class='page' wx:if="{{category=='校园动态'}}">
+  <input placeholder='请输入标题' class='title' bindinput='titleListener' value='{{title}}'></input>
+  <textarea class="areas" placeholder='请输入内容' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" value='{{content}}'>
+    <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+  </textarea>
+
+  <!--暂时关闭选择图片-->
+  <!-- <view style='width:90%;margin-left:5%;'>
+    <text class="issues-label">选择图片（可选）</text>
+    <view class="issues-img-panel {{uploading?'error':''}}">
+      <view class="issues-photo-item" wx:if="{{uploading}}">
+        <image class="remind-img" src="/images/loading.gif"></image>
+      </view>
+      <view class="issues-photo-item add-photo" wx:else bindtap="choosePhoto"></view>
+      <view class="issues-photo-item" wx:for="{{formData.imgs}}" wx:key="*this">
+        <image src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
+      </view>
+    </view>
+  </view> -->
+
+  <view style='width:90%;margin-left:5%;margin-top:5%'>
+    <text class="issues-label">请选择板块</text>
+    <view class='select_box'>
+      <view class='select' catchtap='selectTap'>
+        <text class='select_text'>{{selectData[index]}}</text>
+        <image class='select_img {{show&&"select_img_rotate"}}' src='/image/gobottom.png'></image>
+      </view>
+      <view class='option_box' style='height:{{show?(selectData.length>5?300:selectData.length*60):0}}rpx;'>
+        <text class='option' style='{{index==selectData.length-1&&"border:0;"}}' wx:for='{{selectData}}' wx:key='this' data-index='{{index}}' catchtap='optionTap'>{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view style='display:flex;flex-direction:row;margin-bottom:100rpx;margin-top:{{show?"25%":"10%"}}'>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 50rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='cancal'>取消</button>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 120rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='modify'>修改</button>
+  </view>
+</view>

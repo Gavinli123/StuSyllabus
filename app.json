@@ -27,7 +27,8 @@
     "pages/discover/contentDetail/contentDetail",
     "pages/oa/index/index",
     "pages/oa/content/content",
-    "pages/discover/manage/manage"
+    "pages/discover/manage/manage",
+    "pages/discover/modify/modify"
   ],
   "window": {
     "backgroundTextStyle": "light",
