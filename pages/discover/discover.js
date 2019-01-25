@@ -500,12 +500,10 @@ Page({
     })
   },
   toDetail:function(e){
-    console.log(e)
     let id = e.currentTarget.dataset.id
-    let mode = e.currentTarget.dataset.mode
-    let category = e.currentTarget.dataset.category
+    console.log(id)
     wx.navigateTo({
-       url: 'contentDetail/contentDetail?id='+id+'&mode='+mode+'&category='+category,
+       url: 'contentDetail/contentDetail?id='+id,
     })
   },
   dianzan:function(e){
@@ -578,6 +576,9 @@ Page({
   },
   //加载更多
   loadMore:function(){
+    wx.showLoading({
+      title: '加载中',
+    })
     let that=this
     let addList=[]
     
@@ -631,9 +632,21 @@ Page({
       },
       success(res) {
         console.log(res)
-        init_load(res.data.data)
+        if(res.errMsg=='request:ok'){
+          init_load(res.data.data)
+          wx.hideLoading()
+        }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
       },
       fail(res) {
+        wx.hideLoading()
         wx.showToast({
           title: '请求失败',
           icon: 'none',

@@ -53,7 +53,7 @@
   <scroll-view scroll-y style='height:{{showSearch?"800rpx":"900rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
     <!--校园动态-->
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
-      <view class='showItem' bindtap='toDetail' data-id="{{item.myid}}" data-mode="{{item.description}}" data-category="message">
+      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}">
         <view class='userInfo' hover-class='bg_grey'>
           <image src="{{item.user.image}}" class='avatar' catchtap='previewIcon'></image>
           <view class='right-info'>

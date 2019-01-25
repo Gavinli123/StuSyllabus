@@ -153,6 +153,9 @@ Page({
     })
   },
   loadMore:function(){
+    wx.showLoading({
+      title: '加载中',
+    })
     let that=this
     let page_index=that.data.page_index+1
     wx.request({
@@ -164,18 +167,30 @@ Page({
         page_index:page_index
       },
       success(res){
-        let addList=res.data.data||[]
-        console.log(addList)
-        let showList=that.data.showList
-        showList=showList.concat(addList)
-        console.log(showList)
-        that.setData({
-          addList,
-          showList,
-          page_index
-        })
+        if(res.errMsg=='request:ok'){
+          console.log(res)
+          let addList = res.data.data || []
+          //console.log(addList)
+          let showList = that.data.showList
+          showList = showList.concat(addList)
+          //console.log(showList)
+          that.setData({
+            addList,
+            showList,
+            page_index
+          })
+          wx.hideLoading()
+        }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: '网络出错',
+            icon: "none"
+          })
+        }
       },
       fail(){
+        wx.hideLoading()
         wx.showToast({
           title: '网络出错',
           icon:"none"

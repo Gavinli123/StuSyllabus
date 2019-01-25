@@ -212,7 +212,7 @@ Page({
       let uid=that.data.uid
       wx.request({
         url: testUrl,
-        method: 'POST',
+        method: 'PUT',
         header: {
           'Content-Type': 'application/json',
         },

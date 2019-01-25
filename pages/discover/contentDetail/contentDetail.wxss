@@ -70,6 +70,14 @@ page{
   color: #c0c0c0;
   padding: 10rpx 0;
 }
+.comPanel{
+  width:100%;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  margin-bottom:80rpx;
+}
 .bottom{
   position: fixed;
   bottom: 0;
@@ -79,6 +87,31 @@ page{
   align-items: center;
   width: 100%;
 }
+.commentPanel{
+  position: fixed;
+  bottom:0;
+  height: auto;
+  min-height: 250rpx;
+  display: flex;
+  width:100%;
+  background:#f6f6f6;
+  opacity:1.0;
+}
+
+.mask{
+  width:100%;
+  height:100%;
+  position:fixed;
+  background-color:#999;
+  z-index:9999;
+  top:0;
+  left:0;
+  opacity:0.5;
+}
+
 .bg_grey{
   background: #f6f6f6;
+}
+.bg_red{
+  background: #f00;
 }

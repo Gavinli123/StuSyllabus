@@ -1,17 +1,17 @@
 <!--pages/discover/contentDetail/contentDetail.wxml-->
 <view class='showItem'>
   <view wx:if="{{category!='wall'}}" class='userInfo' hover-class='bg_grey'>
-    <image src="{{userImagesUrl}}" class='avatar' catchtap='previewIcon'></image>
+    <image src="{{showObj.userImagesUrl}}" class='avatar' catchtap='previewIcon'></image>
     <view class='right-info'>
-      <text class='nickname'>{{nickName}}</text>
-      <text class='time'>{{time}}</text>
+      <text class='nickname'>{{showObj.user.nickname}}</text>
+      <text class='time'>{{showObj.post_time}}</text>
     </view>
   </view>
   <view wx:if="{{category!='wall'}}" style='margin:0 0 20rpx 5%;' class='itemTitle'>
-    <text>{{title}}</text>
+    <text>{{showObj.title}}</text>
   </view>
   <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
-    <text class='itemContent'>{{content}}</text>
+    <text class='itemContent'>{{showObj.content}}</text>
   </view>
   <view wx:if="{{category=='things'}}" style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
     <text class='itemContent'>{{yishi?'遗失':'拾取'}}地点：{{position}}</text>
@@ -27,40 +27,55 @@
 </view>
 
 <view class='box'>
-  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>评论 2203</view>
-  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>赞 3093</view>
+  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>评论 {{showObj.comments.length}}</view>
+  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>赞 {{showObj.thumb_ups.length}}</view>
 </view>
 
 <!--评论-->
-<view wx:if="{{comment}}" class='chooseMode' style='width:100%;height:80rpx;margin-top:5rpx;background:#fff;'>
+<!-- <view wx:if="{{comment}}" class='chooseMode' style='width:100%;height:80rpx;margin-top:5rpx;background:#fff;'>
   <view style='height:80rpx;display:flex;position:absolute;right:40rpx;align-items:center;' bindtap='changeMode'>
     <image style='width:30rpx;height:30rpx;' src='../../../image/xiangshang.png'></image>
     <text style='font-size:28rpx;color:#00f;margin-left:10rpx;'>{{heat?"按热度":"按时间"}}</text>
   </view>
-</view>
-<view wx:if="{{comment}}" style='width:100%;height:auto;display:flex;flex-direction:column;background:#fff;margin-bottom:80rpx;'>
-  <block wx:for="{{comment_list}}" wx:key="*comment_list">
-    <view style='display:flex;height:auto;margin-top:20rpx;'>
+</view> -->
+<view wx:if="{{comment}}" class='comPanel'>
+  <block wx:if="{{!comment_list[0]}}">
+    <view style='height:300rpx;width:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#fff'>
+      <image style='height:100rpx;width:100rpx;' src='/image/jinggao.png'></image>
+      <text>当前暂无评论</text>
+    </view>
+  </block>
+  <block wx:for="{{comment_list}}" wx:if="{{comment_list[0]}}" wx:key="*comment_list">
+    <view style='display:flex;height:auto;margin-top:20rpx;' data-user="{{item.user.nickname}}" bindtap='reply_comment' hover-class='bg_grey' >
       <view style='width:15%;'>
         <image src='{{item.userImageUrl}}' style='width:60rpx;height:60rpx;border-radius:50%;margin-top:20rpx;margin-left:20rpx;'></image>
       </view>
       <view style='width:85%;height:auto;display:flex;flex-direction:column;border-bottom:1rpx solid #efefef;'>
-        <view style='font-size:28rpx;color:#f00;'>{{item.nickname}}</view>
-        <view class='itemContent' style='width:90%;'>{{item.content}}</view>
-        <view style='background:#f6f6f6;width:90%;'>
+        <view style='font-size:28rpx;color:#f00;'>{{item.user.nickname}}</view>
+        <view class='itemContent' style='width:90%;'>{{item.comment}}</view>
+        <!-- <view style='background:#f6f6f6;width:90%;'>
           <text style='color:#00f;font-size:25rpx;margin-left:20rpx;'>菲一日之晗</text>
           <text style='color:#000;font-size:25rpx;'>等人 </text>
           <text style='color:#00f;font-size:25rpx;'>共{{item.reply}}条回复 ></text>
-        </view>
+        </view> -->
         <view style='display:flex;align-items:center;margin-top:20rpx;margin-bottom:10rpx;'>
-          <text style='color:#666;font-size:25rpx;'>{{item.time}}</text>
-          <image style='width:35rpx;height:35rpx;position:absolute;right:200rpx;' src='../../../image/pinglun.png'></image>
-          <image style='width:35rpx;height:35rpx;position:absolute;right:100rpx;' src='../../../image/dianzan.png'></image>
-          <text style='color:#666;font-size:25rpx;position:absolute;right:70rpx;'>{{item.likes}}</text>
+          <text style='color:#666;font-size:25rpx;'>{{item.post_time}}</text>
+          <!-- <image style='width:35rpx;height:35rpx;position:absolute;right:200rpx;' src='../../../image/pinglun.png'></image> -->
+          <!--先把点赞的关闭了，怎么获取点赞的数量呢？-->
+          <!-- <image style='width:35rpx;height:35rpx;position:absolute;right:100rpx;' src='../../../image/dianzan.png'></image> -->
+          <!-- <text style='color:#666;font-size:25rpx;position:absolute;right:70rpx;'>{{item.likes}}</text> -->
         </view>
       </view>
     </view>
   </block>
+  
+  <!--下方的加载更多-->
+  <view wx:if="{{comment_list[0]&&commentCount<showObj.comments.length}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+  点击加载更多
+  </view>
+  <view wx:if="{{comment_list[0]&&commentCount>=showObj.comments.length}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+  没有更多了
+  </view>
 </view>
 
 <!--点赞-->
@@ -75,13 +90,24 @@
   </block>
 </view>
 
-<view class='bottom'>
-  <view style='width:50%;display:flex;align-items:center;justify-content:center;'>
+<view class='bottom' hidden='{{!showBottom}}'>
+  <view style='width:50%;display:flex;align-items:center;justify-content:center;' bindtap='clickToComment'>
     <image src='../../../image/pinglun.png' style='width:50rpx;height:50rpx;'></image>
     <text style='font-size:35rpx;color:#666;'>评论</text>
   </view>
   <view style='width:50%;display:flex;align-items:center;justify-content:center;'>
-    <image src='../../../image/dianzan.png' style='width:50rpx;height:50rpx;'></image>
-    <text style='font-size:35rpx;color:#666;'>赞</text>
+    <image src='{{showObj.isLike?"../../../image/dianzan_red.png":"../../../image/dianzan.png"}}' style='width:50rpx;height:50rpx;' bindtap='dianzan'></image>
+    <text style='font-size:35rpx;color:#666;'>{{showObj.isLike?"取消":"赞"}}</text>
+  </view>
+</view>
+
+<view class='commentPanel' style='opacity:1.0;' hidden='{{showBottom}}'>
+  <view style='display:flex;flex-direction:column;width:80%;'>
+  <textarea style='width:100%;margin-left:20rpx;margin-top:10rpx;margin-bottom:10rpx;height:180rpx;border:1rpx solid #efefef;border-radius:20rpx;background:#fff;' maxlength='1000' fixed='true' placeholder='写点评论吧..' bindinput='commentInput' value='{{commentinput}}'></textarea>
+  <view style='margin-left:20rpx;'>回复:{{current_click_user}}</view>
+  </view>
+  <view style='display:flex;flex-direction:column;width:20%;height:100%;'>
+    <view style='margin:10rpx 0 0 40rpx;color:#888' bindtap='cancalComment'>取消</view>
+    <view style='margin:130rpx 0 0 40rpx;color:#888' bindtap='sendComment' >发送</view>
   </view>
 </view>
