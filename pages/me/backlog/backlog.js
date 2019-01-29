@@ -35,25 +35,25 @@ Page({
       success(res) {
         console.log(res)
         let backlogList=[]
-        for(let index=0;index<res.data.data.eva_list.length;index++){
+        for(let index=0;index<res.data.data.todo_list.length;index++){
           let list_obj = {}
           list_obj.choose=false
-          list_obj.content=res.data.data.eva_list[index].content
-          if (!res.data.data.eva_list[index].status){
+          list_obj.content=res.data.data.todo_list[index].content
+          if (!res.data.data.todo_list[index].status){
             list_obj.finished = false  
           }
           else{
             list_obj.finished=true
           }
           list_obj.id=index
-          list_obj.todo_id = res.data.data.eva_list[index].id
-          list_obj.time = res.data.data.eva_list[index].deadline_time
-          list_obj.img_link = res.data.data.eva_list[index].img_link
-          list_obj.label = res.data.data.eva_list[index].label
-          list_obj.priority = res.data.data.eva_list[index].priority
-          list_obj.release_time = res.data.data.eva_list[index].release_time
-          list_obj.start_time = res.data.data.eva_list[index].start_time
-          list_obj.title = res.data.data.eva_list[index].title
+          list_obj.todo_id = res.data.data.todo_list[index].id
+          list_obj.time = res.data.data.todo_list[index].deadline_time
+          list_obj.img_link = res.data.data.todo_list[index].img_link
+          list_obj.label = res.data.data.todo_list[index].label
+          list_obj.priority = res.data.data.todo_list[index].priority
+          list_obj.release_time = res.data.data.todo_list[index].release_time
+          list_obj.start_time = res.data.data.todo_list[index].start_time
+          list_obj.title = res.data.data.todo_list[index].title
           backlogList.push(list_obj)
         }
         console.log(backlogList)

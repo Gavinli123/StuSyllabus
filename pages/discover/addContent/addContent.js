@@ -357,6 +357,7 @@ Page({
     }
     else if(that.data.type=='wall'){
       let formData3=that.data.formData3
+      console.log(formData3)
       if (formData3.content == '') {
         wx.showModal({
           title: '提示',
@@ -364,18 +365,46 @@ Page({
         })
         return
       }
-      let wallList = wx.getStorageSync('wallList') || []
-      let id = wallList.length
-      formData3.id = id
-      wallList.push(formData3)
-      wx.setStorage({
-        key: 'wallList',
-        data: wallList,
+
+      let topic_id=6    /*表白墙的topic_id */
+      wx.request({
+        url: testUrl,
+        method: 'POST',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          uid: testUid,
+          token: testToken,
+          post_type: 0,
+          content: formData3.content,
+          description:'表白墙',
+          topic_id: topic_id,
+          source: "小程序",
+        },
+        success(res) {
+          console.log(res)
+          wx.reLaunch({
+            url: '../discover',
+          })
+        },
+        fail(res) {
+          console.log("出现错误！")
+        }
       })
-      console.log(wallList)
-      wx.reLaunch({
-        url: '../discover',
-      })
+
+      // let wallList = wx.getStorageSync('wallList') || []
+      // let id = wallList.length
+      // formData3.id = id
+      // wallList.push(formData3)
+      // wx.setStorage({
+      //   key: 'wallList',
+      //   data: wallList,
+      // })
+      // console.log(wallList)
+      // wx.reLaunch({
+      //   url: '../discover',
+      // })
     }
   },
 

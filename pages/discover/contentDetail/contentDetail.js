@@ -116,6 +116,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    console.log(options)
     wx.showLoading({
       title: '加载中',
     })
@@ -124,93 +125,188 @@ Page({
     let showObj={}
     /*获取传过来的id值并且请求 */
     let id=options.id
-    wx.request({
-      url: testUrl+'post/'+id,
-      method:'GET',
-      success(res){
-        console.log(res)
-        if(res.errMsg=='request:ok'){
-          /*若请求成功则为showObj赋值 */
-          showObj.comments=res.data.comments
-          showObj.content=res.data.content
-          showObj.description=res.data.description
-          showObj.id=res.data.id
-          showObj.photo_list_json=res.data.photo_list_json
-          showObj.post_time=res.data.post_time
-          showObj.post_type=res.data.post_type
-          showObj.real_uid=res.data.real_uid
-          showObj.source=res.data.source
-          showObj.thumb_ups=res.data.thumb_ups 
-          showObj.title=res.data.title
-          showObj.topic=res.data.topic
-          showObj.user=res.data.user
+    /*category为0时是校园动态，2是表白墙 */
+    let category=Number.parseInt(options.category)
 
-          /*判断当前用户是否已经为该内容点赞 */
-          showObj.isLike=false
-          for(let i in showObj.thumb_ups){
-            if(myuid==showObj.thumb_ups[i].uid){
-              showObj.isLike=true
-              break
-            }
-          }
-          /*暂且加一个头像 */
-          showObj.userImagesUrl = 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+    if(category==0){
+      wx.request({
+        url: testUrl + 'post/' + id,
+        method: 'GET',
+        success(res) {
+          console.log(res)
+          if (res.errMsg == 'request:ok') {
+            /*若请求成功则为showObj赋值 */
+            showObj.comments = res.data.comments
+            showObj.content = res.data.content
+            showObj.description = res.data.description
+            showObj.id = res.data.id
+            showObj.photo_list_json = res.data.photo_list_json
+            showObj.post_time = res.data.post_time
+            showObj.post_type = res.data.post_type
+            showObj.real_uid = res.data.real_uid
+            showObj.source = res.data.source
+            showObj.thumb_ups = res.data.thumb_ups
+            showObj.title = res.data.title
+            showObj.topic = res.data.topic
+            showObj.user = res.data.user
 
-          that.setData({
-            showObj,
-            current_click_user:showObj.user.nickname
-          })
-
-          /*如果评论数组不为空，则请求评论 */
-          if(showObj.comments[0]){
-            wx.request({
-              url: testUrl+'post_comments',
-              method:'GET',
-              data:{
-                field:'post_id',
-                value:showObj.id,
-                count:that.data.commentCount
-              },
-              success(res){
-                console.log(res)
-                if(res.errMsg=='request:ok'){
-                  /*如果请求成功 */
-                  let comment_list=res.data.comments
-                  for(let i in comment_list){
-                    /*暂且加一个头像 */
-                    comment_list[i].userImageUrl=imgurl
-                  }
-                  that.setData({
-                    comment_list
-                  })
-                }
-              },
-              fail(res){
-                console.log(res)
+            /*判断当前用户是否已经为该内容点赞 */
+            showObj.isLike = false
+            for (let i in showObj.thumb_ups) {
+              if (myuid == showObj.thumb_ups[i].uid) {
+                showObj.isLike = true
+                break
               }
+            }
+            /*暂且加一个头像 */
+            showObj.userImagesUrl = 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+
+            that.setData({
+              showObj,
+              current_click_user: showObj.user.nickname
+            })
+
+            /*如果评论数组不为空，则请求评论 */
+            if (showObj.comments[0]) {
+              wx.request({
+                url: testUrl + 'post_comments',
+                method: 'GET',
+                data: {
+                  field: 'post_id',
+                  value: showObj.id,
+                  count: that.data.commentCount
+                },
+                success(res) {
+                  console.log(res)
+                  if (res.errMsg == 'request:ok') {
+                    /*如果请求成功 */
+                    let comment_list = res.data.comments
+                    for (let i in comment_list) {
+                      /*暂且加一个头像 */
+                      comment_list[i].userImageUrl = imgurl
+                    }
+                    that.setData({
+                      comment_list
+                    })
+                  }
+                },
+                fail(res) {
+                  console.log(res)
+                }
+              })
+            }
+
+            console.log(showObj)
+            wx.hideLoading()
+          }
+          else {
+            /*若请求失败则提示失败 */
+            wx.hideLoading()
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none'
             })
           }
-
-          console.log(showObj)
-          wx.hideLoading()
-        }
-        else{
-          /*若请求失败则提示失败 */
+        },
+        fail(res) {
           wx.hideLoading()
           wx.showToast({
-            title: '请求失败',
-            icon:'none'
+            title: '出现错误',
+            icon: 'none'
           })
         }
-      },
-      fail(res){  
-        wx.hideLoading()
-        wx.showToast({
-          title: '出现错误',
-          icon: 'none'
-        })
-      }
-    })
+      })
+    }
+    else if(category==2){
+      wx.request({
+        url: testUrl + 'post/' + id,
+        method: 'GET',
+        success(res) {
+          console.log(res)
+          if (res.errMsg == 'request:ok') {
+            /*若请求成功则为showObj赋值 */
+            showObj.comments = res.data.comments
+            showObj.content = res.data.content
+            showObj.description = res.data.description
+            showObj.id = res.data.id
+            showObj.photo_list_json = res.data.photo_list_json
+            showObj.post_time = res.data.post_time
+            showObj.post_type = res.data.post_type
+            showObj.real_uid = res.data.real_uid
+            showObj.source = res.data.source
+            showObj.thumb_ups = res.data.thumb_ups
+            showObj.title = res.data.title
+            showObj.topic = res.data.topic
+            showObj.user = res.data.user
+
+            /*判断当前用户是否已经为该内容点赞 */
+            showObj.isLike = false
+            for (let i in showObj.thumb_ups) {
+              if (myuid == showObj.thumb_ups[i].uid) {
+                showObj.isLike = true
+                break
+              }
+            }
+            /*表白墙头像 */
+            showObj.userImagesUrl = '../../../icon/xin.jpg'
+
+            that.setData({
+              showObj,
+              current_click_user: showObj.user.nickname
+            })
+
+            /*如果评论数组不为空，则请求评论 */
+            if (showObj.comments[0]) {
+              wx.request({
+                url: testUrl + 'post_comments',
+                method: 'GET',
+                data: {
+                  field: 'post_id',
+                  value: showObj.id,
+                  count: that.data.commentCount
+                },
+                success(res) {
+                  console.log(res)
+                  if (res.errMsg == 'request:ok') {
+                    /*如果请求成功 */
+                    let comment_list = res.data.comments
+                    for (let i in comment_list) {
+                      /*暂且加一个头像 */
+                      comment_list[i].userImageUrl = imgurl
+                    }
+                    that.setData({
+                      comment_list
+                    })
+                  }
+                },
+                fail(res) {
+                  console.log(res)
+                }
+              })
+            }
+
+            console.log(showObj)
+            wx.hideLoading()
+          }
+          else {
+            /*若请求失败则提示失败 */
+            wx.hideLoading()
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none'
+            })
+          }
+        },
+        fail(res) {
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
+        }
+      })
+    }
+    
     // let category=options.category
     // let mode=options.mode
     // let id=Number.parseInt(options.id)
@@ -254,7 +350,8 @@ Page({
     // })
     that.setData({
       showBottom:true,
-      commentinput:''
+      commentinput:'',
+      category
     })
   },
 
@@ -419,6 +516,7 @@ Page({
     let atUser =that.data.current_click_user
     let options={}
     let showObj=that.data.showObj
+    let category=that.data.category
     let commentinput=that.data.commentinput
     /*若未输入则提示返回 */
     if(commentinput==''){
@@ -430,6 +528,7 @@ Page({
     }
     //console.log(commentinput)
     options.id=showObj.id
+    options.category=category
     wx.request({
       url: testUrl+'comment',
       method:'POST',

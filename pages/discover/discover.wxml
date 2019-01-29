@@ -1,6 +1,6 @@
 <!--pages/discover/discover.wxml-->
 <view class='page'>
-  <view wx:if="{{showSearch}}">
+  <!-- <view wx:if="{{showSearch}}">
     <view class="weui-search-bar">
       <view class="weui-search-bar__form">
         <view class="weui-search-bar__box">
@@ -15,8 +15,8 @@
           <view class="weui-search-bar__text">搜索</view>
         </label>
       </view>
-      <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
-    </view>
+    <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+  </view> -->
     <!--<view class="weui-cells searchbar-result" wx:if="{{inputVal.length > 0}}">
       <block wx:for="{{searchList}}" wx:key="{{index}}">
         <view class="weui-media-box weui-media-box_text">
@@ -26,7 +26,7 @@
         </view>
       </block>
     </view>!-->
-  </view>
+  <!-- </view> -->
   <view class='top'>
     <view class='{{isSelected0?"selected":"normal"}}' bindtap='switchItem' data-item='0' hover-class='bg_grey'><text class='{{isSelected0?"border":""}}'>校园动态</text></view>
     <view class='{{isSelected1?"selected":"normal"}}' bindtap='switchItem' data-item='1' hover-class='bg_grey'><text class='{{isSelected1?"border":""}}'>失物招领</text></view>
@@ -50,10 +50,10 @@
     <view style='width:50%;' class='{{WallSelected1?"selected1":"normal"}}' bindtap='switchWall' data-item='1' hover-class='bg_grey'><text class='{{WallSelected1?"border2":""}}'>按时间</text></view>
   </view>
 
-  <scroll-view scroll-y style='height:{{showSearch?"800rpx":"900rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
+  <scroll-view scroll-y style='height:{{showSearch1?"800rpx":"900rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
     <!--校园动态-->
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
-      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}">
+      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-category='0'>
         <view class='userInfo' hover-class='bg_grey'>
           <image src="{{item.user.image}}" class='avatar' catchtap='previewIcon'></image>
           <view class='right-info'>
@@ -129,21 +129,37 @@
     </block>
 
     <!--表白墙-->
-    <block wx:if="{{isSelected2}}" wx:for="{{showList}}" wx:key="*this">
-        <view style='width:100%;background:#fff;margin-top:10rpx;min-height:100rpx;height:auto;padding-left:5%;' data-id="{{item.id}}" bindtap='toDetail' data-mode="表白墙" data-category="wall" >
-          <text class='itemContent' >{{item.content}}</text>
+    <block wx:if="{{isSelected2}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
+      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-category='2'>
+        <view class='userInfo' hover-class='bg_grey'>
+          <image src="../../icon/xin.jpg" class='avatar'></image>
+          <view class='right-info'>
+            <text class='nickname'>匿名</text>
+            <text class='time'>{{item.post_time}}</text>
+          </view>
         </view>
+        <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+          <text class='itemContent'>{{item.content}}</text>
+        </view>
+      </view>
       <view class='comment'>
-          <view class='comment-box' bindtap='dianzan'>
-            <image src='/image/dianzan.png/' class='icon'></image>
-            <text class='iconText'>10</text>
+          <view class='comment-box'>
+            <image src='{{item.isLike?"/image/dianzan_red.png/":"/image/dianzan.png/"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <text class='iconText'>{{item.likeNumber}}</text>
           </view>
           <view class='comment-box'>
             <image src='/image/pinglun.png/' class='icon'></image>
-            <text class='iconText'>10</text>
+            <text class='iconText'>{{item.commentNumber}}</text>
           </view>
         </view>
     </block>
+    <view wx:if="{{addList.length==10&&isSelected2}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+    点击加载更多
+    </view>
+    <view wx:if="{{addList.length!=10&&isSelected2}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+    没有更多了
+    </view>
+
   </scroll-view>
 
 </view>

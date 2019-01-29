@@ -10,6 +10,7 @@ Page({
    * 页面的初始数据
    */
   data: {
+    showSearch1:false,
     showSearch: true,
     inputShowed: false,
     inputVal: "",
@@ -170,6 +171,9 @@ Page({
     /*init_load()函数的作用主要是为请求回来的数据增加一些参数
       包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个） */
     function init_load(list) {
+      let isSelected0=that.data.isSelected0
+      if(!isSelected0)
+        return
       for (let i in list) {
         list[i].myid = i
         list[i].likeNumber = list[i].thumb_ups.length
@@ -245,6 +249,68 @@ Page({
 
   },
   switchItem:function(e){
+    /*init_load()函数的作用主要是为请求回来的数据增加一些参数
+      list:待处理的数组  type:0为校园动态;1为失物招领;2为表白墙 */
+    function init_load(list,type){
+      let currentModeList = []
+      let showList = []
+      let addList = []
+      /*校园动态 */
+      if(type==0){
+        for (let i in list) {
+          list[i].myid = i
+          list[i].likeNumber = list[i].thumb_ups.length
+          list[i].commentNumber = list[i].comments.length
+          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          let isLike = false
+          for (let j in list[i].thumb_ups) {
+            if (list[i].thumb_ups[j].uid == myuid) {
+              isLike = true
+              break
+            }
+          }
+          list[i].isLike = isLike
+          currentModeList.push(list[i])
+          showList.push(list[i])
+          addList.push(list[i])
+        }
+        wx.setStorageSync('post_list', currentModeList)
+        that.setData({
+          showList,
+          currentModeList,
+          addList,
+          page_index:1,
+          topic_id:1
+        })
+      }
+      else if(type==2){
+        for (let i in list) {
+          list[i].myid = i
+          list[i].likeNumber = list[i].thumb_ups.length
+          list[i].commentNumber = list[i].comments.length
+          let isLike = false
+          for (let j in list[i].thumb_ups) {
+            if (list[i].thumb_ups[j].uid == myuid) {
+              isLike = true
+              break
+            }
+          }
+          list[i].isLike = isLike
+          currentModeList.push(list[i])
+          showList.push(list[i])
+          addList.push(list[i])
+        }
+        wx.setStorageSync('post_list', currentModeList)
+        that.setData({
+          showList,
+          currentModeList,
+          addList,
+          page_index:1,
+          topic_id:6
+        })
+      }
+    }
+
     let that=this
     let isSelected0=that.data.isSelected0
     let isSelected1 = that.data.isSelected1
@@ -265,8 +331,35 @@ Page({
         isSelected1=true
       }
       else if (e.currentTarget.dataset.item == "2") {
-        currentModeList = wx.getStorageSync('wallList')
-        showList=currentModeList
+        wx.showLoading({
+          title: '加载中',
+        })
+        wx.request({
+          url: testUrl + 'post_sort',
+          method: "GET",
+          data: {
+            mode:2,
+            topic_id: 6,
+            page_index: 1,
+            page_size: 10
+          },
+          success(res) {
+            console.log(res)
+            let showList=res.data.data
+            init_load(showList,2)
+            wx.hideLoading()
+          },
+          fail(res) {
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none',
+              duration: 2000,
+            })
+          }
+        })
+        
+        // currentModeList = wx.getStorageSync('wallList')
+        // showList=currentModeList
         isSelected0 = false
         isSelected2 = true
       }
@@ -275,19 +368,61 @@ Page({
       if (e.currentTarget.dataset.item == "1")
         return
       if (e.currentTarget.dataset.item == "0") {
-        currentModeList = wx.getStorageSync('post_list')
-        for (let i in currentModeList) {
-          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
-          if (currentModeList[i].description == '生活') {
-            showList.push(currentModeList[i])
+        wx.showLoading({
+          title: '加载中',
+        })
+        wx.request({
+          url: testUrl + 'post_sort',
+          method: "GET",
+          data: {
+            topic_id: 1,
+            page_index: 1,
+            page_size: 10
+          },
+          success(res) {
+            console.log(res)
+            let showList = res.data.data
+            init_load(showList, 0)
+            wx.hideLoading()
+          },
+          fail(res) {
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none',
+              duration: 2000,
+            })
           }
-        }
+        })
         isSelected0 = true
         isSelected1 = false
       }
       else if (e.currentTarget.dataset.item == "2") {
-        currentModeList = wx.getStorageSync('wallList')
-        showList = currentModeList
+        wx.showLoading({
+          title: '加载中',
+        })
+        wx.request({
+          url: testUrl + 'post_sort',
+          method: "GET",
+          data: {
+            mode: 2,
+            topic_id: 6,
+            page_index: 1,
+            page_size: 10
+          },
+          success(res) {
+            console.log(res)
+            let showList = res.data.data
+            init_load(showList, 2)
+            wx.hideLoading()
+          },
+          fail(res) {
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none',
+              duration: 2000,
+            })
+          }
+        })
         isSelected1 = false
         isSelected2 = true
       }
@@ -296,13 +431,31 @@ Page({
       if (e.currentTarget.dataset.item == "2")
         return
       if (e.currentTarget.dataset.item == "0") {
-        currentModeList = wx.getStorageSync('post_list')
-        for (let i in currentModeList) {
-          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
-          if (currentModeList[i].description == '生活') {
-            showList.push(currentModeList[i])
+        wx.showLoading({
+          title: '加载中',
+        })
+        wx.request({
+          url: testUrl + 'post_sort',
+          method: "GET",
+          data: {
+            topic_id: 1,
+            page_index: 1,
+            page_size: 10
+          },
+          success(res) {
+            console.log(res)
+            let showList = res.data.data
+            init_load(showList, 0)
+            wx.hideLoading()
+          },
+          fail(res) {
+            wx.showToast({
+              title: '请求失败',
+              icon: 'none',
+              duration: 2000,
+            })
           }
-        }
+        })
         isSelected0 = true
         isSelected2 = false
       }
@@ -445,7 +598,39 @@ Page({
       showList
     })
   },
+
+  /*表白墙按时间按热度切换 */
   switchWall: function (e) {
+    /*init_load()函数的作用主要是为请求回来的数据增加一些参数*/
+    function init_load(list) {
+      let currentModeList = []
+      let showList = []
+      let addList = []
+      for (let i in list) {
+        list[i].myid = i
+        list[i].likeNumber = list[i].thumb_ups.length
+        list[i].commentNumber = list[i].comments.length
+        let isLike = false
+        for (let j in list[i].thumb_ups) {
+          if (list[i].thumb_ups[j].uid == myuid) {
+            isLike = true
+            break
+          }
+        }
+        list[i].isLike = isLike
+        currentModeList.push(list[i])
+        showList.push(list[i])
+        addList.push(list[i])
+      }
+      wx.setStorageSync('post_list', currentModeList)
+      that.setData({
+        showList,
+        currentModeList,
+        addList,
+        page_index: 1,
+        topic_id: 6
+      })
+    }
     let that = this
     let WallSelected0 = that.data.WallSelected0
     let WallSelected1 = that.data.WallSelected1
@@ -453,11 +638,65 @@ Page({
     if (WallSelected0 && current == 1) {
       WallSelected0 = false
       WallSelected1 = true
+      wx.showLoading({
+        title: '加载中',
+      })
+      wx.request({
+        url: testUrl + 'post_sort',
+        method: "GET",
+        data: {
+          mode: 1,
+          topic_id: 6,
+          page_index: 1,
+          page_size: 10
+        },
+        success(res) {
+          console.log(res)
+          let showList = res.data.data
+          init_load(showList)
+          wx.hideLoading()
+        },
+        fail(res) {
+          wx.showToast({
+            title: '请求失败',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      })
     }
-    if (WallSelected1 && current == 0) {
+    else if (WallSelected1 && current == 0) {
       WallSelected0 = true
       WallSelected1 = false
+      wx.showLoading({
+        title: '加载中',
+      })
+      wx.request({
+        url: testUrl + 'post_sort',
+        method: "GET",
+        data: {
+          mode: 2,
+          topic_id: 6,
+          page_index: 1,
+          page_size: 10
+        },
+        success(res) {
+          console.log(res)
+          let showList = res.data.data
+          init_load(showList)
+          wx.hideLoading()
+        },
+        fail(res) {
+          wx.showToast({
+            title: '请求失败',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      })
     }
+    else
+      return
     that.setData({
       WallSelected0: WallSelected0,
       WallSelected1: WallSelected1,
@@ -502,8 +741,9 @@ Page({
   toDetail:function(e){
     let id = e.currentTarget.dataset.id
     console.log(id)
+    let category = e.currentTarget.dataset.category
     wx.navigateTo({
-       url: 'contentDetail/contentDetail?id='+id,
+       url: 'contentDetail/contentDetail?id='+id+'&category='+category,
     })
   },
   dianzan:function(e){

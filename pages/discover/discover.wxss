@@ -167,6 +167,13 @@
   padding-bottom:15rpx;
   border-bottom: 5rpx solid #ffcc00;
 }
+
+.wallClass{
+  min-height: 1000rpx;
+  width: 100%;
+  background: #ffb6c1;
+}
+
 .bg_grey{
   background: #efefef;
 }

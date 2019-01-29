@@ -1,13 +1,14 @@
 <!--pages/discover/contentDetail/contentDetail.wxml-->
 <view class='showItem'>
-  <view wx:if="{{category!='wall'}}" class='userInfo' hover-class='bg_grey'>
+  <view class='userInfo' hover-class='bg_grey'>
     <image src="{{showObj.userImagesUrl}}" class='avatar' catchtap='previewIcon'></image>
     <view class='right-info'>
-      <text class='nickname'>{{showObj.user.nickname}}</text>
+      <text wx:if="{{category!=2}}" class='nickname'>{{showObj.user.nickname}}</text>
+      <text wx:if="{{category==2}}" class='nickname'>匿名</text>
       <text class='time'>{{showObj.post_time}}</text>
     </view>
   </view>
-  <view wx:if="{{category!='wall'}}" style='margin:0 0 20rpx 5%;' class='itemTitle'>
+  <view wx:if="{{category!=2}}" style='margin:0 0 20rpx 5%;' class='itemTitle'>
     <text>{{showObj.title}}</text>
   </view>
   <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
