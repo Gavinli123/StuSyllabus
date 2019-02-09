@@ -119,6 +119,7 @@ Page({
     console.log(options)
     wx.showLoading({
       title: '加载中',
+      mask: true
     })
     let that=this
     /*showObj为要包含要显示的内容的对象 */
@@ -563,6 +564,7 @@ Page({
   loadMore:function(){
     wx.showLoading({
       title: '加载中',
+      mask: true
     })
     let that=this
     let showObj=that.data.showObj

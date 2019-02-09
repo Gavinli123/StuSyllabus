@@ -40,3 +40,13 @@
     <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 120rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='modify'>修改</button>
   </view>
 </view>
+
+<view class='page' wx:if="{{category=='表白墙'}}">
+  <textarea class="areas" placeholder='请输入内容' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" value='{{content}}' style='margin-top:100rpx;'>
+    <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+  </textarea>
+  <view style='display:flex;flex-direction:row;margin-bottom:100rpx;margin-top:{{show?"25%":"10%"}}'>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 50rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='cancal'>取消</button>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 120rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='modify'>修改</button>
+  </view>
+</view>

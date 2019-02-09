@@ -137,24 +137,18 @@ Page({
   },
   toDetail: function (e) {
     let id = e.currentTarget.dataset.id
-    let mode = e.currentTarget.dataset.mode || '表白墙'
     console.log(id)
     let that=this
     let isSelected=that.data.isSelected
-    let category='message'
-    if(isSelected[1]){
-      category = 'things'
-    }
-    else if(isSelected[2]){
-      category='wall'
-    }
+    let category = e.currentTarget.dataset.category
     wx.navigateTo({
-      url: '../contentDetail/contentDetail?id=' + id + '&mode=' + mode + '&category=' + category,
+      url: '../contentDetail/contentDetail?id=' + id + '&category=' + category,
     })
   },
   loadMore:function(){
     wx.showLoading({
       title: '加载中',
+      mask: true
     })
     let that=this
     let page_index=that.data.page_index+1
@@ -247,12 +241,16 @@ Page({
     /*加一个参数判断类别 */
     let isSelected=that.data.isSelected
     let category=''
-    if(isSelected[0])
-      category='校园动态'
+    if(isSelected[0]){
+      if(mode=='表白墙'){
+        category='表白墙'
+      }
+      else{
+        category='校园动态'
+      }
+    }
     else if(isSelected[1])
       category='失物招领'
-    else if(isSelected[2])
-      category='表白墙'
 
     /*跳转至page/discover/modify页面并传递相关参数*/  
     wx.navigateTo({

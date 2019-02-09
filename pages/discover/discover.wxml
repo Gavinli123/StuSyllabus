@@ -50,7 +50,7 @@
     <view style='width:50%;' class='{{WallSelected1?"selected1":"normal"}}' bindtap='switchWall' data-item='1' hover-class='bg_grey'><text class='{{WallSelected1?"border2":""}}'>按时间</text></view>
   </view>
 
-  <scroll-view scroll-y style='height:{{showSearch1?"800rpx":"900rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
+  <scroll-view scroll-y style='height:{{showSearch1?"800rpx":"1000rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
     <!--校园动态-->
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
       <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-category='0'>
@@ -93,40 +93,51 @@
     
     
     <!--失物招领-->
-    <block wx:if="{{isSelected1}}" wx:for="{{showList}}" wx:key="*this">
-      <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-mode="{{item.mode}}" data-category="things">
-        <view class='userInfo'>
-          <image src='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132' class='avatar' catchtap='previewIcon'></image>
+    <block wx:if="{{isSelected1}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
+      <view class='showItem' bindtap='toDetail1' data-id="{{item.id}}" data-category='0'>
+        <view class='userInfo' hover-class='bg_grey'>
+          <view style='width:60rpx;height:60rpx;font-size:20rpx;border:{{ThingSelected0?"1rpx solid #2d8cf0":"1rpx solid #ffcc00"}};border-radius:50%;margin-right:20rpx;'>
+            <view style='margin-left:10rpx;margin-top:15rpx;'>{{ThingSelected0?"寻物":"寻主"}}</view>
+          </view>
           <view class='right-info'>
-            <text class='nickname'>16eyhuang</text>
-            <text class='time'>10-18 10:51</text>
+            <text class='time' style='margin-top:40rpx;'>{{item.release_time}}</text>
           </view>
         </view>
         <view style='margin:0 0 20rpx 5%;' class='itemTitle'>
-          <text class='itemTitle'>{{item.title}}</text>
-        </view>
-        <view style='margin:0 0 20rpx 5%;width:90%' data-id="{{index}}" bindtap='toDetail' hover-class='bg_grey'>
-          <text class='itemContent'>{{item.content}}</text>
+          <text>{{item.title}}</text>
         </view>
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
-          <text class='itemContent'>{{ThingSelected0?'遗失':'拾取'}}地点：{{item.position}}</text>
+          <text class='itemContent'>{{item.description}}</text>
         </view>
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
-          <text class='itemContent'>联系方式：{{item.phone}}</text>
+          <text class='itemContent'>{{ThingSelected0?"遗失":"拾取"}}地点：{{item.location}}</text>
         </view>
-        <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
-          <view class="issues-photo-item" wx:for="{{item.imgs}}" wx:key="*this_pic" wx:for-index="pics_index">
-            <image src="{{item}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" bindtap="previewPhoto"></image>
+        <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+          <text class='itemContent'>联系方式：{{item.contact}}</text>
+        </view>
+        <!-- <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
+          <view class="issues-photo-item" wx:for="{{item.imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
+            <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" bindtap="previewPhoto"></image>
           </view>
-        </view>
+        </view> -->
       </view>
-      <view class='comment'>
-          <view class='comment-box' style='width:100%'>
-            <image src='/image/pinglun.png/' class='icon' style='margin-left:40%;margin-right:5%;'></image>
-            <text class='iconText'>10</text>
+      <!-- <view class='comment'>
+          <view class='comment-box'>
+            <image src='{{item.isLike?"/image/dianzan_red.png/":"/image/dianzan.png/"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <text class='iconText'>{{item.likeNumber}}</text>
           </view>
-        </view>
+          <view class='comment-box'>
+            <image src='/image/pinglun.png/' class='icon'></image>
+            <text class='iconText'>{{item.commentNumber}}</text>
+          </view>
+      </view> -->
     </block>
+    <!-- <view wx:if="{{addList.length==10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+    点击加载更多
+    </view>
+    <view wx:if="{{addList.length!=10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+    没有更多了
+    </view> -->
 
     <!--表白墙-->
     <block wx:if="{{isSelected2}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
@@ -153,7 +164,7 @@
           </view>
         </view>
     </block>
-    <view wx:if="{{addList.length==10&&isSelected2}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+    <view wx:if="{{addList.length==10&&isSelected2}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore2'>
     点击加载更多
     </view>
     <view wx:if="{{addList.length!=10&&isSelected2}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
@@ -176,6 +187,6 @@
   <view class='pink-text' hover-class='bg_grey'>管理</view>
 </view>
 
-<view wx:if="{{!jiahao}}" style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx; ' >
+<view wx:if="{{!jiahao}}" style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx;' >
   <view class='pink-text' hover-class='bg_grey'>通知</view>
 </view>

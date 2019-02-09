@@ -124,6 +124,12 @@ Page({
         content: value  //当前内容
       });
     }
+    else if (that.data.category == '表白墙') {
+      that.setData({
+        currentWordNumber: len, //当前字数  
+        content: value  //当前内容
+      });
+    }
     // else if (that.data.type == 'things') {
     //   that.setData({
     //     currentWordNumber: len, //当前字数  
@@ -225,6 +231,43 @@ Page({
           title:title,
           description:mode,
           topic_id: topic_id,
+          source: "小程序",
+        },
+        success(res) {
+          console.log(res)
+          wx.reLaunch({
+            url: '../discover',
+          })
+        },
+        fail(res) {
+          console.log("出现错误！")
+        }
+      })
+    }
+    else if (that.data.category == '表白墙') {
+      if (content == '') {
+        wx.showModal({
+          title: '提示',
+          content: '您还没有输入内容',
+        })
+        return
+      }
+      let id = that.data.id
+      let uid = that.data.uid
+      wx.request({
+        url: testUrl,
+        method: 'PUT',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          id: id,
+          uid: uid,
+          token: testToken,
+          post_type: 0,
+          content: content,
+          description: '表白墙',
+          topic_id: 6,
           source: "小程序",
         },
         success(res) {

@@ -1,16 +1,16 @@
 <!--pages/discover/manage/manage.wxml-->
 <view class='top'>
-    <view class='{{isSelected[0]?"selected":"normal"}}' bindtap='switchItem' data-item='0' hover-class='bg_grey'><text class='{{isSelected[0]?"border":""}}'>校园动态</text></view>
+    <view class='{{isSelected[0]?"selected":"normal"}}' bindtap='switchItem' data-item='0' hover-class='bg_grey'><text class='{{isSelected[0]?"border":""}}'>校园动态&表白墙</text></view>
     <view class='{{isSelected[1]?"selected":"normal"}}' bindtap='switchItem' data-item='1' hover-class='bg_grey'><text class='{{isSelected[1]?"border":""}}'>失物招领</text></view>
-    <view class='{{isSelected[2]?"selected":"normal"}}' bindtap='switchItem' data-item='2' hover-class='bg_grey'><text class='{{isSelected[2]?"border":""}}'>表白墙</text></view>
 </view>
-<block wx:for="{{showList}}" wx:key="*this">
-  <view class='listItem' hover-class='bg_grey' data-id="{{item.myid}}" data-mode="{{item.mode}}" bindtap='toDetail'>
+
+<!--校园动态&表白墙-->
+<block wx:if="isSelected[0]" wx:for="{{showList}}" wx:key="*this">
+  <view class='listItem' hover-class='bg_grey' data-id="{{item.id}}" data-category="{{item.description=='表白墙'?'2':'0'}}" bindtap='toDetail'>
     <view class='left'>
-      <view wx:if="{{!isSelected[2]}}" class='title'>标题：{{item.title}}</view>
-      <view class='title' wx:if="{{isSelected[2]}}">内容：{{item.content}}</view>
+      <view wx:if="{{item.description!='表白墙'}}" class='title'>标题：{{item.title}}</view>
+      <view class='title' wx:if="{{item.description=='表白墙'}}">内容：{{item.content}}</view>
       <view wx:if="{{isSelected[0]}}" class='mode'>模块：{{item.description}}</view>
-      <view wx:if="{{isSelected[1]}}" class='mode'>模块：{{item.mode}}</view>
       <view class='time'>{{item.post_time}}</view>
     </view>
     <view class='right'>

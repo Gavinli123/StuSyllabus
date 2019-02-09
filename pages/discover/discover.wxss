@@ -73,6 +73,9 @@
 .pink-text{
   border-radius:50%;
   border:5rpx solid #ff1493;
+  font-size: 30rpx;
+  margin-left:10rpx;
+  margin-top:10rpx;
   padding:10rpx;
   color:#ff1493; 
 }

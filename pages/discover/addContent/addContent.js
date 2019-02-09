@@ -2,6 +2,7 @@
 
 const stuUrl ="https://stuapps.com/interaction/api/v2/post"
 const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
+const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
 const testUid="5"
 const testToken="100004"
 Page({
@@ -342,18 +343,57 @@ Page({
         })
         return
       }
-      let thingsList=wx.getStorageSync('thingsList')||[]
-      let id = thingsList.length
-      formData2.id = id
-      thingsList.push(formData2)
-      wx.setStorage({
-        key: 'thingsList',
-        data: thingsList,
+      console.log(formData2)
+      /*确定类型，0为寻主，1为寻物 */
+      let kind=0
+      if(formData2.mode=='寻物'){
+        kind=1
+      }
+      wx.request({
+        url:findlostUrl,
+        method:'POST',
+        header: {
+          'content-type': 'application/x-www-form-urlencoded',
+        },
+        data:{
+          uid:5,
+          token:testToken,
+          kind:kind,
+          title:formData2.title,
+          description:formData2.content,
+          location:formData2.position,
+          contact:formData2.phone
+        },
+        success(res){
+          console.log(res)
+          if(res.data.status=='created'){
+            wx.reLaunch({
+              url: '../discover',
+            })  
+          }
+          else{
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
+        },
+        fail(res){
+          console.log(res)
+        }
       })
-      console.log(thingsList)
-      wx.reLaunch({
-        url: '../discover',
-      })
+      // let thingsList=wx.getStorageSync('thingsList')||[]
+      // let id = thingsList.length
+      // formData2.id = id
+      // thingsList.push(formData2)
+      // wx.setStorage({
+      //   key: 'thingsList',
+      //   data: thingsList,
+      // })
+      // console.log(thingsList)
+      // wx.reLaunch({
+      //   url: '../discover',
+      // })
     }
     else if(that.data.type=='wall'){
       let formData3=that.data.formData3

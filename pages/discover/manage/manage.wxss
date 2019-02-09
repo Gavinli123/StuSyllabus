@@ -14,14 +14,14 @@ page{
   font-size: 35rpx;
   color:#c0c0c0;
   text-align:center;
-  width:33%;
+  width:50%;
 }
 .selected{
   font-size: 35rpx;
   font-weight: bold;
   color: #2d8cf0;
   text-align:center;
-  width:33%;
+  width:50%;
 }
 .border{
   padding-bottom:15rpx;
