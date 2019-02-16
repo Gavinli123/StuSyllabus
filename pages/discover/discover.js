@@ -1,7 +1,7 @@
 // pages/discover/discover.js
 const testUrl ="http://118.126.92.214:8083/interaction/api/v2/"
 const likeUrl ="http://118.126.92.214:8083/interaction/api/v2/like"
-const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
+const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlosts"
 const stuUrl = "https://stuapps.com/interaction/api/v2/posts"
 const myuid=5
 const mytoken="100004"
@@ -66,8 +66,21 @@ Page({
     let page_index=that.data.page_index
     wx.showLoading({
       title: '加载中',
-      mask:true
+      mask:true,
+      success(){
+        /*设置scrool_view的高度 */
+        wx.getSystemInfo({
+          success: function (res) {
+            console.info(res.windowHeight);
+            let height =res.windowHeight - 80
+            that.setData({
+              scrollHeight:height
+            })
+          }
+        });
+      }
     })
+
     function init_load(list){
       let currentModeList = list
       let showList = []
@@ -251,6 +264,8 @@ Page({
     let isSelected2 = that.data.isSelected2
     let WallSelected0=that.data.WallSelected0
     let WallSelected1 = that.data.WallSelected1
+    let ThingSelected0=that.data.ThingSelected0
+    let ThingSelected1 = that.data.ThingSelected1
     let showList = []
     let currentModeList = []
     let addList = []
@@ -286,6 +301,67 @@ Page({
             title: '请求失败',
             icon: 'none',
             duration: 2000,
+          })
+        }
+      })
+    }
+
+    /*处理失物招领的下拉刷新 */
+    if(isSelected1){
+      wx.showLoading({
+        title: '加载中',
+        mask:true
+      })
+      let kind=1
+      let str='findlost1'
+      if(ThingSelected1){
+        kind = 0
+        str='findlost0'
+      }
+      wx.request({
+        url: findlostUrl,
+        method: 'GET',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          uid: Number.parseInt(myuid),
+          token: mytoken,
+          kind: kind,
+          page_index:1,
+          page_size:10
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            let showList = res.data.data.findlost_list
+            let addList = showList
+            let currentModeList = showList
+            wx.setStorageSync(str, showList)
+            that.setData({
+              showList,
+              addList,
+              currentModeList,
+            })
+            wx.hideLoading()
+            wx.showToast({
+              title: '刷新成功',
+            })
+          }
+          else {
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail(res) {
+          console.log(res)
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
           })
         }
       })
@@ -378,6 +454,22 @@ Page({
           topic_id:1
         })
       }
+
+      /*失物招领 */
+      else if(type==1){
+        showList=list
+        currentModeList=list
+        addList=list
+        /*将寻找失物存储到本地 */
+        wx.setStorageSync('findlost1', showList)
+        that.setData({
+          showList,
+          currentModeList,
+          addList
+        })
+      }
+
+      /*表白墙 */
       else if(type==2){
         for (let i in list) {
           list[i].myid = i
@@ -418,6 +510,29 @@ Page({
       if (e.currentTarget.dataset.item =="0")
         return
       if(e.currentTarget.dataset.item=="1"){
+        /*如果本地存储中已有寻找失物的数据，则不再请求 */
+        let dataList = wx.getStorageSync('findlost1') || []
+        if (dataList.length > 0) {
+          let currentModeList = dataList
+          let showList = dataList
+          let addList = []
+          let yu = dataList.length % 10
+          if (yu == 0) {
+            addList = dataList.slice(dataList.lenth - 11)
+          }
+          that.setData({
+            currentModeList,
+            showList,
+            addList,
+            isSelected0: false,
+            isSelected1: true,
+            isSelected2: false,
+            ThingSelected0: true,
+            ThingSelected1: false,
+          })
+          return
+        }
+
         wx.showLoading({
           title: '加载中',
           mask: true
@@ -432,14 +547,13 @@ Page({
             uid: Number.parseInt(myuid),
             token: mytoken,
             kind: 1,
+            page_index:1,
+            page_size:10
           },
           success(res) {
             console.log(res)
             if(res.statusCode==200){
-              let showList=res.data.data.findlost_list
-              that.setData({
-                showList
-              })
+              init_load(res.data.data.findlost_list,1)              
               wx.hideLoading()
             }
             else{
@@ -459,12 +573,6 @@ Page({
             })
           }
         })
-        // currentModeList=wx.getStorageSync('thingsList')
-        // for(let i in currentModeList){
-        //   if(currentModeList[i].mode=='寻物'){
-        //     showList.push(currentModeList[i])
-        //   }
-        // }
         isSelected0=false
         isSelected1=true
       }
@@ -698,6 +806,29 @@ Page({
         isSelected2 = false
       }
       else if (e.currentTarget.dataset.item == "1") {
+        /*如果本地存储中已有寻找失物的数据，则不再请求 */
+        let dataList = wx.getStorageSync('findlost1') || []
+        if (dataList.length > 0) {
+          let currentModeList = dataList
+          let showList = dataList
+          let addList = []
+          let yu = dataList.length % 10
+          if (yu == 0) {
+            addList = dataList.slice(dataList.lenth - 11)
+          }
+          that.setData({
+            currentModeList,
+            showList,
+            addList,
+            isSelected0: false,
+            isSelected1: true,
+            isSelected2: false,
+            ThingSelected0: true,
+            ThingSelected1: false,
+          })
+          return
+        }
+
         wx.showLoading({
           title: '加载中',
           mask: true
@@ -712,14 +843,13 @@ Page({
             uid: Number.parseInt(myuid),
             token: mytoken,
             kind: 1,
+            page_index:1,
+            page_size:10
           },
           success(res) {
             console.log(res)
             if (res.statusCode == 200) {
-              let showList = res.data.data.findlost_list
-              that.setData({
-                showList
-              })
+              init_load(res.data.data.findlost_list,1)
               wx.hideLoading()
             }
             else {
@@ -879,12 +1009,31 @@ Page({
     let ThingSelected1 = that.data.ThingSelected1
     let current = Number.parseInt(e.currentTarget.dataset.item)
     let currentModeList=that.data.currentModeList
-    let showList=[]
     if(ThingSelected0&&current==0)
       return
     if (ThingSelected1 && current == 1)
       return
     if(ThingSelected0&&current==1){
+      /*若本地存储中有寻找失主的信息，则不再请求 */
+      let dataList=wx.getStorageSync('findlost0')||[]
+      if(dataList.length>0){
+        let showList=dataList
+        let currentModeList=dataList
+        let addList=[]
+        let yu=showList.length%10
+        if(yu==0){
+          addList=showList.slice(showList.length-11)
+        }
+        that.setData({
+          showList,
+          currentModeList,
+          addList,
+          ThingSelected0:false,
+          ThingSelected1:true
+        })
+        return
+      }
+
       wx.showLoading({
         title: '加载中',
         mask: true
@@ -899,13 +1048,20 @@ Page({
           uid: Number.parseInt(myuid),
           token: mytoken,
           kind: 0,
+          page_index:1,
+          page_size:10
         },
         success(res) {
           console.log(res)
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
+            let addList=showList
+            let currentModeList=showList
+            wx.setStorageSync('findlost0', showList)
             that.setData({
-              showList
+              showList,
+              addList,
+              currentModeList,
             })
             wx.hideLoading()
           }
@@ -931,6 +1087,26 @@ Page({
       ThingSelected1=true
     }
     if (ThingSelected1 && current == 0) {
+      /*若本地存储中有寻找失物的信息，则不再请求 */
+      let dataList = wx.getStorageSync('findlost1') || []
+      if (dataList.length > 0) {
+        let showList = dataList
+        let currentModeList = dataList
+        let addList = []
+        let yu = showList.length % 10
+        if (yu == 0) {
+          addList = showList.slice(showList.length - 11)
+        }
+        that.setData({
+          showList,
+          currentModeList,
+          addList,
+          ThingSelected0:true,
+          ThingSelected1:false
+        })
+        return
+      }
+
       wx.showLoading({
         title: '加载中',
         mask: true
@@ -945,13 +1121,19 @@ Page({
           uid: Number.parseInt(myuid),
           token: mytoken,
           kind: 1,
+          page_index:1,
+          page_size:10
         },
         success(res) {
           console.log(res)
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
+            let addList=showList
+            let currentModeList=showList
             that.setData({
-              showList
+              showList,
+              currentModeList,
+              addList,
             })
             wx.hideLoading()
           }
@@ -978,7 +1160,6 @@ Page({
     that.setData({
       ThingSelected0:ThingSelected0,
       ThingSelected1: ThingSelected1,
-      showList
     })
   },
 
@@ -1179,6 +1360,8 @@ Page({
       showSearch:true
     })
   },
+
+  /*跳转至校园动态或表白墙正文 */
   toDetail:function(e){
     let id = e.currentTarget.dataset.id
     console.log(id)
@@ -1187,6 +1370,15 @@ Page({
        url: 'contentDetail/contentDetail?id='+id+'&category='+category,
     })
   },
+
+  /*跳转至失物招领正文 */
+  toDetail1:function(e){
+    let id = e.currentTarget.dataset.id
+    wx.navigateTo({
+      url: 'findlostDetail/findlostDetail?id=' + id,
+    })
+  },
+
   dianzan:function(e){
     let id=e.currentTarget.dataset.id
     let myid=Number.parseInt(e.currentTarget.dataset.myid)
@@ -1340,6 +1532,73 @@ Page({
           title: '请求失败',
           icon: 'none',
           duration: 2000,
+        })
+      }
+    })
+  },
+
+  /*加载更多--失物招领 */
+  loadMore1:function(){
+    wx.showLoading({
+      title: '加载中',
+      mask: true
+    })
+    let that=this
+    let ThingSelected0=that.data.ThingSelected0
+    let ThingSelected1 = that.data.ThingSelected1
+    let showList=that.data.showList
+    let addList=[]
+    let kind=1
+    let str='findlost1'
+    if(ThingSelected1){
+      kind=0
+      str='findlost0'
+    }
+    let dataList=wx.getStorageSync(str)||[]
+    let page_index = Math.floor(dataList.length / 10) + 1
+    /*请求新的一页 */
+    wx.request({
+      url: findlostUrl,
+      method: 'GET',
+      header: {
+        'Content-Type': 'application/json',
+      },
+      data: {
+        uid: Number.parseInt(myuid),
+        token: mytoken,
+        kind: kind,
+        page_index:page_index,
+        page_size:10
+      },
+      success(res) {
+        console.log(res)
+        if (res.statusCode == 200) {
+          for(let i=0;i<res.data.data.findlost_list.length;i++){
+            showList.push(res.data.data.findlost_list[i])
+            addList.push(res.data.data.findlost_list[i])
+          }
+          wx.setStorageSync(str, showList)
+          that.setData({
+            showList,
+            currentModeList:showList,
+            addList,
+          })
+          wx.hideLoading()
+        }
+        else {
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
+        }
+      },
+      fail(res) {
+        console.log(res)
+        wx.hideLoading()
+        wx.showToast({
+          title: '出现错误',
+          icon: 'none'
         })
       }
     })

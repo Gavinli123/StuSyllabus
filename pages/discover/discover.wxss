@@ -6,7 +6,7 @@
 }
 .top{
   background: #fff;
-  height:80rpx;
+  height:40px;
   width:100%;
   display: flex;
   flex-direction: row;

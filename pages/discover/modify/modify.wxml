@@ -41,6 +41,34 @@
   </view>
 </view>
 
+<!--失物招领-->
+<view class='page' wx:if="{{category=='失物招领'}}">
+  <input placeholder='请输入标题' class='title' bindinput='titleListener' value='{{title}}'></input>
+  <textarea class="areas" placeholder='请输入内容' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" value='{{content}}'>
+    <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
+  </textarea>
+  <view style='width:90%;margin-left:5%;margin-top:5%'>
+    <text class="issues-label">请选择类型</text>
+    <radio-group style='margin:20rpx;' bindchange='radiochange'>
+      <radio value='寻物' checked='{{checked}}' style='margin-right:20rpx;' />寻物
+      <radio value='寻主' checked='{{!checked}}' />寻主
+    </radio-group>
+  </view>
+  <view style='width:90%;margin-left:5%;display:flex;flex-direction:row;align-items:center;margin-top:20rpx;'>
+    <text style='width:20%;text-align:center'>位置</text>
+    <input placeholder='遗失或拾取的大概位置' class='input2' bindinput='positionListener' value='{{location}}'></input>
+  </view>
+  <view style='width:90%;margin-left:5%;display:flex;flex-direction:row;align-items:center;margin-top:20rpx;'>
+    <text style='width:20%;text-align:center'>联系方式</text>
+    <input placeholder='输入您的电话号码' class='input2' bindinput='phoneListener' value='{{contact}}'></input>
+  </view>
+  <view style='display:flex;flex-direction:row;margin-bottom:100rpx;margin-top:{{show?"25%":"10%"}}'>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 50rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='cancal'>取消</button>
+    <button style='width:250rpx;height:100rpx;margin:30rpx 20rpx 0 120rpx;background:#2d8cf0;color:#fff;border-radius:50rpx;' bindtap='modify1'>修改</button>
+  </view>
+</view>
+
+<!--表白墙-->
 <view class='page' wx:if="{{category=='表白墙'}}">
   <textarea class="areas" placeholder='请输入内容' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" value='{{content}}' style='margin-top:100rpx;'>
     <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>

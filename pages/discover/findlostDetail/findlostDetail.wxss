@@ -1,0 +1,117 @@
+/* pages/discover/findlostDetail/findlostDetail.wxss */
+page{
+  background: #f0f0f0;
+}
+.showItem{
+  display:flex;
+  flex-direction:column;
+  margin-top: 10rpx;
+  background:#fff;
+  width:100%;
+  height:auto;
+}
+.userInfo{
+  width:90%;
+  height:80rpx;
+  margin:20rpx 0 20rpx 5%;
+  display:flex;
+  flex-direction:row;
+  border-bottom: 1rpx solid #efefef
+}
+.avatar{
+  width:60rpx;
+  height:60rpx;
+  margin-right:20rpx;
+  border-radius:50%;
+}
+.right-info{
+  display:flex;
+  flex-direction:column;
+  height:100%;
+}
+.nickname{
+  font-size:30rpx;
+  color:#000;
+}
+.time{
+  font-size:20rpx;
+  color:#666;
+}
+.itemTitle{
+  color:#000;
+  font-size:40rpx;
+  font-weight:bold;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.itemContent{
+  color:#000;
+  font-size:30rpx;
+  word-break: break-all;
+}
+.box{
+  width:100%;
+  height:80rpx;
+  margin-top:20rpx;
+  display:flex;
+  align-items:center;
+  background:#fff;
+}
+.selected{
+  font-size: 30rpx;
+  color: #000;
+  font-weight: bold;
+  padding: 10rpx 0;
+  border-bottom: 5rpx solid #ffcc00;
+}
+.normal{
+  font-size: 30rpx;
+  color: #c0c0c0;
+  padding: 10rpx 0;
+}
+.comPanel{
+  width:100%;
+  height:auto;
+  display:flex;
+  flex-direction:column;
+  background:#fff;
+  margin-bottom:80rpx;
+}
+.bottom{
+  position: fixed;
+  bottom: 0;
+  height: 80rpx;
+  background: #fcfcfc;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+.commentPanel{
+  position: fixed;
+  bottom:0;
+  height: auto;
+  min-height: 250rpx;
+  display: flex;
+  width:100%;
+  background:#f6f6f6;
+  opacity:1.0;
+}
+
+.mask{
+  width:100%;
+  height:100%;
+  position:fixed;
+  background-color:#999;
+  z-index:9999;
+  top:0;
+  left:0;
+  opacity:0.5;
+}
+
+.bg_grey{
+  background: #f6f6f6;
+}
+.bg_red{
+  background: #f00;
+}

@@ -1,4 +1,5 @@
 // pages/discover/contentDetail/contentDetail.js
+const findlostUrl = "http://118.126.92.214:8083//extension/api/v2/findlost/"
 const testUrl = "http://118.126.92.214:8083/interaction/api/v2/"
 const myuid=5
 const mytoken = "100004"
@@ -21,48 +22,7 @@ Page({
     yishi:true,
     comment:true,
     heat:true,
-    comment_list:[
-      // {
-      //   'userImageUrl':imgurl,
-      //   'nickname':'隐者无名',
-      //   'time':'11-30 14:04',
-      //   'content':'微博粉丝破3万了有什么福利没aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-      //   'reply':'200',
-      //   'likes':'16'
-      // },
-      // {
-      //   'userImageUrl': imgurl,
-      //   'nickname': '冷先生9527',
-      //   'time': '11-30 14:04',
-      //   'content': '孙哥，内定给我，可以吗',
-      //   'reply': '200',
-      //   'likes': '16'
-      // },
-      // {
-      //   'userImageUrl': imgurl,
-      //   'nickname': '冷先生9527',
-      //   'time': '11-30 14:04',
-      //   'content': '孙哥，内定给我，可以吗',
-      //   'reply': '200',
-      //   'likes': '16'
-      // },
-      // {
-      //   'userImageUrl': imgurl,
-      //   'nickname': '冷先生9527',
-      //   'time': '11-30 14:04',
-      //   'content': '孙哥，内定给我，可以吗孙哥，内定给我，可以吗孙哥，内定给我，可以吗孙哥，内定给我，可以吗孙哥，内定给我，可以吗孙哥，内定给我，可以吗孙哥，内定给我，可以吗',
-      //   'reply': '200',
-      //   'likes': '16'
-      // },
-      // {
-      //   'userImageUrl': imgurl,
-      //   'nickname': '冷先生9527',
-      //   'time': '11-30 14:04',
-      //   'content': '孙哥，内定给我，可以吗',
-      //   'reply': '200',
-      //   'likes': '16'
-      // },
-    ],
+    comment_list:[],
     likesList:[
       {
         'userImageUrl': imgurl,
@@ -126,7 +86,7 @@ Page({
     let showObj={}
     /*获取传过来的id值并且请求 */
     let id=options.id
-    /*category为0时是校园动态，2是表白墙 */
+    /*category为0时是校园动态,2是表白墙 */
     let category=Number.parseInt(options.category)
 
     if(category==0){
@@ -215,6 +175,29 @@ Page({
             title: '出现错误',
             icon: 'none'
           })
+        }
+      })
+    }
+    else if(category==1){
+      let url=String(findlostUrl+id)
+      wx.request({
+        url: url,
+        method: 'GET',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data:{
+        },
+        success(res){
+          if(res.statusCode==200){
+
+          }
+          else{
+
+          }
+        },
+        fail(res){
+          console.log(res)
         }
       })
     }

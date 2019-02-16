@@ -5,7 +5,7 @@
 </view>
 
 <!--校园动态&表白墙-->
-<block wx:if="isSelected[0]" wx:for="{{showList}}" wx:key="*this">
+<block wx:if="{{isSelected[0]}}" wx:for="{{showList}}" wx:key="school">
   <view class='listItem' hover-class='bg_grey' data-id="{{item.id}}" data-category="{{item.description=='表白墙'?'2':'0'}}" bindtap='toDetail'>
     <view class='left'>
       <view wx:if="{{item.description!='表白墙'}}" class='title'>标题：{{item.title}}</view>
@@ -19,9 +19,31 @@
     </view>
   </view>
 </block>
-<view wx:if="{{addList.length==10}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+<view wx:if="{{addList.length==10&&isSelected[0]}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
   点击加载更多
 </view>
-<view wx:if="{{addList.length!=10}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+<view wx:if="{{addList.length!=10&&isSelected[0]}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+  已加载完毕
+</view>
+
+<!--失物招领-->
+<block wx:if="{{isSelected[1]}}" wx:for="{{showList}}" wx:key="findlost">
+  <view class='listItem' hover-class='bg_grey' data-id="{{item.id}}" bindtap='toDetail1'>
+    <view class='left'>
+      <view class='title'>标题：{{item.title}}</view>
+      <view class='title'>描述：{{item.description}}</view>
+      <view class='mode'>模块：{{item.kind==1?"寻物":"寻主"}}</view>
+      <view class='time'>{{item.release_time}}</view>
+    </view>
+    <view class='right'>
+    <image src='../../../image/bianji_cdcdcd.png' style='height:40rpx;width:40rpx;padding-top:50rpx;padding-left:70rpx;' catchtap='modify1' data-id="{{item.id}}" data-content="{{item.description}}" data-mode="{{item.kind==1?'寻物':'寻主'}}" data-photo="{{item.img_link}}" data-title="{{item.title}}" data-uid="{{item.uid}}" data-location="{{item.location}}" data-contact="{{item.contact}}"></image>
+    <image src='../../../image/shanchu_cdcdcd.png' style='height:40rpx;width:40rpx;padding-top:50rpx;padding-left:30rpx;' catchtap='delete1' data-id="{{item.id}}" data-index="{{index}}"></image>
+    </view>
+  </view>
+</block>
+<view wx:if="{{addList.length==10&&isSelected[1]}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore1'>
+  点击加载更多
+</view>
+<view wx:if="{{addList.length!=10&&isSelected[1]}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
   已加载完毕
 </view>

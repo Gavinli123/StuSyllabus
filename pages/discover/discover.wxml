@@ -1,5 +1,5 @@
 <!--pages/discover/discover.wxml-->
-<view class='page'>
+<view class='page' id='other'>
   <!-- <view wx:if="{{showSearch}}">
     <view class="weui-search-bar">
       <view class="weui-search-bar__form">
@@ -50,7 +50,8 @@
     <view style='width:50%;' class='{{WallSelected1?"selected1":"normal"}}' bindtap='switchWall' data-item='1' hover-class='bg_grey'><text class='{{WallSelected1?"border2":""}}'>按时间</text></view>
   </view>
 
-  <scroll-view scroll-y style='height:{{showSearch1?"800rpx":"1000rpx"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
+<!--{{showSearch1?"800rpx":"1000rpx"}}-->
+  <scroll-view scroll-y style='height: {{scrollHeight + "px"}}' bindscroll='scroll' bindscrolltoupper='upper' upper-threshold='100rpx'>
     <!--校园动态-->
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
       <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-category='0'>
@@ -94,7 +95,7 @@
     
     <!--失物招领-->
     <block wx:if="{{isSelected1}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
-      <view class='showItem' bindtap='toDetail1' data-id="{{item.id}}" data-category='0'>
+      <view class='showItem' bindtap='toDetail1' data-id="{{item.id}}">
         <view class='userInfo' hover-class='bg_grey'>
           <view style='width:60rpx;height:60rpx;font-size:20rpx;border:{{ThingSelected0?"1rpx solid #2d8cf0":"1rpx solid #ffcc00"}};border-radius:50%;margin-right:20rpx;'>
             <view style='margin-left:10rpx;margin-top:15rpx;'>{{ThingSelected0?"寻物":"寻主"}}</view>
@@ -132,12 +133,12 @@
           </view>
       </view> -->
     </block>
-    <!-- <view wx:if="{{addList.length==10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore'>
+    <view wx:if="{{addList.length==10&&isSelected1}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;' bindtap='loadMore1'>
     点击加载更多
     </view>
-    <view wx:if="{{addList.length!=10&&isSelected0}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
+    <view wx:if="{{addList.length!=10&&isSelected1}}" style='width:100%;height:auto;margin-top:10rpx;text-align:center;margin-bottom:10rpx;'>
     没有更多了
-    </view> -->
+    </view>
 
     <!--表白墙-->
     <block wx:if="{{isSelected2}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">

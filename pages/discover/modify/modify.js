@@ -1,4 +1,5 @@
 // pages/discover/modify/modify.js
+const findlostUrl ="http://118.126.92.214:8083/extension/api/v2/findlost"
 const testUrl = "http://118.126.92.214:8083/interaction/api/v2/post"
 const testUid = "5"
 const testToken = "100004"
@@ -20,7 +21,24 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    let that = this
     console.log(options)
+    if(options.category=='失物招领'){
+      console.log(options)
+      that.setData({
+        category:options.category,
+        content:options.content,
+        id:Number.parseInt(options.id),
+        location:options.location,
+        contact:options.contact,
+        checked:options.mode=="寻物"?true:false,
+        mode:options.mode,
+        title:options.title,
+        uid:Number.parseInt(options.uid),
+        currentWordNumber:options.content.length
+      })
+    }
+
     /*获取从manage页面传来的参数并且setData */
     let category=options.category
     let content=options.content
@@ -32,7 +50,6 @@ Page({
     let title=options.title
     let uid=Number.parseInt(options.uid)
     let topic_id=Number.parseInt(options.topic_id)
-    let that=this
     let currentWordNumber=content.length
     let index = topic_id - 1
     that.setData({
@@ -101,7 +118,7 @@ Page({
   /*标题监听 */
   titleListener: function (e) {
     let that = this
-    if (that.data.category == '校园动态') {
+    if (that.data.category == '校园动态' || that.data.category == '失物招领') {
       that.setData({
         title: e.detail.value
       })
@@ -118,30 +135,41 @@ Page({
     if (len > this.data.max) return;
     // 当输入框内容的长度大于最大长度限制（max)时，终止setData()的执行
     let that = this
-    if (that.data.category == '校园动态') {
+    that.setData({
+      currentWordNumber: len, //当前字数  
+      content: value  //当前内容
+    });
+  },
+
+  /*失物招领模块变化 */
+  radiochange: function (e) {
+    let that = this
+    if (e.detail.value == '寻物') {
       that.setData({
-        currentWordNumber: len, //当前字数  
-        content: value  //当前内容
-      });
+        mode: '寻物'
+      })
     }
-    else if (that.data.category == '表白墙') {
+    if (e.detail.value == '寻主') {
       that.setData({
-        currentWordNumber: len, //当前字数  
-        content: value  //当前内容
-      });
+        mode: '寻主'
+      })
     }
-    // else if (that.data.type == 'things') {
-    //   that.setData({
-    //     currentWordNumber: len, //当前字数  
-    //     'formData2.content': value  //当前内容
-    //   })
-    // }
-    // else if (that.data.type == 'wall') {
-    //   that.setData({
-    //     currentWordNumber: len, //当前字数  
-    //     'formData3.content': value  //当前内容
-    //   })
-    // }
+  },
+
+  /*失物招领位置监听器 */
+  positionListener: function (e) {
+    let that = this
+    that.setData({
+      location: e.detail.value
+    })
+  },
+
+  /*失物招领联系方式监听器 */
+  phoneListener: function (e) {
+    let that = this
+    that.setData({
+      contact: e.detail.value
+    })
   },
 
   /*是否显示下拉框 */
@@ -282,4 +310,56 @@ Page({
       })
     }
   },
+
+  /*失物招领修改 */
+  modify1:function(){
+    let that=this
+    let formdata={}
+    formdata.findlost_id=that.data.id
+    formdata.uid=that.data.uid
+    formdata.kind=that.data.mode=="寻物"?1:0
+    formdata.title=that.data.title
+    formdata.description=that.data.content
+    formdata.location=that.data.location
+    formdata.contact=that.data.contact
+    console.log(formdata)
+
+    wx.request({
+      url: findlostUrl,
+      method:'PUT',
+      header: {
+        'content-type': 'application/x-www-form-urlencoded',
+      },
+      data:{
+        findlost_id:formdata.findlost_id,
+        uid:testUid,
+        token:testToken,
+        kind:formdata.kind,
+        title:formdata.title,
+        description:formdata.description,
+        location:formdata.location,
+        contact:formdata.contact
+      },
+      success(res){
+        if(res.statusCode==200){
+          wx.reLaunch({
+            url: '../discover',
+          })
+        }
+        else{
+          wx.showToast({
+            title: '出现错误',
+            icon: none,
+          })  
+        }
+      },
+      fail(res){
+        console.log(res)
+        wx.showToast({
+          title: '出现错误',
+          icon:none,
+        })
+      }
+    })
+  }
 })

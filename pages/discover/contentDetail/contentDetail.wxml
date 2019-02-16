@@ -27,7 +27,7 @@
   </view>
 </view>
 
-<view class='box'>
+<view class='box' wx:if="{{category!=1}}">
   <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>评论 {{showObj.comments.length}}</view>
   <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>赞 {{showObj.thumb_ups.length}}</view>
 </view>
