@@ -102,6 +102,20 @@ Page({
             showObj.description = res.data.description
             showObj.id = res.data.id
             showObj.photo_list_json = res.data.photo_list_json
+            showObj.imgs=[]
+            if(showObj.photo_list_json!=null){
+              let imgObj=JSON.parse(showObj.photo_list_json)
+              if(imgObj!=null){
+                for (let i = 0; i < imgObj.photo_list.length; i++) {
+                  if (imgObj.photo_list[i]["size_big"] != "") {
+                    showObj.imgs.push(imgObj.photo_list[i]["size_big"])
+                  }
+                  else {
+                    showObj.imgs.push(imgObj.photo_list[i]["size_small"])
+                  }
+                }
+              }
+            }
             showObj.post_time = res.data.post_time
             showObj.post_type = res.data.post_type
             showObj.real_uid = res.data.real_uid
@@ -592,6 +606,15 @@ Page({
           icon: 'none'
         })
       }
+    })
+  },
+  /*图片预览 */
+  previewPhoto: function (e) {
+    let that = this
+    let index = e.currentTarget.dataset.index
+    wx.previewImage({
+      current: that.data.showObj.imgs[index],
+      urls: that.data.showObj.imgs,
     })
   }
 })

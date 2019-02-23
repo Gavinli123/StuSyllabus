@@ -27,6 +27,16 @@ global.notice = global.notice ? global.notice : {
 }
 wx.setStorageSync('notice', global.notice)
 
+var Bmob = require('util/bmob.js')
+
+
+// var BmobSocketIo = require('utils/bmobSocketIo.js').BmobSocketIo;
+// const BmobSocketIo = require('utils/tunnel');
+Bmob.initialize(
+  '6aab8e119139573e2d2ed4cbb2cbbe4c',
+  '2c491fcde79bee2a17f4b7f1e9420ece'
+)
+
 App({
 
   getPage: function (pageName) {

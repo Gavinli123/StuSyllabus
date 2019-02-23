@@ -5,6 +5,9 @@ const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
 const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
 const testUid="5"
 const testToken="100004"
+
+var Bmob = require('../../../util/bmob.js');
+var common = require('../../../util/common.js');
 Page({
 
   /**
@@ -38,7 +41,9 @@ Page({
 
     show: false,//控制下拉列表的显示隐藏，false隐藏、true显示
     selectData: ['生活', '兼职', '研究', '学习'],//下拉列表的数据
-    index: 0//选择的下拉列表下标
+    index: 0,//选择的下拉列表下标
+    imgChoose:false,
+    urlArr:[],  //图片的地址数组
   },
 
   /**
@@ -157,7 +162,7 @@ Page({
             success: function (res) {
               console.log(res)
               var tempFilePaths = res.tempFilePaths, imgLen = tempFilePaths.length;
-              if(imgLen+_this.data.imgLen>5){
+              if(imgLen>5){
                 wx.showModal({
                   title: '提示',
                   content: '上传图片的数量不得大于5张',
@@ -168,44 +173,91 @@ Page({
                 //uploading: true,
                 imgLen: _this.data.imgLen + imgLen
               });
-              tempFilePaths.forEach(function (e) {
-                if(_this.data.type=='news'){
-                  _this.setData({
-                    "formData.imgs": _this.data.formData.imgs.concat(e)
-                  })
+              
+              wx.showLoading({
+                title: '上传中',
+                mask:true
+              })
+              var urlArr=new Array();
+              if(imgLen>0){
+                var newDate=new Date();
+                var newDateStr = newDate.toLocaleDateString();
+                var j = 0;
+                for (var i = 0; i < imgLen; i++){
+                  var tempFilePath = [tempFilePaths[i]];
+                  var extension = /\.([^.]*)$/.exec(tempFilePath[0]);
+                  if (extension) {
+                    extension = extension[1].toLowerCase();
+                  }
+                  var name = newDateStr + "." + extension;//上传的图片的别名
+                  var file = new Bmob.File(name, tempFilePath);
+                  file.save().then(function (res) {
+                    console.log(res)
+                    wx.hideLoading()
+                    var url = res.url();
+                    console.log(url);
+
+                    urlArr.push({ "url": url });
+                    j++;
+                    console.log(j, imgLen);
+                    // if (imgLength == j) {
+                    //   console.log(imgLength, urlArr);
+                    //如果担心网络延时问题，可以去掉这几行注释，就是全部上传完成后显示。
+                    // }
+                    _this.setData({
+                      urlArr,
+                      imgChoose:true
+                    })
+                    console.log(_this.data.urlArr)
+
+                  }, function (error) {
+                    wx.hideLoading()
+                    console.log(error)
+                    wx.showToast({
+                      title: '出现错误',
+                      icon:none
+                    })
+                  });
                 }
-                else if (_this.data.type == 'things'){
-                  _this.setData({
-                    "formData2.imgs": _this.data.formData2.imgs.concat(e)
-                  })
-                }
-                //_this.uploadImg(e);
-              });
+              }
+              // tempFilePaths.forEach(function (e) {
+              //   if(_this.data.type=='news'){
+              //     _this.setData({
+              //       "formData.imgs": _this.data.formData.imgs.concat(e)
+              //     })
+              //   }
+              //   else if (_this.data.type == 'things'){
+              //     _this.setData({
+              //       "formData2.imgs": _this.data.formData2.imgs.concat(e)
+              //     })
+              //   }
+              //   //_this.uploadImg(e);
+              // });
             }
           });
         }
       }
     });
   },
+  rechooseImg:function(){
+    let that=this
+    that.setData({
+      urlArr:[],
+      imgChoose:false
+    })
+  },
+
   previewPhoto: function (e) {
-    var _this = this;
-    //预览图片
-    if (_this.data.uploading) {
-      app.showErrorModal('正在上传图片', '预览失败');
-      return false;
+    var that = this;
+    let arr=[]
+    let urlArr=that.data.urlArr
+    for(let i=0;i<urlArr.length;i++){
+      arr.push(urlArr[i].url)
     }
-    if(_this.data.type=='news'){
-      wx.previewImage({
-        current:_this.data.formData.imgs[e.target.dataset.index],
-        urls: _this.data.formData.imgs
-      });
-    }
-    else if(_this.data.type=='things'){
-      wx.previewImage({
-        current: _this.data.formData2.imgs[e.target.dataset.index],
-        urls: _this.data.formData2.imgs
-      });
-    }
+    wx.previewImage({
+      urls: arr,
+      current: arr[e.target.dataset.index]
+    })
   },
   titleListener:function(e){
     let that=this
@@ -268,6 +320,26 @@ Page({
         })
         return
       }
+      /*以下为图片的处理，目的是符合后台传值规范 */
+      let photo_list_json
+      let urlArr = that.data.urlArr
+      if (urlArr.length == 0) {
+        photo_list_json = null
+      }
+      else {
+        photo_list_json = {}
+        let photo_list = []
+        for (let i = 0; i < urlArr.length; i++) {
+          let obj = {}
+          obj["size_big"] = urlArr[i].url
+          obj["size_small"] = urlArr[i].url
+          photo_list.push(obj)
+        }
+        photo_list_json["photo_list"] = photo_list
+        console.log(photo_list_json)
+      }
+      photo_list_json = JSON.stringify(photo_list_json)
+      console.log(photo_list_json)
 
       /*确定topic_id 1为生活，2为兼职，3为学习，4为研究 */
       let topic_id=1
@@ -290,28 +362,32 @@ Page({
           content:formData.content,
           title:formData.title,
           description:formData.mode,
+          photo_list_json:photo_list_json,
           topic_id:topic_id,
           source:"小程序",
         },
         success(res){
           console.log(res)
-          wx.reLaunch({
-            url: '../discover',
-          })
+          if(res.statusCode==201){
+            wx.reLaunch({
+              url: '../discover?category=1&mode='+(topic_id-1),
+            })
+          }
+          else{
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res){
-          console.log("出现错误！")
+          console.log(res)
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
         }
       })
-      // let messageList=wx.getStorageSync('messageList')||[]
-      // let id=messageList.length
-      // formData.id=id
-      // messageList.push(formData)
-      // wx.setStorage({
-      //   key: 'messageList',
-      //   data: messageList,
-      // })
-      // console.log(messageList)
     }
     else if(that.data.type=='things'){
       let formData2=that.data.formData2
@@ -349,6 +425,28 @@ Page({
       if(formData2.mode=='寻物'){
         kind=1
       }
+      
+      /*以下为图片的处理，目的是符合后台传值规范 */
+      let photo_list_json
+      let urlArr = that.data.urlArr
+      if (urlArr.length == 0) {
+        photo_list_json = null
+      }
+      else {
+        photo_list_json = {}
+        let photo_list = []
+        for (let i = 0; i < urlArr.length; i++) {
+          let obj = {}
+          obj["size_big"] = urlArr[i].url
+          obj["size_small"] = urlArr[i].url
+          photo_list.push(obj)
+        }
+        photo_list_json["photo_list"] = photo_list
+        console.log(photo_list_json)
+      }
+      photo_list_json = JSON.stringify(photo_list_json)
+      console.log(photo_list_json)
+
       wx.request({
         url:findlostUrl,
         method:'POST',
@@ -362,13 +460,14 @@ Page({
           title:formData2.title,
           description:formData2.content,
           location:formData2.position,
-          contact:formData2.phone
+          contact:formData2.phone,
+          img_link:photo_list_json
         },
         success(res){
           console.log(res)
           if(res.data.status=='created'){
             wx.reLaunch({
-              url: '../discover',
+              url: '../discover?category=2&mode='+kind,
             })  
           }
           else{
@@ -424,12 +523,24 @@ Page({
         },
         success(res) {
           console.log(res)
-          wx.reLaunch({
-            url: '../discover',
-          })
+          if(res.statusCode==201){
+            wx.reLaunch({
+              url: '../discover?category=3',
+            })
+          }
+          else{
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res) {
-          console.log("出现错误！")
+          console.log(res)
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
         }
       })
 

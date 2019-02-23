@@ -8,19 +8,22 @@
     <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
   </textarea>
 
-  <!--暂时关闭选择图片-->
-  <!-- <view style='width:90%;margin-left:5%;'>
-    <text class="issues-label">选择图片（可选）</text>
+  <!--选择图片-->
+  <view style='width:90%;margin-left:5%;'>
+    <view style='display:flex;flex-direction:row;'>
+      <text class="issues-label">选择图片（可选）</text>
+      <text wx:if="{{imgChoose}}" class='issues-label' style='margin-left:280rpx;color:#0f0' bindtap='rechooseImg'>重新选择</text>
+    </view>
     <view class="issues-img-panel {{uploading?'error':''}}">
       <view class="issues-photo-item" wx:if="{{uploading}}">
         <image class="remind-img" src="/images/loading.gif"></image>
       </view>
-      <view class="issues-photo-item add-photo" wx:else bindtap="choosePhoto"></view>
-      <view class="issues-photo-item" wx:for="{{formData.imgs}}" wx:key="*this">
-        <image src="{{item}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
+      <view class="issues-photo-item add-photo" wx:if="{{!imgChoose}}" bindtap="choosePhoto"></view>
+      <view class="issues-photo-item" wx:for="{{urlArr}}" wx:key="*this">
+        <image src="{{item.url}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
       </view>
     </view>
-  </view> -->
+  </view>
 
   <view style='width:90%;margin-left:5%;margin-top:5%'>
     <text class="issues-label">请选择板块</text>
@@ -47,6 +50,24 @@
   <textarea class="areas" placeholder='请输入内容' minlength="{{min}}" maxlength="{{max}}" bindinput="inputs" value='{{content}}'>
     <text class="currentWordNumber">{{currentWordNumber|0}}/{{max}}</text>
   </textarea>
+
+  <!--选择图片-->
+  <view style='width:90%;margin-left:5%;'>
+    <view style='display:flex;flex-direction:row;'>
+      <text class="issues-label">选择图片（可选）</text>
+      <text wx:if="{{imgChoose}}" class='issues-label' style='margin-left:280rpx;color:#0f0' bindtap='rechooseImg'>重新选择</text>
+    </view>
+    <view class="issues-img-panel {{uploading?'error':''}}">
+      <view class="issues-photo-item" wx:if="{{uploading}}">
+        <image class="remind-img" src="/images/loading.gif"></image>
+      </view>
+      <view class="issues-photo-item add-photo" wx:if="{{!imgChoose}}" bindtap="choosePhoto"></view>
+      <view class="issues-photo-item" wx:for="{{urlArr}}" wx:key="*this">
+        <image src="{{item.url}}" mode="aspectFill" data-index="{{index}}" bindtap="previewPhoto"></image>
+      </view>
+    </view>
+  </view>
+
   <view style='width:90%;margin-left:5%;margin-top:5%'>
     <text class="issues-label">请选择类型</text>
     <radio-group style='margin:20rpx;' bindchange='radiochange'>

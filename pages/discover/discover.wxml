@@ -70,17 +70,17 @@
         </view>
         <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
           <view class="issues-photo-item" wx:for="{{item.imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
-            <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" bindtap="previewPhoto"></image>
+            <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" catchtap="previewPhoto"></image>
           </view>
         </view>
       </view>
       <view class='comment'>
           <view class='comment-box'>
-            <image src='{{item.isLike?"/image/dianzan_red.png/":"/image/dianzan.png/"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <image src='{{item.isLike?"../../image/dianzan_red.png":"../../image/dianzan.png"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
             <text class='iconText'>{{item.likeNumber}}</text>
           </view>
           <view class='comment-box'>
-            <image src='/image/pinglun.png/' class='icon'></image>
+            <image src='../../image/pinglun.png' class='icon'></image>
             <text class='iconText'>{{item.commentNumber}}</text>
           </view>
         </view>
@@ -110,17 +110,17 @@
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
           <text class='itemContent'>{{item.description}}</text>
         </view>
+        <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
+          <view class="issues-photo-item" wx:for="{{item.imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
+            <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" catchtap="previewPhoto"></image>
+          </view>
+        </view>
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
           <text class='itemContent'>{{ThingSelected0?"遗失":"拾取"}}地点：{{item.location}}</text>
         </view>
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
           <text class='itemContent'>联系方式：{{item.contact}}</text>
         </view>
-        <!-- <view wx:if="{{item.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
-          <view class="issues-photo-item" wx:for="{{item.imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
-            <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" bindtap="previewPhoto"></image>
-          </view>
-        </view> -->
       </view>
       <!-- <view class='comment'>
           <view class='comment-box'>
@@ -156,11 +156,11 @@
       </view>
       <view class='comment'>
           <view class='comment-box'>
-            <image src='{{item.isLike?"/image/dianzan_red.png/":"/image/dianzan.png/"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <image src='{{item.isLike?"/image/dianzan_red.png":"/image/dianzan.png"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
             <text class='iconText'>{{item.likeNumber}}</text>
           </view>
           <view class='comment-box'>
-            <image src='/image/pinglun.png/' class='icon'></image>
+            <image src='/image/pinglun.png' class='icon'></image>
             <text class='iconText'>{{item.commentNumber}}</text>
           </view>
         </view>
@@ -180,14 +180,14 @@
   <image src='{{jiahao? "/image/jiahao_pink.png": "/image/jianhao_pink.png"}} ' class='addImage' bindtap='changeAdd'></image>
 </view>
 
-<view wx:if="{{!jiahao}}" class='addContent' bindtap='addContent'>
+<view hidden='{{jiahao}}' class='addContent' bindtap='addContent'>
   <view class='pink-text' hover-class='bg_grey'>发布</view>
 </view>
 
-<view wx:if="{{!jiahao}}" class='manage' bindtap='toManage'>
+<view hidden='{{jiahao}}' class='manage' bindtap='toManage'>
   <view class='pink-text' hover-class='bg_grey'>管理</view>
 </view>
 
-<view wx:if="{{!jiahao}}" style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx;' >
+<view hidden='{{jiahao}}' style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx;' >
   <view class='pink-text' hover-class='bg_grey'>通知</view>
 </view>

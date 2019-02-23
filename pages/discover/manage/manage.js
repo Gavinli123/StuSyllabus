@@ -37,16 +37,25 @@ Page({
       },
       success(res){
         console.log(res)
-        let addList=res.data.data
-        let showList=that.data.showList
-        console.log(addList)
-        showList=showList.concat(addList)
-        wx.setStorageSync('manage0',showList)
-        that.setData({
-          showList,
-          addList
-        })
-        wx.hideLoading()
+        if(res.statusCode==200){
+          let addList = res.data.data
+          let showList = that.data.showList
+          console.log(addList)
+          showList = showList.concat(addList)
+          wx.setStorageSync('manage0', showList)
+          that.setData({
+            showList,
+            addList
+          })
+          wx.hideLoading()
+        }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon:'none'
+          })
+        }
       },
       fail(){
         wx.hideLoading()
@@ -107,20 +116,29 @@ Page({
         },
         success(res) {
           console.log(res)
-          let addList = res.data.data
-          let showList = that.data.showList
-          console.log(addList)
-          showList = showList.concat(addList)
-          wx.setStorageSync('manage0', showList)
-          that.setData({
-            showList,
-            addList,
-            page_index:1
-          })
-          wx.hideLoading()
-          wx.showToast({
-            title: '刷新成功',
-          })
+          if(res.statusCode==200){
+            let addList = res.data.data
+            let showList = that.data.showList
+            console.log(addList)
+            showList = showList.concat(addList)
+            wx.setStorageSync('manage0', showList)
+            that.setData({
+              showList,
+              addList,
+              page_index: 1
+            })
+            wx.hideLoading()
+            wx.showToast({
+              title: '刷新成功',
+            })
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail() {
           wx.hideLoading()
@@ -220,14 +238,23 @@ Page({
           },
           success(res) {
             console.log(res)
-            let addList = res.data.data
-            let showList = addList
-            wx.setStorageSync('manage0', showList)
-            that.setData({
-              showList,
-              addList
-            })
-            wx.hideLoading()
+            if(res.statusCode==200){
+              let addList = res.data.data
+              let showList = addList
+              wx.setStorageSync('manage0', showList)
+              that.setData({
+                showList,
+                addList
+              })
+              wx.hideLoading()
+            }
+            else{
+              wx.hideLoading()
+              wx.showToast({
+                title: '出现错误',
+                icon:'none'
+              })
+            }
           },
           fail() {
             wx.hideLoading()
@@ -352,7 +379,7 @@ Page({
         page_index:page_index
       },
       success(res){
-        if(res.errMsg=='request:ok'){
+        if(res.statusCode==200){
           console.log(res)
           let addList = res.data.data || []
           let showList = that.data.showList
@@ -469,17 +496,26 @@ Page({
                   },
                   success(res) {
                     console.log(res)
-                    let showList = res.data.data
-                    let addList = showList.slice(showList.length-10)
-                    wx.setStorageSync('manage0', showList)
-                    that.setData({
-                      showList,
-                      addList,
-                    })
-                    wx.hideLoading()
-                    wx.showToast({
-                      title: '删除成功',
-                    })
+                    if(res.statusCode==200){
+                      let showList = res.data.data
+                      let addList = showList.slice(showList.length - 10)
+                      wx.setStorageSync('manage0', showList)
+                      that.setData({
+                        showList,
+                        addList,
+                      })
+                      wx.hideLoading()
+                      wx.showToast({
+                        title: '删除成功',
+                      })
+                    }
+                    else{
+                      wx.hideLoading()
+                      wx.showToast({
+                        title: '出现错误',
+                        icon:'none'
+                      })
+                    }
                   },
                   fail() {
                     wx.hideLoading()
@@ -547,17 +583,26 @@ Page({
                   },
                   success(res) {
                     console.log(res)
-                    let showList = res.data.data.findlost_list
-                    let addList = showList.slice(showList.length - 10)
-                    wx.setStorageSync('manage1', showList)
-                    that.setData({
-                      showList,
-                      addList,
-                    })
-                    wx.hideLoading()
-                    wx.showToast({
-                      title: '删除成功',
-                    })
+                    if(res.statusCode==200){
+                      let showList = res.data.data.findlost_list
+                      let addList = showList.slice(showList.length - 10)
+                      wx.setStorageSync('manage1', showList)
+                      that.setData({
+                        showList,
+                        addList,
+                      })
+                      wx.hideLoading()
+                      wx.showToast({
+                        title: '删除成功',
+                      })
+                    }
+                    else{
+                      wx.hideLoading()
+                      wx.showToast({
+                        title: '出现错误',
+                        icon:'none'
+                      })
+                    }
                   },
                   fail() {
                     wx.hideLoading()

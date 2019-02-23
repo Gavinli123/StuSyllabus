@@ -4,6 +4,9 @@ const testUrl = "http://118.126.92.214:8083/interaction/api/v2/post"
 const testUid = "5"
 const testToken = "100004"
 
+var Bmob = require('../../../util/bmob.js');
+var common = require('../../../util/common.js');
+
 Page({
 
   /**
@@ -14,7 +17,8 @@ Page({
     max: 1000,//最大字数限制
     min:0,
     show: false,//控制下拉列表的显示隐藏，false隐藏、true显示
-    index: 0//选择的下拉列表下标
+    index: 0,//选择的下拉列表下标
+    imgs:[]
   },
 
   /**
@@ -25,7 +29,16 @@ Page({
     console.log(options)
     if(options.category=='失物招领'){
       console.log(options)
+      let imgObj=JSON.parse(options.photo)
+      let urlArr=[]
+      if(imgObj!=null){
+        for (let i = 0; i < imgObj.photo_list.length;i++){
+          urlArr.push({url:imgObj.photo_list[i]["size_big"]})
+        }
+      }
       that.setData({
+        urlArr,
+        imgChoose:urlArr.length>0?true:false,
         category:options.category,
         content:options.content,
         id:Number.parseInt(options.id),
@@ -44,9 +57,19 @@ Page({
     let content=options.content
     let id=Number.parseInt(options.id)
     let mode=options.mode
-    let photo=[]
-    if(options.photo!="null")
-      photo=options.photo
+    let photo={}
+    let urlArr=[]
+    if(options.photo!="null"){
+      photo=JSON.parse(options.photo)
+      for(let i=0;i<photo.photo_list.length;i++){
+        if(photo.photo_list[i]["size_big"]!=null){
+          urlArr.push({url:photo.photo_list[i]["size_big"]})
+        }
+        else{
+          urlArr.push({url:photo.photo_list[i]["size_small"]})
+        }
+      }
+    }
     let title=options.title
     let uid=Number.parseInt(options.uid)
     let topic_id=Number.parseInt(options.topic_id)
@@ -62,7 +85,9 @@ Page({
       uid,
       topic_id,
       index,
-      currentWordNumber
+      currentWordNumber,
+      urlArr,
+      imgChoose: urlArr.length > 0 ? true : false,
     })
   },
 
@@ -139,6 +164,93 @@ Page({
       currentWordNumber: len, //当前字数  
       content: value  //当前内容
     });
+  },
+
+  choosePhoto: function () {
+    var _this = this;
+    wx.showModal({
+      title: '提示',
+      content: '上传图片需要消耗流量，是否继续？',
+      confirmText: '继续',
+      success: function (res) {
+        if (res.confirm) {
+          wx.chooseImage({
+            count: 5,
+            sourceType: ['album'],
+            success: function (res) {
+              console.log(res)
+              var tempFilePaths = res.tempFilePaths, imgLen = tempFilePaths.length;
+              if (imgLen > 5) {
+                wx.showModal({
+                  title: '提示',
+                  content: '上传图片的数量不得大于5张',
+                })
+                return
+              }
+              _this.setData({
+                //uploading: true,
+                imgLen: _this.data.imgLen + imgLen
+              });
+
+              wx.showLoading({
+                title: '上传中',
+                mask: true
+              })
+              var urlArr = new Array();
+              if (imgLen > 0) {
+                var newDate = new Date();
+                var newDateStr = newDate.toLocaleDateString();
+                var j = 0;
+                for (var i = 0; i < imgLen; i++) {
+                  var tempFilePath = [tempFilePaths[i]];
+                  var extension = /\.([^.]*)$/.exec(tempFilePath[0]);
+                  if (extension) {
+                    extension = extension[1].toLowerCase();
+                  }
+                  var name = newDateStr + "." + extension;//上传的图片的别名
+                  var file = new Bmob.File(name, tempFilePath);
+                  file.save().then(function (res) {
+                    console.log(res)
+                    wx.hideLoading()
+                    var url = res.url();
+                    console.log(url);
+
+                    urlArr.push({ "url": url });
+                    j++;
+                    console.log(j, imgLen);
+                    // if (imgLength == j) {
+                    //   console.log(imgLength, urlArr);
+                    //如果担心网络延时问题，可以去掉这几行注释，就是全部上传完成后显示。
+                    // }
+                    _this.setData({
+                      urlArr,
+                      imgChoose: true
+                    })
+                    console.log(_this.data.urlArr)
+
+                  }, function (error) {
+                    wx.hideLoading()
+                    console.log(error)
+                    wx.showToast({
+                      title: '出现错误',
+                      icon: none
+                    })
+                  });
+                }
+              }
+            }
+          });
+        }
+      }
+    });
+  },
+  /*重新选择图片 */
+  rechooseImg: function () {
+    let that = this
+    that.setData({
+      urlArr: [],
+      imgChoose: false
+    })
   },
 
   /*失物招领模块变化 */
@@ -231,6 +343,27 @@ Page({
         return
       }
 
+      /*以下为图片的处理，目的是符合后台传值规范 */
+      let photo_list_json
+      let urlArr = that.data.urlArr
+      if (urlArr.length == 0) {
+        photo_list_json = null
+      }
+      else {
+        photo_list_json = {}
+        let photo_list = []
+        for (let i = 0; i < urlArr.length; i++) {
+          let obj = {}
+          obj["size_big"] = urlArr[i].url
+          obj["size_small"] = urlArr[i].url
+          photo_list.push(obj)
+        }
+        photo_list_json["photo_list"] = photo_list
+        console.log(photo_list_json)
+      }
+      photo_list_json = JSON.stringify(photo_list_json)
+      console.log(photo_list_json)
+
       /*确定topic_id 1为生活，2为兼职，3为学习，4为研究 */
       let topic_id = that.data.topic_id
       let mode=that.data.mode
@@ -260,6 +393,7 @@ Page({
           description:mode,
           topic_id: topic_id,
           source: "小程序",
+          photo_list_json:photo_list_json,
         },
         success(res) {
           console.log(res)
@@ -314,7 +448,30 @@ Page({
   /*失物招领修改 */
   modify1:function(){
     let that=this
+
+    /*以下为图片的处理，目的是符合后台传值规范 */
+    let photo_list_json
+    let urlArr = that.data.urlArr
+    if (urlArr.length == 0) {
+      photo_list_json = null
+    }
+    else {
+      photo_list_json = {}
+      let photo_list = []
+      for (let i = 0; i < urlArr.length; i++) {
+        let obj = {}
+        obj["size_big"] = urlArr[i].url
+        obj["size_small"] = urlArr[i].url
+        photo_list.push(obj)
+      }
+      photo_list_json["photo_list"] = photo_list
+      console.log(photo_list_json)
+    }
+    photo_list_json = JSON.stringify(photo_list_json)
+    console.log(photo_list_json)
+
     let formdata={}
+    formdata.img_link=photo_list_json
     formdata.findlost_id=that.data.id
     formdata.uid=that.data.uid
     formdata.kind=that.data.mode=="寻物"?1:0
@@ -324,6 +481,34 @@ Page({
     formdata.contact=that.data.contact
     console.log(formdata)
 
+    if(formdata.title==""){
+      wx.showModal({
+        title: '提示',
+        content: '你还没有输入标题',
+      })
+      return
+    }
+    else if(formdata.description==""){
+      wx.showModal({
+        title: '提示',
+        content: '你还没有输入描述',
+      })
+      return
+    }
+    else if(formdata.location==""){
+      wx.showModal({
+        title: '提示',
+        content: '你还没有输入位置',
+      })
+      return
+    }
+    else if(formdata.contact==""){
+      wx.showModal({
+        title: '提示',
+        content: '你还没有输入联系方式',
+      })
+      return
+    }
     wx.request({
       url: findlostUrl,
       method:'PUT',
@@ -338,7 +523,8 @@ Page({
         title:formdata.title,
         description:formdata.description,
         location:formdata.location,
-        contact:formdata.contact
+        contact:formdata.contact,
+        img_link:formdata.img_link
       },
       success(res){
         if(res.statusCode==200){
@@ -361,5 +547,17 @@ Page({
         })
       }
     })
-  }
+  },
+  previewPhoto: function (e) {
+    var that = this;
+    let arr = []
+    let urlArr = that.data.urlArr
+    for (let i = 0; i < urlArr.length; i++) {
+      arr.push(urlArr[i].url)
+    }
+    wx.previewImage({
+      urls: arr,
+      current: arr[e.target.dataset.index]
+    })
+  },
 })

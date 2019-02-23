@@ -14,15 +14,9 @@
   <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
     <text class='itemContent'>{{showObj.content}}</text>
   </view>
-  <view wx:if="{{category=='things'}}" style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
-    <text class='itemContent'>{{yishi?'遗失':'拾取'}}地点：{{position}}</text>
-  </view>
-  <view wx:if="{{category=='things'}}" style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
-    <text class='itemContent'>联系方式：{{phone}}</text>
-  </view>
-  <view wx:if="{{imgs.length>0&&category!='wall'}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
-    <view class="issues-photo-item" wx:for="{{imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
-      <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" data-id="{{index}}" bindtap="previewPhoto"></image>
+  <view wx:if="{{showObj.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
+    <view class="issues-photo-item" wx:for="{{showObj.imgs}}" wx:key="*this_pic" wx:for-item="pics" wx:for-index="pics_index">
+      <image src="{{pics}}" style='height:140rpx;width:140rpx;margin-right:5rpx; ' mode="aspectFill" data-index="{{pics_index}}" catchtap="previewPhoto"></image>
     </view>
   </view>
 </view>

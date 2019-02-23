@@ -62,8 +62,6 @@ Page({
    */
   onLoad: function (options) {
     let that = this
-    /*page_index的初始值为1，即当前请求第一页 */
-    let page_index=that.data.page_index
     wx.showLoading({
       title: '加载中',
       mask:true,
@@ -80,76 +78,356 @@ Page({
         });
       }
     })
+    console.log(options)
+    let category=options.category||null
+    let mode=options.mode||null
 
-    function init_load(list){
-      let currentModeList = list
-      let showList = []
-      /*addList为增加的数组，用来判断显示加载更多还是已加载完毕 */
-      let addList=[]
-      for (let i in currentModeList) {
-        currentModeList[i].myid=i
-        currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
-        currentModeList[i].commentNumber=currentModeList[i].comments.length
-        currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
-        let isLike=false
-        for(let j in currentModeList[i].thumb_ups){
-          if(currentModeList[i].thumb_ups[j].uid==myuid){
-            isLike=true
-            break
+    /*校园动态 */
+    if(category=='1'){
+      /*init_load()函数的作用主要是为请求回来的数据增加一些参数
+      包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个）
+      校园动态所使用 */
+      function init_load(list) {
+        for (let i in list) {
+          /*图片链接处理 */
+          let imgs = []
+          let imgObj = JSON.parse(list[i].photo_list_json)
+          if (imgObj != null) {
+            for (let j = 0; j < imgObj.photo_list.length; j++) {
+              if (imgObj.photo_list[j]["size_big"] != "") {
+                imgs.push(imgObj.photo_list[j]["size_big"])
+              }
+              else {
+                imgs.push(imgObj.photo_list[j]["size_small"])
+              }
+            }
           }
+          list[i].imgs = imgs
+
+          list[i].myid = i
+          list[i].likeNumber = list[i].thumb_ups.length
+          list[i].commentNumber = list[i].comments.length
+          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          let isLike = false
+          for (let j in list[i].thumb_ups) {
+            if (list[i].thumb_ups[j].uid == myuid) {
+              isLike = true
+              break
+            }
+          }
+          list[i].isLike = isLike
+          currentModeList.push(list[i])
+          showList.push(list[i])
+          addList.push(list[i])
         }
-        currentModeList[i].isLike=isLike
-        showList.push(currentModeList[i])
-        addList.push(currentModeList[i])
+
+        /*下面进行本地存储 */
+        let str = String('school' + topic_id)
+        wx.setStorageSync(str, showList)
+        //wx.setStorageSync('post_list', currentModeList)
+        that.setData({
+          schoolSelected,
+          showList,
+          currentModeList,
+          addList,
+          page_index,
+          topic_id
+        })
       }
-      //wx.setStorageSync('post_list', currentModeList)
-      
-      /*将数据本地存储，school1代表校园动态的生活，2代表兼职，以此类推 */
-      wx.setStorageSync('school1', showList)
-      console.log(currentModeList)
-      that.setData({
-        currentModeList,
-        showList,
-        addList
+      let schoolSelected = that.data.schoolSelected
+      let current = Number.parseInt(mode)
+      let showList = []
+      let currentModeList = []
+      let addList = []
+      /*将请求页重设为1 */
+      let page_index = 1
+      /*定义请求的模块id 为点击的模块加1*/
+      let topic_id = current + 1
+
+      if (schoolSelected[current] == true) {
+        return
+      }
+      for (let i = 0; i < schoolSelected.length; i++) {
+        schoolSelected[i] = false
+      }
+      if (current == 0) {
+        schoolSelected[0] = true
+      }
+      else if (current == 1) {
+        schoolSelected[1] = true
+      }
+      else if (current == 2) {
+        schoolSelected[2] = true
+      }
+      else if (current == 3) {
+        schoolSelected[3] = true
+      }
+
+      wx.request({
+        url: testUrl + 'post_sort',
+        method: "GET",
+        data: {
+          topic_id: topic_id,
+          page_index: page_index,
+          page_size: 10
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            init_load(res.data.data)
+            wx.hideLoading()
+          }
+          else {
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail(res) {
+          wx.hideLoading()
+          wx.showToast({
+            title: '请求失败',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
       })
     }
 
-    wx.request({
-      url: testUrl+'post_sort',
-      method:"GET",
-      data:{
-        topic_id:1,
-        page_index:page_index,
-        page_size:10
-      },
-      success(res){
-        console.log(res)
-        //wx.setStorageSync('post_list', res.data.data)
-        init_load(res.data.data)
-        wx.hideLoading()
-      },
-      fail(res){
-        wx.showToast({
-          title: '请求失败',
-          icon:'none',
-          duration:2000,
+    /*失物招领 */
+    else if(category=='2'){
+      let kind=Number.parseInt(mode)
+
+      wx.showLoading({
+        title: '加载中',
+        mask: true
+      })
+      wx.request({
+        url: findlostUrl,
+        method: 'GET',
+        header: {
+          'Content-Type': 'application/json',
+        },
+        data: {
+          uid: Number.parseInt(myuid),
+          token: mytoken,
+          kind: kind,
+          page_index: 1,
+          page_size: 10
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            let showList = res.data.data.findlost_list
+            for (let i = 0; i < showList.length; i++) {
+              let imgObj = JSON.parse(showList[i].img_link)
+              let imgs = []
+              if (imgObj != null) {
+                for (let j = 0; j < imgObj.photo_list.length; j++) {
+                  imgs.push(imgObj.photo_list[j]["size_big"])
+                }
+              }
+              showList[i].imgs = imgs
+            }
+            let addList = showList
+            let currentModeList = showList
+            let str
+            if(kind==1){
+              str='findlost1'
+            }
+            else{
+              str='findlost0'
+            }
+            wx.setStorageSync(str, showList)
+            that.setData({
+              showList,
+              addList,
+              currentModeList,
+              isSelected0:false,
+              isSelected1:true,
+              isSelected2:false,
+              ThingSelected0:kind==1?true:false,
+              ThingSelected1:kind==0?true:false,
+            })
+            wx.hideLoading()
+          }
+          else {
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail(res) {
+          console.log(res)
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
+        }
+      })
+    }
+    /*表白墙 */
+    else if(category=='3'){
+      /*init_load2的作用是为表白墙的数据增加一些参数 */
+      function init_load2(list) {
+        let currentModeList = []
+        let showList = []
+        let addList = []
+        for (let i in list) {
+          list[i].myid = i
+          list[i].likeNumber = list[i].thumb_ups.length
+          list[i].commentNumber = list[i].comments.length
+          let isLike = false
+          for (let j in list[i].thumb_ups) {
+            if (list[i].thumb_ups[j].uid == myuid) {
+              isLike = true
+              break
+            }
+          }
+          list[i].isLike = isLike
+          currentModeList.push(list[i])
+          showList.push(list[i])
+          addList.push(list[i])
+        }
+        let str = 'wall1'
+        wx.setStorageSync(str, currentModeList)
+        that.setData({
+          showList,
+          currentModeList,
+          addList,
+          page_index: 1,
+          topic_id: 6,
+          isSelected0:false,
+          isSelected1:false,
+          isSelected2:true,
+          WallSelected0:true,
+          WallSelected1:false
         })
       }
-    })
 
-    //let currentModeList=wx.getStorageSync('messageList')
-    //console.log(currentModeList)
-    // let that=this
-    // let showList=[]
-    // for(var i in currentModeList){
-    //   if(currentModeList[i].mode=='生活'){
-    //     showList.push(currentModeList[i])
-    //   } 
-    // }
-    // that.setData({
-    //   currentModeList,
-    //   showList
-    // })
+      let mode_ = 1
+      wx.request({
+        url: testUrl + 'post_sort',
+        method: "GET",
+        data: {
+          mode: mode_,
+          topic_id: 6,
+          page_index: 1,
+          page_size: 10
+        },
+        success(res) {
+          console.log(res)
+          if (res.statusCode == 200) {
+            init_load2(res.data.data)
+            wx.hideLoading()
+          }
+          else {
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon: 'none'
+            })
+          }
+        },
+        fail(res) {
+          wx.hideLoading()
+          wx.showToast({
+            title: '请求失败',
+            icon: 'none',
+            duration: 2000,
+          })
+        }
+      })
+    }
+    /*无参的情况 */
+    else{
+      /*page_index的初始值为1，即当前请求第一页 */
+      let page_index=that.data.page_index
+
+      function init_load(list){
+        let currentModeList = list
+        let showList = []
+        /*addList为增加的数组，用来判断显示加载更多还是已加载完毕 */
+        let addList=[]
+        for (let i in currentModeList) {
+          /*图片链接处理 */
+          let imgs=[]
+          let imgObj=JSON.parse(currentModeList[i].photo_list_json)
+          if(imgObj!=null){
+            for (let j = 0; j < imgObj.photo_list.length; j++) {
+              if (imgObj.photo_list[j]["size_big"] != "") {
+                imgs.push(imgObj.photo_list[j]["size_big"])
+              }
+              else {
+                imgs.push(imgObj.photo_list[j]["size_small"])
+              }
+            }
+          }
+          currentModeList[i].imgs=imgs
+
+          currentModeList[i].myid=i
+          currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
+          currentModeList[i].commentNumber=currentModeList[i].comments.length
+          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          let isLike=false
+          for(let j in currentModeList[i].thumb_ups){
+            if(currentModeList[i].thumb_ups[j].uid==myuid){
+              isLike=true
+              break
+            }
+          }
+          currentModeList[i].isLike=isLike
+          showList.push(currentModeList[i])
+          addList.push(currentModeList[i])
+        }
+
+        /*将数据本地存储，school1代表校园动态的生活，2代表兼职，以此类推 */
+        wx.setStorageSync('school1', showList)
+        console.log(currentModeList)
+        that.setData({
+          currentModeList,
+          showList,
+          addList
+        })
+      }
+
+      wx.request({
+        url: testUrl+'post_sort',
+        method:"GET",
+        data:{
+          topic_id:1,
+          page_index:page_index,
+          page_size:10
+        },
+        success(res){
+          console.log(res)
+          if(res.statusCode==200){
+            init_load(res.data.data)
+            wx.hideLoading()  
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
+        },
+        fail(res){
+          wx.hideLoading()
+          wx.showToast({
+            title: '请求失败',
+            icon:'none',
+            duration:2000,
+          })
+        }
+      })
+    }
   },
 
   /**
@@ -189,6 +467,21 @@ Page({
       用于校园动态的消息 */
     function init_load(list) {
       for (let i in list) {
+        /*图片链接处理 */
+        let imgs = []
+        let imgObj = JSON.parse(list[i].photo_list_json)
+        if (imgObj != null) {
+          for (let j = 0; j < imgObj.photo_list.length; j++) {
+            if (imgObj.photo_list[j]["size_big"] != "") {
+              imgs.push(imgObj.photo_list[j]["size_big"])
+            }
+            else {
+              imgs.push(imgObj.photo_list[j]["size_small"])
+            }
+          }
+        }
+        list[i].imgs = imgs
+
         list[i].myid = i
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
@@ -289,11 +582,20 @@ Page({
         },
         success(res) {
           console.log(res)
-          init_load(res.data.data)
-          wx.hideLoading()
-          wx.showToast({
-            title: '刷新成功',
-          })
+          if(res.statusCode==200){
+            init_load(res.data.data)
+            wx.hideLoading()
+            wx.showToast({
+              title: '刷新成功',
+            })
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res) {
           wx.hideLoading()
@@ -335,6 +637,17 @@ Page({
           console.log(res)
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
+            for(let i=0;i<showList.length;i++){
+              let imgObj=JSON.parse(showList[i].img_link)
+              let imgs=[]
+              if(imgObj!=null){
+                for (let j = 0; j < imgObj.photo_list.length; j++) {
+                  imgs.push(imgObj.photo_list[j]["size_big"])
+                }
+              }
+              showList[i].imgs=imgs
+            }
+            console.log(showList)
             let addList = showList
             let currentModeList = showList
             wx.setStorageSync(str, showList)
@@ -386,11 +699,20 @@ Page({
         },
         success(res) {
           console.log(res)
-          init_load2(res.data.data)
-          wx.hideLoading()
-          wx.showToast({
-            title: '刷新成功',
-          })
+          if(res.statusCode==200){
+            init_load2(res.data.data)
+            wx.hideLoading()
+            wx.showToast({
+              title: '刷新成功',
+            })
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res) {
           wx.hideLoading()
@@ -427,6 +749,20 @@ Page({
       /*校园动态 */
       if(type==0){
         for (let i in list) {
+          /*图片链接处理 */
+          let imgs = []
+          let imgObj = JSON.parse(list[i].photo_list_json)
+          if (imgObj != null) {
+            for (let j = 0; j < imgObj.photo_list.length; j++) {
+              if (imgObj.photo_list[j]["size_big"] != "") {
+                imgs.push(imgObj.photo_list[j]["size_big"])
+              }
+              else {
+                imgs.push(imgObj.photo_list[j]["size_small"])
+              }
+            }
+          }
+          list[i].imgs = imgs
           list[i].myid = i
           list[i].likeNumber = list[i].thumb_ups.length
           list[i].commentNumber = list[i].comments.length
@@ -458,8 +794,18 @@ Page({
       /*失物招领 */
       else if(type==1){
         showList=list
-        currentModeList=list
-        addList=list
+        for (let i = 0; i < showList.length; i++) {
+          let imgObj = JSON.parse(showList[i].img_link)
+          let imgs = []
+          if (imgObj != null) {
+            for (let j = 0; j < imgObj.photo_list.length; j++) {
+              imgs.push(imgObj.photo_list[j]["size_big"])
+            }
+          }
+          showList[i].imgs = imgs
+        }
+        currentModeList=showList
+        addList=showList
         /*将寻找失物存储到本地 */
         wx.setStorageSync('findlost1', showList)
         that.setData({
@@ -616,9 +962,18 @@ Page({
           },
           success(res) {
             console.log(res)
-            let showList=res.data.data
-            init_load(showList,2)
-            wx.hideLoading()
+            if(res.statusCode==200){
+              let showList = res.data.data
+              init_load(showList, 2)
+              wx.hideLoading()
+            }
+            else{
+              wx.hideLoading()
+              wx.showToast({
+                title: '出现错误',
+                icon:'none'
+              })
+            }
           },
           fail(res) {
             wx.showToast({
@@ -675,9 +1030,18 @@ Page({
           },
           success(res) {
             console.log(res)
-            let showList = res.data.data
-            init_load(showList, 0)
-            wx.hideLoading()
+            if(res.statusCode==200){
+              let showList = res.data.data
+              init_load(showList, 0)
+              wx.hideLoading()
+            }
+            else{
+              wx.hideLoading()
+              wx.showToast({
+                title: '出现错误',
+                icon:'none'
+              })
+            }
           },
           fail(res) {
             wx.showToast({
@@ -730,11 +1094,20 @@ Page({
           },
           success(res) {
             console.log(res)
-            let showList = res.data.data
-            init_load(showList, 2)
-            wx.hideLoading()
+            if(res.statusCode==200){
+              let showList = res.data.data
+              init_load(showList, 2)
+              wx.hideLoading()
+            }
+            else{
+              wx.showToast({
+                title: '出现错误',
+                icon:'none'
+              })
+            }
           },
           fail(res) {
+            wx.hideLoading()
             wx.showToast({
               title: '请求失败',
               icon: 'none',
@@ -790,11 +1163,21 @@ Page({
           },
           success(res) {
             console.log(res)
-            let showList = res.data.data
-            init_load(showList, 0)
-            wx.hideLoading()
+            if(res.statusCode==200){
+              let showList = res.data.data
+              init_load(showList, 0)
+              wx.hideLoading()
+            }
+            else{
+              wx.hideLoading()
+              wx.showToast({
+                title: '出现错误',
+                icon:'none'
+              })
+            }
           },
           fail(res) {
+            wx.hideLoading()
             wx.showToast({
               title: '请求失败',
               icon: 'none',
@@ -893,6 +1276,21 @@ Page({
       包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个） */
     function init_load(list) {
       for (let i in list) {
+        /*图片链接处理 */
+        let imgs = []
+        let imgObj = JSON.parse(list[i].photo_list_json)
+        if (imgObj != null) {
+          for (let j = 0; j < imgObj.photo_list.length; j++) {
+            if (imgObj.photo_list[j]["size_big"] != "") {
+              imgs.push(imgObj.photo_list[j]["size_big"])
+            }
+            else {
+              imgs.push(imgObj.photo_list[j]["size_small"])
+            }
+          }
+        }
+        list[i].imgs = imgs
+
         list[i].myid = i
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
@@ -991,10 +1389,20 @@ Page({
       },
       success(res) {
         console.log(res)
-        init_load(res.data.data)
-        wx.hideLoading()
+        if(res.statusCode==200){
+          init_load(res.data.data)
+          wx.hideLoading()
+        }
+        else{
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon:'none'
+          })
+        }
       },
       fail(res) {
+        wx.hideLoading()
         wx.showToast({
           title: '请求失败',
           icon: 'none',
@@ -1055,6 +1463,16 @@ Page({
           console.log(res)
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
+            for (let i = 0; i < showList.length; i++) {
+              let imgObj = JSON.parse(showList[i].img_link)
+              let imgs = []
+              if (imgObj != null) {
+                for (let j = 0; j < imgObj.photo_list.length; j++) {
+                  imgs.push(imgObj.photo_list[j]["size_big"])
+                }
+              }
+              showList[i].imgs = imgs
+            }
             let addList=showList
             let currentModeList=showList
             wx.setStorageSync('findlost0', showList)
@@ -1128,6 +1546,16 @@ Page({
           console.log(res)
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
+            for (let i = 0; i < showList.length; i++) {
+              let imgObj = JSON.parse(showList[i].img_link)
+              let imgs = []
+              if (imgObj != null) {
+                for (let j = 0; j < imgObj.photo_list.length; j++) {
+                  imgs.push(imgObj.photo_list[j]["size_big"])
+                }
+              }
+              showList[i].imgs = imgs
+            }
             let addList=showList
             let currentModeList=showList
             that.setData({
@@ -1250,11 +1678,21 @@ Page({
         },
         success(res) {
           console.log(res)
-          let showList = res.data.data
-          init_load(showList)
-          wx.hideLoading()
+          if(res.statusCode==200){
+            let showList = res.data.data
+            init_load(showList)
+            wx.hideLoading()
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res) {
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon: 'none',
@@ -1305,11 +1743,21 @@ Page({
         },
         success(res) {
           console.log(res)
-          let showList = res.data.data
-          init_load(showList)
-          wx.hideLoading()
+          if(res.statusCode==200){
+            let showList = res.data.data
+            init_load(showList)
+            wx.hideLoading()
+          }
+          else{
+            wx.hideLoading()
+            wx.showToast({
+              title: '出现错误',
+              icon:'none'
+            })
+          }
         },
         fail(res) {
+          wx.hideLoading()
           wx.showToast({
             title: '请求失败',
             icon: 'none',
@@ -1478,6 +1926,22 @@ Page({
       for(let i in list){
         list[i].myid=list_length
         list_length++
+
+        /*图片链接处理 */
+        let imgs = []
+        let imgObj = JSON.parse(list[i].photo_list_json)
+        if (imgObj != null) {
+          for (let j = 0; j < imgObj.photo_list.length; j++) {
+            if (imgObj.photo_list[j]["size_big"] != "") {
+              imgs.push(imgObj.photo_list[j]["size_big"])
+            }
+            else {
+              imgs.push(imgObj.photo_list[j]["size_small"])
+            }
+          }
+        }
+        list[i].imgs = imgs
+
         list[i].likeNumber =list[i].thumb_ups.length
         list[i].commentNumber =list[i].comments.length
         list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
@@ -1513,7 +1977,7 @@ Page({
       },
       success(res) {
         console.log(res)
-        if(res.errMsg=='request:ok'){
+        if(res.statusCode==200){
           init_load(res.data.data)
           wx.hideLoading()
         }
@@ -1577,6 +2041,17 @@ Page({
             showList.push(res.data.data.findlost_list[i])
             addList.push(res.data.data.findlost_list[i])
           }
+          for (let i = 0; i < showList.length; i++) {
+            let imgObj = JSON.parse(showList[i].img_link)
+            let imgs = []
+            if (imgObj != null) {
+              for (let j = 0; j < imgObj.photo_list.length; j++) {
+                imgs.push(imgObj.photo_list[j]["size_big"])
+              }
+            }
+            showList[i].imgs = imgs
+          }
+          console.log(showList)
           wx.setStorageSync(str, showList)
           that.setData({
             showList,
@@ -1679,7 +2154,7 @@ Page({
       },
       success(res) {
         console.log(res)
-        if (res.errMsg == 'request:ok') {
+        if (res.statusCode ==200) {
           init_load(res.data.data)
           wx.hideLoading()
         }

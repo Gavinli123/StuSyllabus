@@ -33,6 +33,14 @@ Page({
         if (res.statusCode == 200) {
           console.log(res)
           let showObj=res.data
+          let imgObj=JSON.parse(showObj.img_link)
+          let imgs=[]
+          if(imgObj!=null){
+            for (let i = 0; i < imgObj.photo_list.length; i++) {
+              imgs.push(imgObj.photo_list[i]["size_big"])
+            }
+          }
+          showObj.imgs=imgs
           console.log(showObj)
           that.setData({
             showObj
@@ -98,5 +106,15 @@ Page({
    */
   onShareAppMessage: function () {
 
+  },
+  
+  /*图片预览 */
+  previewPhoto:function(e){
+    let that = this
+    let index = e.currentTarget.dataset.index
+    wx.previewImage({
+      current: that.data.showObj.imgs[index],
+      urls: that.data.showObj.imgs,
+    })
   }
 })
