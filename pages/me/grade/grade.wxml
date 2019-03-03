@@ -1,0 +1,53 @@
+<view class='itemPanel'>
+  <view class='title'>成绩总评</view>
+  <view class='middlePanel'>
+    <view class='textContainer' style='border-right:1rpx solid #999;'>
+      <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>总学科</text>
+      <text style='font-size:28rpx;'>{{gradeObj.totalSubject}}</text>
+    </view>
+    <view class='textContainer' style='border-right:1rpx solid #999;'>
+      <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>总学分</text>
+      <text style='font-size:28rpx;'>{{gradeObj.totalCredit}}</text>
+    </view>
+    <view class='textContainer'>
+      <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>GPA</text>
+      <text style='font-size:28rpx;'>{{gradeObj.totalGPA}}</text>
+    </view>
+  </view>
+</view>
+
+<view wx:for="{{gradeObj.grades}}" wx:key="grades">
+  <view class='itemPanel'>
+    <view class='title'>{{item.years}} {{item.semester}}</view>
+    <view class='middlePanel' style='border-bottom:1rpx solid #999;'>
+      <view class='textContainer' style='border-right:1rpx solid #999;'>
+        <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>总学科</text>
+        <text style='font-size:28rpx;'>{{item.subject}}</text>
+      </view>
+      <view class='textContainer' style='border-right:1rpx solid #999;'>
+        <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>总学分</text>
+        <text style='font-size:28rpx;'>{{item.credit}}</text>
+      </view>
+      <view class='textContainer'>
+        <text style='font-weight:bold;font-size:28rpx;padding-bottom:10rpx;'>GPA</text>
+        <text style='font-size:28rpx;'>{{item.gpa}}</text>
+      </view>
+    </view>
+
+    <button class='button' bindtap='change' data-index="{{index}}">
+      <image src='{{arrow_status[index]?"../../../image/arrow_up.png":"../../../image/arrow_down.png"}}' style='width:40rpx;height:40rpx;padding:10rpx 0'></image>
+    </button>
+    <view wx:if="{{arrow_status[index]}}" style='display:flex;font-size:28rpx;font-weight:bold;width:90%;margin-left:5%;'>
+      <view style='margin:10rpx 0;width:50%;text-align:left;border-right:1rpx solid #999;'>课程名</view>
+      <view style='margin:10rpx 0;width:25%;text-align:center;border-right:1rpx solid #999;'>成绩</view>
+      <view style='margin:10rpx 0;width:25%;text-align:center;'>学分</view>
+    </view>
+    <view wx:if="{{arrow_status[index]}}" wx:for="{{item.gradesDetail}}" wx:key="detail" wx:for-item="gradesDetail" wx:for-index="gradesIndex">
+      <view style='display:flex;font-size:28rpx;width:90%;margin-left:5%;border-top:1rpx solid #999;'>
+        <view style='margin:10rpx 0;width:50%;text-align:left;border-right:1rpx solid #999;'>{{gradesDetail.class_name}}</view>
+        <view style='margin:10rpx 0;width:25%;text-align:center;border-right:1rpx solid #999;'>{{gradesDetail.class_grade}}</view>
+        <view style='margin:10rpx 0;width:25%;text-align:center;'>{{gradesDetail.class_credit}}</view>
+      </view>
+    </view>
+  </view>
+</view>

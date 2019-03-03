@@ -96,12 +96,12 @@ Page({
         token: global.classes.token,
       },
       success(res) {
+        console.log(res)
         if(res.statusCode==200){
           wx.setStorage({
             key: 'comment_list',
             data: res.data.data.eva_list,
           })
-          console.log(res)
         }
         else{
           wx.showModal({
@@ -111,6 +111,7 @@ Page({
         }
       },
       fail(){
+        console.log(res)
         wx.showModal({
           title: '错误',
           content: '请求出错',

@@ -29,7 +29,10 @@
     "pages/oa/content/content",
     "pages/discover/manage/manage",
     "pages/discover/modify/modify",
-    "pages/discover/findlostDetail/findlostDetail"
+    "pages/discover/findlostDetail/findlostDetail",
+    "pages/me/grade/grade",
+    "pages/me/arrange/arrange",
+    "pages/me/arrange/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

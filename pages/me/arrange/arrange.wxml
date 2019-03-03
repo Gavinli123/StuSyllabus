@@ -1,0 +1,30 @@
+<view style='height:20rpx;'></view>
+<view wx:for="{{examArrange.exams}}" style='width:100%;display:flex;flex-direction:column;' wx:key="exams">
+  <view class='panel' style='{{index==0?"border-top:1rpx solid #999":""}}' hover-class='bg_grey' bindtap='toDetail' data-item="{{item}}">
+    <view style='padding:20rpx 0 10rpx 10rpx;font-size:30rpx;color:#00f;font-weight:bold;'>{{item.exam_class}}</view>
+    <view style='display:flex;width:100%;font-size:28rpx;'>
+      <view style='width:auto;display:flex;flex-direction:column;'>
+        <view style='padding:0rpx 0 10rpx 10rpx;'>时间</view>
+        <view style='margin-top:50rpx;padding:0rpx 0 10rpx 10rpx;'>试室</view>
+        <view style='padding:0rpx 0 10rpx 10rpx;'>座位号</view>
+      </view>
+      <view style='width:auto;display:flex;flex-direction:column'>
+        <view style='padding:0rpx 0 10rpx 10rpx;'>：{{item.time[1]}}</view>
+        <view style='padding:0rpx 0 10rpx 40rpx;'>{{item.time[0]}}</view>
+        <view style='padding:0rpx 0 10rpx 10rpx;'>：{{item.exam_location}}</view>
+        <view style='padding:0rpx 0 20rpx 10rpx;'>：{{item.exam_stu_position}}</view>
+      </view>
+      <view style='font-size:28rpx;margin-left:50rpx;width:30%;display:flex;justify-content:center;height:200rpx;align-items:center;'>
+        <view style='color:#999;' wx:if="{{item.countDown=='已结束'||item.countDown=='进行中'}}">{{item.countDown}}</view>
+        <view wx:else style='display:flex;flex-direction:column;text-align:center;'>
+          <view style='color:#999;'>倒计时</view>
+          <view style='color:#00f;'>{{item.countDown.day}}天</view>
+          <view style='color:#00f;'>
+            {{item.countDown.hour<=9?"0":""}}{{item.countDown.hour}}:{{item.countDown.minute<=9?"0":""}}{{item.countDown.minute}}
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>
+<view style='height:50rpx;'></view>

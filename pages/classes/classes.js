@@ -128,7 +128,7 @@ Page({
         global.week = week
       }
     }
-    getWeek('2018-9-16')
+    getWeek('2019-2-24')
     let that = this
     if (classes) {
       that.showClass(classes)
@@ -141,9 +141,9 @@ Page({
       })
       wx.request({
         url: global.stuUrl + '/credit/api/v2/syllabus',         //mark
-        method: 'post',
+        method: 'POST',
         header: {
-          'content-type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded'
         },
         data: {
           username: global.account,

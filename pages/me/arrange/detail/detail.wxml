@@ -1,0 +1,40 @@
+<!--pages/arrange/detail/detail.wxml-->
+<view class='top'>
+  <view style='height:50%;margin-top:50rpx;margin-left:50rpx;width:80%;'>{{item.exam_class}}</view>
+  <view style='height:50%;margin-left:50rpx;font-size:60rpx;'>汕大课程表</view>
+</view>
+<view class='infoList' style='margin-top:50rpx;'>
+  <image src='/image/banhao_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>班号</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_class_number}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/shijian_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>时间</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.time[1]}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/jiankao_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>监考</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_invigilator}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/kaoshi_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>考室</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_location}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/zuowei_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>座位</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_stu_position}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/renshu_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>人数</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_stu_numbers}}</view>
+</view>
+<view class='infoList'>
+  <image src='/image/beizhu_999.png' class='icon'></image>
+  <view style='padding:10rpx 0;color:#999;'>备注</view>
+  <view style='padding:10rpx 0 10rpx 80rpx;'>{{item.exam_comment==""?"无":"item.exam_comment"}}</view>
+</view>

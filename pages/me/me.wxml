@@ -55,7 +55,21 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator> -->
 
-          <navigator url="/pages/me/backlog/backlog" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+          <navigator wx:if="{{isLogin}}" url="/pages/me/grade/grade" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd weui-cell_primary">
+              <view>查看成绩</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+
+          <navigator wx:if="{{isLogin}}" url="/pages/me/arrange/arrange" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd weui-cell_primary">
+              <view>考试安排</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+
+          <navigator wx:if="{{isLogin}}" url="/pages/me/backlog/backlog" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__bd weui-cell_primary">
               <view>待办事项</view>
             </view>

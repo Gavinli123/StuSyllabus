@@ -1,0 +1,14 @@
+/* pages/me/arrange/arrange.wxss */
+page{
+  background: #fff;
+}
+.panel{
+  width:95%;
+  margin-left:2.5%;
+  display:flex;
+  flex-direction:column;
+  border-bottom:1rpx solid #999; 
+}
+.bg_grey{
+  background: #efefef;
+}
