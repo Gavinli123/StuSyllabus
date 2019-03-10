@@ -27,6 +27,7 @@
     "pages/discover/contentDetail/contentDetail",
     "pages/oa/index/index",
     "pages/oa/content/content",
+    "pages/oa/detail/detail",
     "pages/discover/manage/manage",
     "pages/discover/modify/modify",
     "pages/discover/findlostDetail/findlostDetail",

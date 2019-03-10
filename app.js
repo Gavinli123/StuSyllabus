@@ -211,7 +211,9 @@ App({
             iv: userinfo.iv,
             encrypted_data: userinfo.encryptedData
           }
-          console.log(userinfo)
+          global.code=login_info.code;
+          console.log("login_info");
+          console.log(login_info);
           wx.showLoading({
             title: '登录中',
             mask: true
@@ -224,8 +226,8 @@ App({
               encrypted_data: login_info.encrypted_data
             },
             success: function (res) {
-              console.log(res)
-
+              console.log(res);
+              console.log(res.statusCode);
               if (res.statusCode != '200') {
                 if (res.statusCode >= 500) {
                   console.log('服务器错误')
@@ -328,12 +330,14 @@ App({
       // 初始化学期信息
       // 设为当前学年
       let enrollment_year = global.account.substring(0, 2)
+      //       获取学号前两位判断入学年份
       let year_picker = []
 
       if (Number(enrollment_year)) {
         for (let i = 0; i < 6; i++) {
           year_picker.push('20' + (Number(enrollment_year) + i) + '-' + '20' + (Number(enrollment_year) + i + 1))
         }
+        //         入学年份往后数6年
       } else {
         console.log('教室')
         // 账户中没有入学年份，可能为老师
@@ -352,6 +356,7 @@ App({
       let year_index = year_picker.findIndex(function (year) {
         return year === this_year
       })
+      //       获取今年在数组中的索引
       global.years = {
         enrollment_year: '20' + enrollment_year,
         year_picker,
@@ -361,7 +366,7 @@ App({
       // 设为当前学期
       let semester_picker = ['秋季学期', '春季学期', '夏季学期']
       let semester_index
-      let this_month = date.getMonth + 1
+      let this_month = date.getMonth()+1
       if (this_month < 8) {
         semester_index = 2
       } else if (this_month < 9) {
@@ -373,6 +378,7 @@ App({
         semester_picker,
         semester_index
       }
+      //储存学期信息
       wx.setStorageSync('semester', global.semester)
 
     }

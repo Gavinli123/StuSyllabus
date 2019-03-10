@@ -5170,7 +5170,7 @@
                     console.log('未获取到用户信息')
                 }
                 var openid = wx.getStorageSync('openid')
-                console.log(openid)
+                console.log("openid是"+openid)
                 query.get(currentUser.id, {
                     success: function (result) {
                         result.set('nickName', nickName)

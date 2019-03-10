@@ -155,7 +155,6 @@ Page({
         success(res) {
           if (res.statusCode != '200') {
             let errorMsg
-
             if (res.data.ERROR === "the password is wrong") {
               app.signout()
               wx.showModal({

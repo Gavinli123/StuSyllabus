@@ -264,6 +264,8 @@ Page({
           content:evaluateData.comment
         },
         success(res){
+          // console("新增评价返回值");
+          // console.log(res.data);
           wx.showToast({
             title: '成功',
             icon: "success",
@@ -283,6 +285,8 @@ Page({
                   token: global.classes.token,
                 },
                 success(res) {
+                  // console.log("获取评论返回值");
+                  // console.log(res.data);
                   if (res.statusCode == 200) {
                     wx.setStorage({
                       key: 'comment_list',
@@ -311,6 +315,7 @@ Page({
           })
         },
         fail(){
+          //console.log(res.data);
           wx.showModal({
             title: '错误',
             content: '请求出错',
@@ -346,6 +351,8 @@ Page({
           content: evaluateData.comment
         },
         success(res){
+           console.log("修改评价返回值");
+           console.log(res.data);
           wx.showToast({
             title: '成功',
             icon: "success",
@@ -365,12 +372,14 @@ Page({
                   token: global.classes.token,
                 },
                 success(res) {
+                   console.log("获取评价返回值");
+                   console.log(res.data);
                   if (res.statusCode == 200) {
                     wx.setStorage({
                       key: 'comment_list',
                       data: res.data.data.eva_list,
                     })
-                    //console.log(res)
+                    console.log(res)
                     wx.redirectTo({
                       url: '/pages/classes/showEvaluate/showEvaluate?lesson=' + lessonJson,
                     })
