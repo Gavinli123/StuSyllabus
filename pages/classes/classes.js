@@ -20,6 +20,9 @@ Page({
         if(global.classes){
             this.refalshSyllabus()
         }
+      wx.setNavigationBarTitle({
+        title: '第 ' + global.week + ' 周'
+      })
     },
 
 
@@ -32,6 +35,9 @@ Page({
             this.refalshSyllabus(classes)
             this.classes = classes
         }
+      wx.setNavigationBarTitle({
+        title: '第 ' + global.week + ' 周'
+      })
     },
 
     /**
@@ -77,8 +83,11 @@ Page({
                 key: 'version',
                 data: global.version,
             })
-            wx.navigateTo({
-                url: '/pages/me/update_log/update_log',
+            //wx.navigateTo({
+              //  url: '/pages/me/update_log/update_log',
+            //})
+            wx.switchTab({
+              url: '/pages/me/me',
             })
             return
         }
@@ -196,6 +205,12 @@ Page({
                 complete(res) {
                     wx.hideLoading()
                     console.log(that.classes.classes)
+                    if(that.classes.classes.length==0||!that.classes.classes){
+                      wx.showModal({
+                        title: '提示',
+                        content: '当前学期暂无课程，请切换学期',
+                      })
+                    }
                     //console.log(global.classes)
                     console.log(that.lessons)
                 }

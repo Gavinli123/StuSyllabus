@@ -128,7 +128,7 @@ Page({
             let addList = res.data.data
             let showList = that.data.showList
             console.log(addList)
-            showList = showList.concat(addList)
+            //showList = showList.concat(addList)
             wx.setStorageSync('manage0', showList)
             that.setData({
               showList,
@@ -482,6 +482,7 @@ Page({
             title: '删除中',
             mask:true
           })
+          let before=Number.parseInt(new Date().getTime()/1000)
           wx.request({
             url: deleteUrl,
             method:"DELETE",
@@ -516,6 +517,8 @@ Page({
                       wx.showToast({
                         title: '删除成功',
                       })
+                      let after=Number.parseInt(new Date().getTime()/1000)
+                      console.log(after-before)
                     }
                     else{
                       wx.hideLoading()
