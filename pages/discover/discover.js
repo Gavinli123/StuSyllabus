@@ -115,11 +115,11 @@ Page({
           list[i].likeNumber = list[i].thumb_ups.length
           list[i].commentNumber = list[i].comments.length
           if (list[i].user.image==null){
-            list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+            list[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
           }
           let isLike = false
           for (let j in list[i].thumb_ups) {
-            if (list[i].thumb_ups[j].uid == myuid) {
+            if (list[i].thumb_ups[j].uid == global.classes.user_id) {
               isLike = true
               break
             }
@@ -289,7 +289,7 @@ Page({
           list[i].commentNumber = list[i].comments.length
           let isLike = false
           for (let j in list[i].thumb_ups) {
-            if (list[i].thumb_ups[j].uid == myuid) {
+            if (list[i].thumb_ups[j].uid == global.classes.user_id) {
               isLike = true
               break
             }
@@ -382,11 +382,11 @@ Page({
           currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
           currentModeList[i].commentNumber=currentModeList[i].comments.length
           if(currentModeList[i].user.image==null){
-            currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+            currentModeList[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
           }
           let isLike=false
           for(let j in currentModeList[i].thumb_ups){
-            if(currentModeList[i].thumb_ups[j].uid==myuid){
+            if(currentModeList[i].thumb_ups[j].uid==global.classes.user_id){
               isLike=true
               break
             }
@@ -499,11 +499,11 @@ Page({
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
         if(list[i].user.image==null){
-          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          list[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
         }
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }
@@ -537,7 +537,7 @@ Page({
         list[i].commentNumber = list[i].comments.length
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }
@@ -703,6 +703,9 @@ Page({
       })
 
       let mode=1
+      if(that.data.WallSelected0){
+        mode=2
+      }
       wx.request({
         url: testUrl + 'post_sort',
         method: "GET",
@@ -785,11 +788,11 @@ Page({
           list[i].likeNumber = list[i].thumb_ups.length
           list[i].commentNumber = list[i].comments.length
           if (list[i].user.image==null){
-            list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+            list[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
           }
           let isLike = false
           for (let j in list[i].thumb_ups) {
-            if (list[i].thumb_ups[j].uid == myuid) {
+            if (list[i].thumb_ups[j].uid == global.classes.user_id) {
               isLike = true
               break
             }
@@ -843,7 +846,7 @@ Page({
           list[i].commentNumber = list[i].comments.length
           let isLike = false
           for (let j in list[i].thumb_ups) {
-            if (list[i].thumb_ups[j].uid == myuid) {
+            if (list[i].thumb_ups[j].uid == global.classes.user_id) {
               isLike = true
               break
             }
@@ -975,7 +978,7 @@ Page({
           url: testUrl + 'post_sort',
           method: "GET",
           data: {
-            mode:1,
+            mode:2,
             topic_id: 6,
             page_index: 1,
             page_size: 10
@@ -1107,7 +1110,7 @@ Page({
           url: testUrl + 'post_sort',
           method: "GET",
           data: {
-            mode: 1,
+            mode: 2,
             topic_id: 6,
             page_index: 1,
             page_size: 10
@@ -1243,8 +1246,8 @@ Page({
             'Content-Type': 'application/json',
           },
           data: {
-            uid: Number.parseInt(myuid),
-            token: mytoken,
+            uid: global.classes.user_id,
+            token: global.classes.token,
             kind: 1,
             page_index:1,
             page_size:10
@@ -1318,11 +1321,11 @@ Page({
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
         if (list[i].user.image==null){
-          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          list[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
         }
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }
@@ -1629,7 +1632,7 @@ Page({
         list[i].commentNumber = list[i].comments.length
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }
@@ -1761,7 +1764,7 @@ Page({
         url: testUrl + 'post_sort',
         method: "GET",
         data: {
-          mode: 1,
+          mode: 2,
           topic_id: 6,
           page_index: 1,
           page_size: 10
@@ -1887,7 +1890,7 @@ Page({
               }
             }
             if(flag==0){
-              showList[myid].thumb_ups.push({ 'id': res.data.id, 'uid': myuid })
+              showList[myid].thumb_ups.push({ 'id': res.data.id, 'uid': global.classes.user_id })
             }
             console.log(showList[myid])
             that.setData({
@@ -1944,8 +1947,10 @@ Page({
     //})
   },
   previewIcon:function(e){
+    let url=[]
+    url.push(e.currentTarget.dataset.icon)
     wx.previewImage({
-      urls: ['https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'],
+      urls: url,
     })
   },
   previewPhoto:function(e){
@@ -2015,11 +2020,11 @@ Page({
         list[i].likeNumber =list[i].thumb_ups.length
         list[i].commentNumber =list[i].comments.length
         if(list[i].user.image==null){
-          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          list[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
         }
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }
@@ -2174,7 +2179,7 @@ Page({
         list[i].commentNumber = list[i].comments.length
         let isLike = false
         for (let j in list[i].thumb_ups) {
-          if (list[i].thumb_ups[j].uid == myuid) {
+          if (list[i].thumb_ups[j].uid == global.classes.user_id) {
             isLike = true
             break
           }

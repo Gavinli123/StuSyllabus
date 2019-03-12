@@ -56,7 +56,7 @@
     <block wx:if="{{isSelected0}}" wx:for="{{showList}}" wx:key="*this" wx:for-item="item">
       <view class='showItem' bindtap='toDetail' data-id="{{item.id}}" data-category='0'>
         <view class='userInfo' hover-class='bg_grey'>
-          <image src="{{item.user.image}}" class='avatar' catchtap='previewIcon'></image>
+          <image src="{{item.user.image}}" class='avatar' data-icon='{{item.user.image}}' catchtap='previewIcon'></image>
           <view class='right-info'>
             <text class='nickname'>{{item.user.nickname}}</text>
             <text class='time'>{{item.post_time}}</text>

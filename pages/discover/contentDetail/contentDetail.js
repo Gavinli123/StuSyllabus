@@ -5,14 +5,14 @@ const testUrl = "https://stuapps.com/interaction/api/v2/"
 const myuid=global.classes.user_id
 const mytoken = global.classes.token
 
-const imgurl ='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+const imgurl ='http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg'
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    userImagesUrl: 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132',
+    userImagesUrl: 'http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg',
     nickName:'16eyhuang',
     time:'10-18 10:51',
     title:'',
@@ -139,7 +139,7 @@ Page({
               showObj.userImagesUrl = res.data.user.image
             }
             else{
-              showObj.userImagesUrl = 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+              showObj.userImagesUrl = 'http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg'
             } 
 
             that.setData({
