@@ -11,7 +11,7 @@
 
 
 <scroll-view scroll-y='true' bindscrolltolower="getMoreData" bindscroll="onScroll" style='height: {{scrollHeight + "px"}}'>
-  <view class="news_info" wx:for="{{newsItems}}" data-id="{{index}}" wx:key="item.ID"  bindtap="getDetail">
+  <view class="news_info" wx:for="{{newsItems}}" data-id="{{index}}" wx:key="item.ID"  bindtap="tapEvent">
     <!--左边-->
     <view class="left" >
       <view class="news_title">{{item.DOCSUBJECT}}</view>

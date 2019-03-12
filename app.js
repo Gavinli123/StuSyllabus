@@ -1,5 +1,6 @@
 //app.js
 let topBar = require('/util/topBar.js');
+let tdweapp = require('/util/tdweapp.js');
 
 global.version = '1.0.17'
 global.token = wx.getStorageSync('token')
@@ -49,6 +50,7 @@ App({
   onLaunch: function () {
 
     console.log(topBar)
+    console.log("hahah")
     //topBar.timer()
 
     // 初始化
