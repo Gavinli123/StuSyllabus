@@ -1,7 +1,7 @@
 <!--pages/discover/contentDetail/contentDetail.wxml-->
 <view class='showItem'>
   <view class='userInfo' hover-class='bg_grey'>
-    <image src="{{showObj.userImagesUrl}}" class='avatar' catchtap='previewIcon'></image>
+    <image src="{{showObj.userImagesUrl}}" class='avatar' catchtap='previewIcon' data-url="{{showObj.userImagesUrl}}"></image>
     <view class='right-info'>
       <text wx:if="{{category!=2}}" class='nickname'>{{showObj.user.nickname}}</text>
       <text wx:if="{{category==2}}" class='nickname'>匿名</text>
@@ -9,7 +9,7 @@
     </view>
   </view>
   <view wx:if="{{category!=2}}" style='margin:0 0 20rpx 5%;' class='itemTitle'>
-    <text>{{showObj.title}}</text>
+    <text wx:if="{{showObj.title!=null}}">{{showObj.title}}</text>
   </view>
   <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
     <text class='itemContent'>{{showObj.content}}</text>
@@ -22,8 +22,8 @@
 </view>
 
 <view class='box' wx:if="{{category!=1}}">
-  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>评论 {{showObj.comments.length}}</view>
-  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey' bindtap='change'>赞 {{showObj.thumb_ups.length}}</view>
+  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey'>评论 {{showObj.comments.length}}</view>
+  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey'>赞 {{showObj.thumb_ups.length}}</view>
 </view>
 
 <!--评论-->

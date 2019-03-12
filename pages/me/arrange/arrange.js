@@ -81,7 +81,7 @@ Page({
       mask: true
     })
     wx.request({
-      url: testUrl + '/credit/api/v2/exam',
+      url: global.stuUrl + '/credit/api/v2/exam',
       method: 'POST',
       header: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -97,7 +97,7 @@ Page({
       success(res) {
         console.log(res)
         if (res.statusCode == 200) {
-          if (res.data.EXAMS.length == 0) {
+          if (res.data.ERROR == 'no exams' || res.data.EXAMS.length == 0) {
             wx.hideLoading()
             wx.showToast({
               title: '当前学期暂无考试',
@@ -222,7 +222,7 @@ Page({
         title: '加载中',
       })
       wx.request({
-        url: testUrl + '/credit/api/v2/exam',
+        url: global.stuUrl + '/credit/api/v2/exam',
         method: 'POST',
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -238,7 +238,7 @@ Page({
         success(res) {
           console.log(res)
           if (res.statusCode == 200) {
-            if (res.data.EXAMS.length == 0) {
+            if (res.data.ERROR == 'no exams' || res.data.EXAMS.length == 0) {
               that.setData({
                 currentTimeStamp:Number.parseInt(new Date().getTime()/1000)
               })
@@ -306,7 +306,7 @@ Page({
           title: '加载中',
         })
         wx.request({
-          url: testUrl + '/credit/api/v2/exam',
+          url: global.stuUrl + '/credit/api/v2/exam',
           method: 'POST',
           header: {
             'Content-Type': 'application/x-www-form-urlencoded',

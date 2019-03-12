@@ -1,10 +1,18 @@
 // pages/discover/manage/manage.js
-const findlostUrl ="http://118.126.92.214:8083/extension/api/v2/personal_findlosts"
-const testUrl ="http://118.126.92.214:8083/interaction/api/v2/personal_post"
-const deleteUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
-const deleteUrl1 = "http://118.126.92.214:8083/extension/api/v2/findlost"
-const testUid = "5"
-const testToken = "100004"
+//const findlostUrl ="http://118.126.92.214:8083/extension/api/v2/personal_findlosts"
+//const testUrl ="http://118.126.92.214:8083/interaction/api/v2/personal_post"
+//const deleteUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
+//const deleteUrl1 = "http://118.126.92.214:8083/extension/api/v2/findlost"
+//const testUid = "5"
+//const testToken = "100004"
+
+const findlostUrl ="https://stuapps.com/extension/api/v2/personal_findlosts"
+const testUrl ="https://stuapps.com/interaction/api/v2/personal_post"
+const deleteUrl ="http://stuapps.com/interaction/api/v2/post"
+const deleteUrl1 = "http://stuapps.com/extension/api/v2/findlost"
+const testUid = global.classes.user_id
+const testToken = global.classes.token
+
 Page({
 
   /**
@@ -31,8 +39,8 @@ Page({
       url: testUrl,
       method:'GET',
       data:{
-        token:testToken,
-        uid:testUid,
+        token:global.classes.token,
+        uid:global.classes.user_id,
         page_index:1,
       },
       success(res){
@@ -110,8 +118,8 @@ Page({
         url: testUrl,
         method: 'GET',
         data: {
-          token: testToken,
-          uid: testUid,
+          token: global.classes.token,
+          uid: global.classes.user_id,
           page_index: 1,
         },
         success(res) {
@@ -157,8 +165,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: testUid,
-          token: testToken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           page_index: 1,
           page_size: 10
         },
@@ -293,8 +301,8 @@ Page({
             'Content-Type': 'application/json',
           },
           data:{
-            uid:testUid,
-            token:testToken,
+            uid:global.classes.user_id,
+            token:global.classes.token,
             page_index:1,
             page_size:10
           },
@@ -374,8 +382,8 @@ Page({
       url: testUrl,
       method:"GET",
       data:{
-        token:testToken,
-        uid:testUid,
+        token:global.classes.token,
+        uid:global.classes.user_id,
         page_index:page_index
       },
       success(res){
@@ -425,8 +433,8 @@ Page({
         'Content-Type': 'application/json',
       },
       data: {
-        token: testToken,
-        uid: testUid,
+        token: global.classes.token,
+        uid: global.classes.user_id,
         page_index: page_index1,
         page_size:10,
       },
@@ -478,8 +486,8 @@ Page({
             url: deleteUrl,
             method:"DELETE",
             header:{
-              token:testToken,
-              uid:testUid,
+              token:global.classes.token,
+              uid:global.classes.user_id,
               id:id
             },
             success(res){
@@ -489,8 +497,8 @@ Page({
                   url: testUrl,
                   method: 'GET',
                   data: {
-                    token: testToken,
-                    uid: testUid,
+                    token: global.classes.token,
+                    uid: global.classes.user_id,
                     page_index: 1,
                     page_size:that.data.page_index*10
                   },
@@ -565,8 +573,8 @@ Page({
             url: deleteUrl1,
             method: "DELETE",
             header: {
-              token: testToken,
-              uid: testUid,
+              token: global.classes.token,
+              uid: global.classes.user_id,
               findlostid: id
             },
             success(res) {
@@ -576,8 +584,8 @@ Page({
                   url: findlostUrl,
                   method: 'GET',
                   data: {
-                    token: testToken,
-                    uid: testUid,
+                    token: global.classes.token,
+                    uid: global.classes.user_id,
                     page_index: 1,
                     page_size: that.data.page_index1 * 10
                   },

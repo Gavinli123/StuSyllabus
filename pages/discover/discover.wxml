@@ -63,7 +63,7 @@
           </view>
         </view>
         <view style='margin:0 0 20rpx 5%;' class='itemTitle'>
-          <text>{{item.title}}</text>
+          <text wx:if="{{item.title!=null}}">{{item.title}}</text>
         </view>
         <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
           <text class='itemContent'>{{item.content}}</text>
@@ -177,7 +177,7 @@
 </view>
 
 <view class='add'>
-  <image src='{{jiahao? "/image/jiahao_pink.png": "/image/jianhao_pink.png"}} ' class='addImage' bindtap='changeAdd'></image>
+  <image src='{{jiahao? "/image/jiahao_blue.png": "/image/jianhao_blue.png"}} ' class='addImage' bindtap='changeAdd'></image>
 </view>
 
 <view hidden='{{jiahao}}' class='addContent' bindtap='addContent'>

@@ -1,8 +1,9 @@
 // pages/discover/contentDetail/contentDetail.js
 const findlostUrl = "http://118.126.92.214:8083//extension/api/v2/findlost/"
-const testUrl = "http://118.126.92.214:8083/interaction/api/v2/"
-const myuid=5
-const mytoken = "100004"
+//const testUrl = "http://118.126.92.214:8083/interaction/api/v2/"
+const testUrl = "https://stuapps.com/interaction/api/v2/"
+const myuid=global.classes.user_id
+const mytoken = global.classes.token
 
 const imgurl ='https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
 Page({
@@ -103,7 +104,7 @@ Page({
             showObj.id = res.data.id
             showObj.photo_list_json = res.data.photo_list_json
             showObj.imgs=[]
-            if(showObj.photo_list_json!=null){
+            if(showObj.photo_list_json!=null&&showObj.photo_list_json!=''){
               let imgObj=JSON.parse(showObj.photo_list_json)
               if(imgObj!=null){
                 for (let i = 0; i < imgObj.photo_list.length; i++) {
@@ -134,7 +135,12 @@ Page({
               }
             }
             /*暂且加一个头像 */
-            showObj.userImagesUrl = 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+            if(res.data.user.image!=null){
+              showObj.userImagesUrl = res.data.user.image
+            }
+            else{
+              showObj.userImagesUrl = 'https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'
+            } 
 
             that.setData({
               showObj,
@@ -153,7 +159,7 @@ Page({
                 },
                 success(res) {
                   console.log(res)
-                  if (res.errMsg == 'request:ok') {
+                  if (res.statusCode == 200) {
                     /*如果请求成功 */
                     let comment_list = res.data.comments
                     for (let i in comment_list) {
@@ -304,48 +310,6 @@ Page({
         }
       })
     }
-    
-    // let category=options.category
-    // let mode=options.mode
-    // let id=Number.parseInt(options.id)
-    // console.log(options)
-    // let childList=[]
-    // if(category=='message'){
-    //   childList=wx.getStorageSync('post_list')
-    // }
-    // else if(category=='things'){
-    //   childList=wx.getStorageSync('thingsList')
-    // }
-    // else if(category=='wall'){
-    //   childList=wx.getStorageSync('wallList')
-    // }
-    // console.log(childList[id])
-    // let content=childList[id].content
-    // let title=''
-    // let position=''
-    // let phone=''
-    // let imgs=[]
-    // let yishi=true
-    // if(category!='wall'){
-    //   title=childList[id].title
-    //   //imgs=childList[id].imgs
-    // }
-    // if(category=='things'){
-    //   position=childList[id].position
-    //   phone=childList[id].phone
-    //   if(mode=='寻主'){
-    //     yishi=false
-    //   }
-    // }
-    // that.setData({
-    //   category,
-    //   content,
-    //   title,
-    //   position,
-    //   phone,
-    //   imgs,
-    //   yishi,
-    // })
     that.setData({
       showBottom:true,
       commentinput:'',
@@ -385,7 +349,12 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-
+    let that=this
+    let showObj = that.data.showObj
+    let options = {}
+    options.id = showObj.id
+    options.category = that.data.category
+    that.onLoad(options)
   },
 
   /**
@@ -402,8 +371,10 @@ Page({
 
   },
   previewIcon: function (e) {
+    let url=[]
+    url.push(e.currentTarget.dataset.url)
     wx.previewImage({
-      urls: ['https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132'],
+      urls:url,
     })
   },
   previewPhoto: function (e) {
@@ -436,15 +407,12 @@ Page({
     /*若当前是点赞的状态，则请求取消 */
     if(showObj.isLike){
       /*由于请求需要时间，故先设置好数据再请求，以免反应过慢 */
-      showObj.isLike=false
-      that.setData({
-        showObj
-      })
       /*获取点赞的id */
       let like_id
       for(let i in showObj.thumb_ups){
         if(myuid==showObj.thumb_ups[i].uid){
           like_id=showObj.thumb_ups[i].id
+          break
         }
       }
       wx.request({
@@ -452,38 +420,79 @@ Page({
         method:"DELETE",
         header:{
           id:like_id,
-          uid:myuid,
-          token:mytoken
+          uid:global.classes.user_id,
+          token:global.classes.token
         },
         success(res){
           console.log(res)
+          if(res.statusCode==200){
+            showObj.isLike = false
+            showObj.likeNumber--
+            that.setData({
+              showObj
+            })
+          }
+          else{
+            wx.showToast({
+              title: '取消点赞失败',
+              icon:'none'
+            })
+          }
         },
         fail(res){
           console.log(res)
+          wx.showToast({
+            title: '取消点赞失败',
+            icon: 'none'
+          })
         }
       })
     }
     else{
       /*如果当前用户未点赞，则请求点赞 */
       /*由于请求需要时间，故先设置好数据再请求，以免反应过慢 */
-      showObj.isLike = true
-      that.setData({
-        showObj
-      })
 
       wx.request({
         url: testUrl+'like',
         method:"POST",
         data: {
-          uid: myuid,
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           post_id: showObj.id,
         },
         success(res){
           console.log(res)
+          if(res.statusCode==201){
+            showObj.isLike = true
+            showObj.likeNumber++
+            let flag=0
+            for(let i in showObj.thumb_ups){
+              if(showObj.thumb_ups[i].uid==global.classes.user_id){
+                showObj.thumb_ups[i].id=res.data.id
+                flag=1
+                break
+              }
+            }
+            if(flag==0){
+              showObj.thumb_ups.push({ 'id': res.data.id, 'uid': myuid })
+            }
+            that.setData({
+              showObj
+            })
+          }
+          else{
+            wx.showToast({
+              title: '点赞失败',
+              icon:'none'
+            })
+          }
         },
         fail(res){
           console.log(res)
+          wx.showToast({
+            title: '点赞失败',
+            icon: 'none'
+          })
         }
       })
     }
@@ -532,16 +541,28 @@ Page({
       method:'POST',
       data:{
         comment:'@'+atUser+'：'+commentinput,
-        token:mytoken,
-        uid:myuid,
+        token:global.classes.token,
+        uid:global.classes.user_id,
         post_id:showObj.id
       },
       success(res){
         console.log(res)
-        that.onLoad(options)
+        if(res.statusCode==201){
+          that.onLoad(options)
+        }
+        else{
+          wx.showToast({
+            title: '评论失败',
+            icon:'none'
+          })
+        }
       },
       fail(res){
         console.log(res)
+        wx.showToast({
+          title: '评论失败',
+          icon: 'none'
+        })
       }
     })
   },
@@ -577,7 +598,7 @@ Page({
       },
       success(res) {
         console.log(res)
-        if (res.errMsg == 'request:ok') {
+        if (res.statusCode == 200) {
           /*如果请求成功 */
           let comment_list = res.data.comments
           for (let i in comment_list) {

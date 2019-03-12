@@ -97,7 +97,7 @@ Page({
         title: '加载中',
       })
       wx.request({
-        url: testUrl + '/credit/api/v2/grade',
+        url: global.stuUrl + '/credit/api/v2/grade',
         method: 'POST',
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -233,7 +233,7 @@ Page({
         title: '加载中',
       })
       wx.request({
-        url: testUrl + '/credit/api/v2/grade',
+        url: global.stuUrl + '/credit/api/v2/grade',
         method: 'POST',
         header: {
           'Content-Type': 'application/x-www-form-urlencoded',
@@ -301,7 +301,7 @@ Page({
           title: '加载中',
         })
         wx.request({
-          url: testUrl + '/credit/api/v2/grade',
+          url: global.stuUrl + '/credit/api/v2/grade',
           method: 'POST',
           header: {
             'Content-Type': 'application/x-www-form-urlencoded',

@@ -1,8 +1,13 @@
 // pages/discover/modify/modify.js
-const findlostUrl ="http://118.126.92.214:8083/extension/api/v2/findlost"
-const testUrl = "http://118.126.92.214:8083/interaction/api/v2/post"
-const testUid = "5"
-const testToken = "100004"
+//const findlostUrl ="http://118.126.92.214:8083/extension/api/v2/findlost"
+//const testUrl = "http://118.126.92.214:8083/interaction/api/v2/post"
+//const testUid = "5"
+//const testToken = "100004"
+
+const findlostUrl = "https://stuapps.com/extension/api/v2/findlost"
+const testUrl = "https://stuapps.com/interaction/api/v2/post"
+const testUid = global.classes.user_id
+const testToken = global.classes.token
 
 var Bmob = require('../../../util/bmob.js');
 var common = require('../../../util/common.js');
@@ -29,9 +34,12 @@ Page({
     console.log(options)
     if(options.category=='失物招领'){
       console.log(options)
-      let imgObj=JSON.parse(options.photo)
+      let imgObj=''
+      if (options.photo != "null" && options.photo!=""){
+        imgObj = JSON.parse(options.photo)
+      }
       let urlArr=[]
-      if(imgObj!=null){
+      if(imgObj!=''){
         for (let i = 0; i < imgObj.photo_list.length;i++){
           urlArr.push({url:imgObj.photo_list[i]["size_big"]})
         }
@@ -59,7 +67,7 @@ Page({
     let mode=options.mode
     let photo={}
     let urlArr=[]
-    if(options.photo!="null"){
+    if(options.photo!="null"&&options.photo!=""){
       photo=JSON.parse(options.photo)
       for(let i=0;i<photo.photo_list.length;i++){
         if(photo.photo_list[i]["size_big"]!=null){
@@ -385,8 +393,8 @@ Page({
         },
         data: {
           id:id,
-          uid: uid,
-          token: testToken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           post_type: 0,
           content:content,
           title:title,
@@ -424,8 +432,8 @@ Page({
         },
         data: {
           id: id,
-          uid: uid,
-          token: testToken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           post_type: 0,
           content: content,
           description: '表白墙',
@@ -517,8 +525,8 @@ Page({
       },
       data:{
         findlost_id:formdata.findlost_id,
-        uid:testUid,
-        token:testToken,
+        uid:global.classes.user_id,
+        token:global.classes.token,
         kind:formdata.kind,
         title:formdata.title,
         description:formdata.description,

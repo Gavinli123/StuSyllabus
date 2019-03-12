@@ -1,10 +1,14 @@
 // pages/discover/discover.js
-const testUrl ="http://118.126.92.214:8083/interaction/api/v2/"
-const likeUrl ="http://118.126.92.214:8083/interaction/api/v2/like"
-const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlosts"
+//const testUrl ="http://172.16.43.4:8001/interaction/api/v2/"
+//const likeUrl ="http://172.16.43.4:8001/interaction/api/v2/like"
+//const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlosts"
 const stuUrl = "https://stuapps.com/interaction/api/v2/posts"
-const myuid=5
-const mytoken="100004"
+const testUrl = "https://stuapps.com/interaction/api/v2/"
+const likeUrl = "https://stuapps.com/interaction/api/v2/like"
+const findlostUrl = "https://stuapps.com/extension/api/v2/findlosts"
+const myuid=global.classes.user_id
+const mytoken=global.classes.token
+
 Page({
 
   /**
@@ -83,7 +87,7 @@ Page({
     let mode=options.mode||null
 
     /*校园动态 */
-    if(category=='1'){
+    if(category=="1"){
       /*init_load()函数的作用主要是为请求回来的数据增加一些参数
       包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个）
       校园动态所使用 */
@@ -91,8 +95,11 @@ Page({
         for (let i in list) {
           /*图片链接处理 */
           let imgs = []
-          let imgObj = JSON.parse(list[i].photo_list_json)
-          if (imgObj != null) {
+          let imgObj=''
+          if (list[i].photo_list_json != '' && list[i].photo_list_json!=null){
+            imgObj = JSON.parse(list[i].photo_list_json)
+          }
+          if (imgObj != '') {
             for (let j = 0; j < imgObj.photo_list.length; j++) {
               if (imgObj.photo_list[j]["size_big"] != "") {
                 imgs.push(imgObj.photo_list[j]["size_big"])
@@ -107,7 +114,9 @@ Page({
           list[i].myid = i
           list[i].likeNumber = list[i].thumb_ups.length
           list[i].commentNumber = list[i].comments.length
-          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          if (list[i].user.image==null){
+            list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          }
           let isLike = false
           for (let j in list[i].thumb_ups) {
             if (list[i].thumb_ups[j].uid == myuid) {
@@ -124,7 +133,6 @@ Page({
         /*下面进行本地存储 */
         let str = String('school' + topic_id)
         wx.setStorageSync(str, showList)
-        //wx.setStorageSync('post_list', currentModeList)
         that.setData({
           schoolSelected,
           showList,
@@ -144,9 +152,6 @@ Page({
       /*定义请求的模块id 为点击的模块加1*/
       let topic_id = current + 1
 
-      if (schoolSelected[current] == true) {
-        return
-      }
       for (let i = 0; i < schoolSelected.length; i++) {
         schoolSelected[i] = false
       }
@@ -211,8 +216,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: Number.parseInt(myuid),
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           kind: kind,
           page_index: 1,
           page_size: 10
@@ -357,8 +362,11 @@ Page({
         for (let i in currentModeList) {
           /*图片链接处理 */
           let imgs=[]
-          let imgObj=JSON.parse(currentModeList[i].photo_list_json)
-          if(imgObj!=null){
+          let imgObj=''
+          if (currentModeList[i].photo_list_json != '' && currentModeList[i].photo_list_json !=null){
+            imgObj = JSON.parse(currentModeList[i].photo_list_json)
+          }
+          if(imgObj!=''){
             for (let j = 0; j < imgObj.photo_list.length; j++) {
               if (imgObj.photo_list[j]["size_big"] != "") {
                 imgs.push(imgObj.photo_list[j]["size_big"])
@@ -373,7 +381,9 @@ Page({
           currentModeList[i].myid=i
           currentModeList[i].likeNumber=currentModeList[i].thumb_ups.length
           currentModeList[i].commentNumber=currentModeList[i].comments.length
-          currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          if(currentModeList[i].user.image==null){
+            currentModeList[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          }
           let isLike=false
           for(let j in currentModeList[i].thumb_ups){
             if(currentModeList[i].thumb_ups[j].uid==myuid){
@@ -401,7 +411,7 @@ Page({
         method:"GET",
         data:{
           topic_id:1,
-          page_index:page_index,
+          page_index:1,
           page_size:10
         },
         success(res){
@@ -462,15 +472,18 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function () {
-    /*init_load函数的作用主要是为请求回来的数据增加一些参数
+    /*init_load函数的作用主要是为校园动态请求回来的数据增加一些参数
       包括点赞数、评论数、当前用户是否已点赞、头像（随便加一个）
       用于校园动态的消息 */
     function init_load(list) {
       for (let i in list) {
         /*图片链接处理 */
         let imgs = []
-        let imgObj = JSON.parse(list[i].photo_list_json)
-        if (imgObj != null) {
+        let imgObj=''
+        if (list[i].photo_list_json != '' && list[i].photo_list_json!=null){
+          imgObj = JSON.parse(list[i].photo_list_json)
+        }
+        if (imgObj != '') {
           for (let j = 0; j < imgObj.photo_list.length; j++) {
             if (imgObj.photo_list[j]["size_big"] != "") {
               imgs.push(imgObj.photo_list[j]["size_big"])
@@ -485,7 +498,9 @@ Page({
         list[i].myid = i
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
-        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        if(list[i].user.image==null){
+          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        }
         let isLike = false
         for (let j in list[i].thumb_ups) {
           if (list[i].thumb_ups[j].uid == myuid) {
@@ -627,8 +642,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: Number.parseInt(myuid),
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           kind: kind,
           page_index:1,
           page_size:10
@@ -751,8 +766,11 @@ Page({
         for (let i in list) {
           /*图片链接处理 */
           let imgs = []
-          let imgObj = JSON.parse(list[i].photo_list_json)
-          if (imgObj != null) {
+          let imgObj=''
+          if (list[i].photo_list_json != null && list[i].photo_list_json!=''){
+            imgObj = JSON.parse(list[i].photo_list_json)
+          }
+          if (imgObj != '') {
             for (let j = 0; j < imgObj.photo_list.length; j++) {
               if (imgObj.photo_list[j]["size_big"] != "") {
                 imgs.push(imgObj.photo_list[j]["size_big"])
@@ -766,7 +784,9 @@ Page({
           list[i].myid = i
           list[i].likeNumber = list[i].thumb_ups.length
           list[i].commentNumber = list[i].comments.length
-          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          if (list[i].user.image==null){
+            list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+          }
           let isLike = false
           for (let j in list[i].thumb_ups) {
             if (list[i].thumb_ups[j].uid == myuid) {
@@ -890,8 +910,8 @@ Page({
             'Content-Type': 'application/json',
           },
           data: {
-            uid: Number.parseInt(myuid),
-            token: mytoken,
+            uid: global.classes.user_id,
+            token: global.classes.token,
             kind: 1,
             page_index:1,
             page_size:10
@@ -1052,7 +1072,7 @@ Page({
           }
         })
         isSelected0 = true
-        isSelected2 = false
+        isSelected1 = false
       }
       else if (e.currentTarget.dataset.item == "2") {
         /*如果本地存储中已有表白墙的数据，则不再请求 */
@@ -1115,7 +1135,7 @@ Page({
             })
           }
         })
-        isSelected0 = false
+        isSelected1 = false
         isSelected2 = true
       }
     }
@@ -1278,8 +1298,11 @@ Page({
       for (let i in list) {
         /*图片链接处理 */
         let imgs = []
-        let imgObj = JSON.parse(list[i].photo_list_json)
-        if (imgObj != null) {
+        let imgObj=''
+        if (list[i].photo_list_json != null && list[i].photo_list_json!=''){
+          imgObj = JSON.parse(list[i].photo_list_json)
+        }
+        if (imgObj != '') {
           for (let j = 0; j < imgObj.photo_list.length; j++) {
             if (imgObj.photo_list[j]["size_big"] != "") {
               imgs.push(imgObj.photo_list[j]["size_big"])
@@ -1294,7 +1317,9 @@ Page({
         list[i].myid = i
         list[i].likeNumber = list[i].thumb_ups.length
         list[i].commentNumber = list[i].comments.length
-        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        if (list[i].user.image==null){
+          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        }
         let isLike = false
         for (let j in list[i].thumb_ups) {
           if (list[i].thumb_ups[j].uid == myuid) {
@@ -1453,8 +1478,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: Number.parseInt(myuid),
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           kind: 0,
           page_index:1,
           page_size:10
@@ -1536,8 +1561,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: Number.parseInt(myuid),
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           kind: 1,
           page_index:1,
           page_size:10
@@ -1832,28 +1857,58 @@ Page({
     let myid=Number.parseInt(e.currentTarget.dataset.myid)
     let that=this
     let showList=that.data.showList
+    console.log(mytoken)
     if(!showList[myid].isLike){
-      showList[myid].isLike=true
-      showList[myid].likeNumber++
+      //showList[myid].isLike=true
+      //showList[myid].likeNumber++
       wx.request({
         url: likeUrl,
         method:"POST",
+        header: {
+          'Content-Type': 'application/json',
+        },
         data:{
-          uid:myuid,
-          token:mytoken,
+          uid:global.classes.user_id,
+          token:global.classes.token,
           post_id:id,
         },
         success(res){
           console.log(res)
+          if(res.statusCode===201){
+            showList[myid].isLike = true
+            showList[myid].likeNumber++
+
+            let flag=0
+            for (let i in showList[myid].thumb_ups){
+              if (showList[myid].thumb_ups[i].uid==global.classes.user_id){
+                showList[myid].thumb_ups[i].id=res.data.id
+                flag=1
+                break
+              }
+            }
+            if(flag==0){
+              showList[myid].thumb_ups.push({ 'id': res.data.id, 'uid': myuid })
+            }
+            console.log(showList[myid])
+            that.setData({
+              showList
+            })
+          }
+          else{
+            wx.showToast({
+              title: '点赞失败',
+              icon:'none'
+            })
+          }
         }
       })
     }
     else{
-      showList[myid].isLike = false
-      showList[myid].likeNumber--
+      //showList[myid].isLike = false
+      //showList[myid].likeNumber--
       let like_id=-1
       for(let i in showList[myid].thumb_ups){
-        if(myuid==showList[myid].thumb_ups[i].uid){
+        if(global.classes.user_id==showList[myid].thumb_ups[i].uid){
           like_id = showList[myid].thumb_ups[i].id
           break
         }
@@ -1862,19 +1917,31 @@ Page({
       wx.request({
         url: likeUrl,
         header: {
-          uid: myuid,
-          token: mytoken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           id: like_id,
         },
         method:"delete",
         success(res){
-          console.log(res)
+          if(res.statusCode==200){
+            showList[myid].isLike = false
+            showList[myid].likeNumber--
+            that.setData({
+              showList
+            })
+          }
+          else{
+            wx.showToast({
+              title: '取消点赞失败',
+              icon:'none'
+            })
+          }
         }
       })
     }
-    that.setData({
-      showList
-    })
+    //that.setData({
+      //showList
+    //})
   },
   previewIcon:function(e){
     wx.previewImage({
@@ -1929,8 +1996,11 @@ Page({
 
         /*图片链接处理 */
         let imgs = []
-        let imgObj = JSON.parse(list[i].photo_list_json)
-        if (imgObj != null) {
+        let imgObj=''
+        if(list[i].photo_list_json!=''&&list[i].photo_list_json!=null){
+          imgObj = JSON.parse(list[i].photo_list_json)
+        }
+        if (imgObj != '') {
           for (let j = 0; j < imgObj.photo_list.length; j++) {
             if (imgObj.photo_list[j]["size_big"] != "") {
               imgs.push(imgObj.photo_list[j]["size_big"])
@@ -1944,7 +2014,9 @@ Page({
 
         list[i].likeNumber =list[i].thumb_ups.length
         list[i].commentNumber =list[i].comments.length
-        list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        if(list[i].user.image==null){
+          list[i].user.image = "https://wx.qlogo.cn/mmopen/vi_32/7DlxFtROxV23k87nMiasic9SbttTYmJ9YOsEvdqULa3crMSED8XCk5DPBp0UNSoac4M38VEZbkibFQic3zC2M0zTxg/132"
+        }
         let isLike = false
         for (let j in list[i].thumb_ups) {
           if (list[i].thumb_ups[j].uid == myuid) {
@@ -2028,8 +2100,8 @@ Page({
         'Content-Type': 'application/json',
       },
       data: {
-        uid: Number.parseInt(myuid),
-        token: mytoken,
+        uid: global.classes.user_id,
+        token: global.classes.token,
         kind: kind,
         page_index:page_index,
         page_size:10

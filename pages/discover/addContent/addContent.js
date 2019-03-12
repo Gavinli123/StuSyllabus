@@ -1,10 +1,12 @@
 // pages/discover/addContent/addContent.js
 
 const stuUrl ="https://stuapps.com/interaction/api/v2/post"
-const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
-const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
-const testUid="5"
-const testToken="100004"
+//const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
+const testUrl = "https://stuapps.com/interaction/api/v2/post"
+const findlostUrl = "https://stuapps.com/extension/api/v2/findlost"
+//const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
+const testUid=global.classes.user_id
+const testToken=global.classes.token
 
 var Bmob = require('../../../util/bmob.js');
 var common = require('../../../util/common.js');
@@ -200,10 +202,6 @@ Page({
                     urlArr.push({ "url": url });
                     j++;
                     console.log(j, imgLen);
-                    // if (imgLength == j) {
-                    //   console.log(imgLength, urlArr);
-                    //如果担心网络延时问题，可以去掉这几行注释，就是全部上传完成后显示。
-                    // }
                     _this.setData({
                       urlArr,
                       imgChoose:true
@@ -220,19 +218,6 @@ Page({
                   });
                 }
               }
-              // tempFilePaths.forEach(function (e) {
-              //   if(_this.data.type=='news'){
-              //     _this.setData({
-              //       "formData.imgs": _this.data.formData.imgs.concat(e)
-              //     })
-              //   }
-              //   else if (_this.data.type == 'things'){
-              //     _this.setData({
-              //       "formData2.imgs": _this.data.formData2.imgs.concat(e)
-              //     })
-              //   }
-              //   //_this.uploadImg(e);
-              // });
             }
           });
         }
@@ -321,10 +306,10 @@ Page({
         return
       }
       /*以下为图片的处理，目的是符合后台传值规范 */
-      let photo_list_json
-      let urlArr = that.data.urlArr
+      let photo_list_json=''
+      let urlArr = that.data.urlArr||[]
       if (urlArr.length == 0) {
-        photo_list_json = null
+        //photo_list_json = ''
       }
       else {
         photo_list_json = {}
@@ -336,9 +321,9 @@ Page({
           photo_list.push(obj)
         }
         photo_list_json["photo_list"] = photo_list
+        photo_list_json = JSON.stringify(photo_list_json)
         console.log(photo_list_json)
       }
-      photo_list_json = JSON.stringify(photo_list_json)
       console.log(photo_list_json)
 
       /*确定topic_id 1为生活，2为兼职，3为学习，4为研究 */
@@ -349,6 +334,9 @@ Page({
         topic_id=3
       else if(formData.mode=='学习')
         topic_id=4
+      
+      console.log(photo_list_json)
+      
       wx.request({
         url: testUrl,
         method:'POST',
@@ -356,8 +344,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data:{
-          uid:testUid,
-          token:testToken,
+          uid:global.classes.user_id,
+          token:global.classes.token,
           post_type:0,
           content:formData.content,
           title:formData.title,
@@ -454,8 +442,8 @@ Page({
           'content-type': 'application/x-www-form-urlencoded',
         },
         data:{
-          uid:5,
-          token:testToken,
+          uid:global.classes.user_id,
+          token:global.classes.token,
           kind:kind,
           title:formData2.title,
           description:formData2.content,
@@ -513,8 +501,8 @@ Page({
           'Content-Type': 'application/json',
         },
         data: {
-          uid: testUid,
-          token: testToken,
+          uid: global.classes.user_id,
+          token: global.classes.token,
           post_type: 0,
           content: formData3.content,
           description:'表白墙',

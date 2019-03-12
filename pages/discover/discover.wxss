@@ -51,7 +51,7 @@
   height:80rpx;
   width:80rpx;
   border-radius: 50%;
-  border:5rpx solid #ff1493;
+  border:5rpx solid #2d8cf0;
   padding:10rpx;
 }
 .addContent{
@@ -72,12 +72,12 @@
 }
 .pink-text{
   border-radius:50%;
-  border:5rpx solid #ff1493;
+  border:5rpx solid #2d8cf0;
   font-size: 30rpx;
   margin-left:10rpx;
   margin-top:10rpx;
   padding:10rpx;
-  color:#ff1493; 
+  color:#2d8cf0; 
 }
 .column{
   background: transparent;
@@ -87,7 +87,7 @@
   bottom: 100rpx;
   right:250rpx;
   border-radius: 50rpx;
-  border: 5rpx solid #ff1493;
+  border: 5rpx solid #2d8cf0;
   align-items: center;
 }
 .showItem{
