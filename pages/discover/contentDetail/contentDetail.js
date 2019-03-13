@@ -1,7 +1,7 @@
 // pages/discover/contentDetail/contentDetail.js
 const findlostUrl = "http://118.126.92.214:8083//extension/api/v2/findlost/"
 //const testUrl = "http://118.126.92.214:8083/interaction/api/v2/"
-const testUrl = "https://stuapps.com/interaction/api/v2/"
+const testUrl = global.stuUrl+"/interaction/api/v2/"
 const myuid=global.classes.user_id
 const mytoken = global.classes.token
 

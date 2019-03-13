@@ -48,7 +48,7 @@ Page({
               'content-type': 'application/json'
             },
             */
-            url: 'https://stuapps.com/credit/api/v2/oa',
+          url: global.stuUrl+'/credit/api/v2/oa',
             method: 'POST',
             data: that.data.parm,
             header: {
@@ -87,7 +87,7 @@ Page({
               'content-type': 'application/json'
             },
             */
-            url: 'https://stuapps.com/credit/api/v2/oa',
+          url: global.stuUrl+'/credit/api/v2/oa',
             method: 'POST',
             data: that.data.parm,
             header: {

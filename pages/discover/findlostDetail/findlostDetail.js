@@ -1,6 +1,6 @@
 // pages/discover/findlostDetail/findlostDetail.js
 //const findlostUrl = "http://118.126.92.214:8083//extension/api/v2/findlost/"
-const findlostUrl = "https://stuapps.com//extension/api/v2/findlost/"
+const findlostUrl = global.stuUrl+"/extension/api/v2/findlost/"
 Page({
 
   /**

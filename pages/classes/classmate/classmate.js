@@ -66,7 +66,7 @@ Page({
     let that = this
     let class_id = options.class_id
     wx.request({
-      url: 'https://stuapps.com/credit/api/v2.1/member?class_id=' + class_id,
+      url: global.stuUrl+'/credit/api/v2.1/member?class_id=' + class_id,
       success(res) {
         console.log(res)
         if (res.data.message === "connection refused") {

@@ -4,8 +4,8 @@
 //const testUid = "5"
 //const testToken = "100004"
 
-const findlostUrl = "https://stuapps.com/extension/api/v2/findlost"
-const testUrl = "https://stuapps.com/interaction/api/v2/post"
+const findlostUrl = global.stuUrl+"/extension/api/v2/findlost"
+const testUrl = global.stuUrl+"/interaction/api/v2/post"
 const testUid = global.classes.user_id
 const testToken = global.classes.token
 

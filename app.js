@@ -15,8 +15,8 @@ global.week = wx.getStorageSync('week')
 global.classes = wx.getStorageSync('classes')
 global.showError = true
 global.baseurl = 'https://candycute.cn/'
-global.stuUrl = 'https://class.stuapps.com'
-//global.stuUrl='https://syllabus.candycute.cn'
+// global.stuUrl = 'https://class.stuapps.com'
+global.stuUrl ='https://syllabus.candycute.cn'
 
 global.notice = wx.getStorageSync('notice')
 global.notice = global.notice ? global.notice : {

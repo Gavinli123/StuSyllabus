@@ -6,10 +6,10 @@
 //const testUid = "5"
 //const testToken = "100004"
 
-const findlostUrl ="https://stuapps.com/extension/api/v2/personal_findlosts"
-const testUrl ="https://stuapps.com/interaction/api/v2/personal_post"
-const deleteUrl ="http://stuapps.com/interaction/api/v2/post"
-const deleteUrl1 = "http://stuapps.com/extension/api/v2/findlost"
+const findlostUrl =global.stuUrl+"/extension/api/v2/personal_findlosts"
+const testUrl =global.stuUrl+"/interaction/api/v2/personal_post"
+const deleteUrl =global.stuUrl+"/interaction/api/v2/post"
+const deleteUrl1 = global.stuUrl+"/extension/api/v2/findlost"
 const testUid = global.classes.user_id
 const testToken = global.classes.token
 

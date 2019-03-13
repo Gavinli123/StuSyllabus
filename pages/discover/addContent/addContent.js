@@ -1,9 +1,9 @@
 // pages/discover/addContent/addContent.js
 
-const stuUrl ="https://stuapps.com/interaction/api/v2/post"
+const stuUrl = global.stuUrl+"/interaction/api/v2/post"
 //const testUrl ="http://118.126.92.214:8083/interaction/api/v2/post"
-const testUrl = "https://stuapps.com/interaction/api/v2/post"
-const findlostUrl = "https://stuapps.com/extension/api/v2/findlost"
+const testUrl = global.stuUrl+"/interaction/api/v2/post"
+const findlostUrl = global.stuUrl+"/extension/api/v2/findlost"
 //const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlost"
 const testUid=global.classes.user_id
 const testToken=global.classes.token

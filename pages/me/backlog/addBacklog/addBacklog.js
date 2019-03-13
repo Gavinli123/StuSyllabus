@@ -1,5 +1,5 @@
 var dateTimePicker = require('../../../../util/dateTimePicker.js');
-const LinshiUrl ='https://stuapps.com/extension/'
+const LinshiUrl = global.stuUrl+'/extension/'
 Page({
 
   /**

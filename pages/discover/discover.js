@@ -2,10 +2,10 @@
 //const testUrl ="http://172.16.43.4:8001/interaction/api/v2/"
 //const likeUrl ="http://172.16.43.4:8001/interaction/api/v2/like"
 //const findlostUrl = "http://118.126.92.214:8083/extension/api/v2/findlosts"
-const stuUrl = "https://stuapps.com/interaction/api/v2/posts"
-const testUrl = "https://stuapps.com/interaction/api/v2/"
-const likeUrl = "https://stuapps.com/interaction/api/v2/like"
-const findlostUrl = "https://stuapps.com/extension/api/v2/findlosts"
+const stuUrl = global.stuUrl+"/interaction/api/v2/posts"
+const testUrl = global.stuUrl+"/interaction/api/v2/"
+const likeUrl = global.stuUrl+"/interaction/api/v2/like"
+const findlostUrl = global.stuUrl+"/extension/api/v2/findlosts"
 const myuid=global.classes.user_id
 const mytoken=global.classes.token
 
