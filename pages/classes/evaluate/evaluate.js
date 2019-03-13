@@ -1,5 +1,5 @@
 // pages/classes/evaluate/evaluate.js
-const LinshiUrl = 'https://stuapps.com/extension/'
+const LinshiUrl = global.stuUrl+'/extension/'
 Page({
 
   /**
