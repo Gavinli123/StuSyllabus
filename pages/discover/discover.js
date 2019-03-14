@@ -742,6 +742,8 @@ Page({
         }
       })
     }
+
+    wx.stopPullDownRefresh();
   },
 
   /**
@@ -1842,8 +1844,9 @@ Page({
     let id = e.currentTarget.dataset.id
     console.log(id)
     let category = e.currentTarget.dataset.category
+    let autofoucs = e.currentTarget.dataset.autofoucs
     wx.navigateTo({
-       url: 'contentDetail/contentDetail?id='+id+'&category='+category,
+       url: 'contentDetail/contentDetail?id='+id+'&category='+category+'&autofoucs='+autofoucs,
     })
   },
 

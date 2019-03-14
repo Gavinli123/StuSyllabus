@@ -69,6 +69,7 @@ Page({
     showObj:{},
     maskFlag:false,
     showBottom:false,
+    autoFoucs:false,
     commentinput:'',
     commentCount:10,
   },
@@ -84,6 +85,14 @@ Page({
     })
     let that=this
     /*showObj为要包含要显示的内容的对象 */
+    if(options.autofoucs=='1'){
+      that.setData({
+        showBottom:true,
+        autoFoucs:true
+      })
+      console.log(that.data)
+    }
+
     let showObj={}
     /*获取传过来的id值并且请求 */
     let id=options.id
@@ -355,6 +364,8 @@ Page({
     options.id = showObj.id
     options.category = that.data.category
     that.onLoad(options)
+
+    wx.stopPullDownRefresh();
   },
 
   /**

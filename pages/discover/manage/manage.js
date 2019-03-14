@@ -202,6 +202,8 @@ Page({
         }
       })
     }
+
+    wx.stopPullDownRefresh();
   },
 
   /**

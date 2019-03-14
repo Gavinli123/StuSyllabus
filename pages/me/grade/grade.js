@@ -294,6 +294,7 @@ Page({
           title: '亲，您的操作过于频繁哦,请在' + seconds + '秒后再刷新',
           icon: 'none'
         })
+        wx.stopPullDownRefresh();
         return
       }
       else {  //大于限制则可以请求
@@ -352,6 +353,8 @@ Page({
         })
       }
     }
+
+    wx.stopPullDownRefresh();
   },
 
   /**
