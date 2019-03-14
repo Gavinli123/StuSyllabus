@@ -11,7 +11,7 @@
   <view wx:if="{{category!=2}}" style='margin:0 0 20rpx 5%;' class='itemTitle'>
     <text wx:if="{{showObj.title!=null}}">{{showObj.title}}</text>
   </view>
-  <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+  <view style='margin:0 0 20rpx 5%;width:90%'>
     <text class='itemContent'>{{showObj.content}}</text>
   </view>
   <view wx:if="{{showObj.imgs.length>0}}" style='width:90%;margin-left:5%;display:flex;flex-direction:row;'>
@@ -22,8 +22,8 @@
 </view>
 
 <view class='box' wx:if="{{category!=1}}">
-  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}' hover-class='bg_grey'>评论 {{showObj.comments.length}}</view>
-  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}' hover-class='bg_grey'>赞 {{showObj.thumb_ups.length}}</view>
+  <view style='position:absolute;left:30rpx;' class='{{comment?"selected":"normal"}}'>评论 {{showObj.comments.length}}</view>
+  <view style='position:absolute;right:30rpx;' class='{{!comment?"selected":"normal"}}'>赞 {{showObj.thumb_ups.length}}</view>
 </view>
 
 <!--评论-->
@@ -41,7 +41,7 @@
     </view>
   </block>
   <block wx:for="{{comment_list}}" wx:if="{{comment_list[0]}}" wx:key="*comment_list">
-    <view style='display:flex;height:auto;margin-top:20rpx;' data-user="{{item.user.nickname}}" bindtap='reply_comment' hover-class='bg_grey' >
+    <view style='display:flex;height:auto;margin-top:20rpx;' data-user="{{item.user.nickname}}" bindtap='reply_comment'>
       <view style='width:15%;'>
         <image src='{{item.userImageUrl}}' style='width:60rpx;height:60rpx;border-radius:50%;margin-top:20rpx;margin-left:20rpx;'></image>
       </view>

@@ -177,6 +177,6 @@
   background: #ffb6c1;
 }
 
-.bg_grey{
+/* .bg_grey{
   background: #efefef;
-}
+} */
