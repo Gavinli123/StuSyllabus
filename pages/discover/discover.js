@@ -2257,5 +2257,12 @@ Page({
         })
       }
     })
+  },
+
+  toInfo:function(){
+    wx.showToast({
+      title: '正在开发',
+      icon:'none'
+    })
   }
 })

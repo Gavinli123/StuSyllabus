@@ -188,6 +188,6 @@
   <view class='pink-text' hover-class='bg_grey'>管理</view>
 </view>
 
-<view hidden='{{jiahao}}' style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx;' >
+<view hidden='{{jiahao}}' style='background: transparent;height:100rpx;width:100rpx;position: fixed;bottom: 300rpx;right: 40rpx;' bindtap='toInfo'>
   <view class='pink-text' hover-class='bg_grey'>通知</view>
 </view>

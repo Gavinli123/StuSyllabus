@@ -90,8 +90,8 @@
     <image src='../../../image/pinglun.png' style='width:50rpx;height:50rpx;'></image>
     <text style='font-size:35rpx;color:#666;'>评论</text>
   </view>
-  <view style='width:50%;display:flex;align-items:center;justify-content:center;'>
-    <image src='{{showObj.isLike?"../../../image/dianzan_red.png":"../../../image/dianzan.png"}}' style='width:50rpx;height:50rpx;' bindtap='dianzan'></image>
+  <view style='width:50%;display:flex;align-items:center;justify-content:center;' bindtap='dianzan'>
+    <image src='{{showObj.isLike?"../../../image/dianzan_red.png":"../../../image/dianzan.png"}}' style='width:50rpx;height:50rpx;'></image>
     <text style='font-size:35rpx;color:#666;'>{{showObj.isLike?"取消":"赞"}}</text>
   </view>
 </view>
