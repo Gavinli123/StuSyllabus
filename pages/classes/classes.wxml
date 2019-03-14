@@ -7,10 +7,10 @@
       <view class="table-grid" wx:for='{{week}}' wx:key='*this' hover-class="weui-grid_active">
         <view class="week cell">{{item}}</view>
       </view>
-      <view bindtap='showClassDetail' data-index='{{item.lessonIndex}}' class='class-cell' wx:if="{{item.week[curWeek-1]==1&&(item.danshuang=='both'||(item.danshuang=='dan'&&curWeek%2!=0)||(item.danshuang=='shuang'&&curWeek%2==0))}}" wx:for="{{lessons}}" wx:key="{{index}}" style='position:absolute;top:{{item.top*7.14+0.25}}%;left:{{item.left*12.5+0.25}}%;width:12%;height:{{item.height*7.14-0.5}}%;background-color:{{item.color}};border-radius:10rpx'>
+      <view bindtap='showClassDetail' data-index='{{item.lessonIndex}}' class='class-cell' wx:if="{{item.week[curWeek-1]==1&&(item.danshuang=='both'||(item.danshuang=='dan'&&curWeek%2!=0)||(item.danshuang=='shuang'&&curWeek%2==0))}}" wx:for="{{lessons}}" wx:key="{{index}}" style='position:absolute;top:{{item.top*7.14+0.25}}%;left:{{item.left*12.5+0.25}}%;width:12%;height:{{item.height*7.14-0.5}}%;background-color:{{item.color}};border-radius:10rpx;line-height:25rpx;'>
     
-        <view class="classname">{{item.classname}}</view>
-        <view>@{{item.room}}</view>
+        <view class="classname" style='font-size:18rpx;margin:0 5rpx;'>{{item.classname}}</view>
+        <view style='font-size:18rpx;margin:0 5rpx;'>@{{item.room}}</view>
       </view>
     </view>
 
