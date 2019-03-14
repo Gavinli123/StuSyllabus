@@ -70,6 +70,7 @@ Page({
     maskFlag:false,
     showBottom:false,
     autoFoucs:false,
+    show_confirm_bar:false,
     commentinput:'',
     commentCount:10,
   },
@@ -85,13 +86,13 @@ Page({
     })
     let that=this
     /*showObj为要包含要显示的内容的对象 */
-    if(options.autofoucs=='1'){
-      that.setData({
-        showBottom:true,
-        autoFoucs:true
-      })
-      console.log(that.data)
-    }
+    //if(options.autofoucs=='1'){
+      //that.setData({
+        //showBottom:true,
+        //autoFoucs:true
+      //})
+      //console.log(that.data)
+    //}
 
     let showObj={}
     /*获取传过来的id值并且请求 */

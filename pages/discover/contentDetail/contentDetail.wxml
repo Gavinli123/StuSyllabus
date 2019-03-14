@@ -98,7 +98,7 @@
 
 <view class='commentPanel' style='opacity:1.0;' hidden='{{showBottom}}'>
   <view style='display:flex;flex-direction:column;width:80%;'>
-  <textarea style='width:100%;margin-left:20rpx;margin-top:10rpx;margin-bottom:10rpx;height:180rpx;border:1rpx solid #efefef;border-radius:20rpx;background:#fff;' maxlength='1000' fixed='true' placeholder='写点评论吧..' bindinput='commentInput' value='{{commentinput}}' auto-focus='{{autoFoucs}}' cursor-spacing='100rpx'></textarea>
+  <textarea style='width:100%;margin-left:20rpx;margin-top:10rpx;margin-bottom:10rpx;height:180rpx;border:1rpx solid #efefef;border-radius:20rpx;background:#fff;' maxlength='1000' fixed='true' placeholder='写点评论吧..' bindinput='commentInput' value='{{commentinput}}' focus='{{autoFoucs}}' cursor-spacing='200rpx' show-confirm-bar='{{show_confirm_bar}}'></textarea>
   <view style='margin-left:20rpx;'>回复:{{current_click_user}}</view>
   </view>
   <view style='display:flex;flex-direction:column;width:20%;height:100%;'>
