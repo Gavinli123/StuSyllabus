@@ -354,7 +354,10 @@ App({
 
       // 找出当前学年、学期的picker index
       let date = new Date()
-      let this_year = date.getFullYear() + '-' + (Number(date.getFullYear()) + 1)
+      // let this_year = date.getFullYear() + '-' + (Number(date.getFullYear()) + 1)
+      let this_year = (Number(date.getFullYear()) - 1) + '-' + date.getFullYear()
+      console.log("this_year");
+      console.log(this_year);
       let year_index = year_picker.findIndex(function (year) {
         return year === this_year
       })

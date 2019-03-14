@@ -1,6 +1,6 @@
 <!--pages/discover/findlostDetail/findlostDetail.wxml-->
 <view class='showItem'>
-  <view class='userInfo' hover-class='bg_grey'>
+  <view class='userInfo'>
     <view style='width:60rpx;height:60rpx;font-size:20rpx;border:{{showObj.kind==1?"1rpx solid #2d8cf0":"1rpx solid #ffcc00"}};border-radius:50%;margin-right:20rpx;'>
       <view style='margin-left:10rpx;margin-top:15rpx;'>{{showObj.kind==1?"寻物":"寻主"}}</view>
     </view>
@@ -11,7 +11,7 @@
   <view style='margin:0 0 20rpx 5%;' class='itemTitle'>
     <text>{{showObj.title}}</text>
   </view>
-  <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+  <view style='margin:0 0 20rpx 5%;width:90%'>
     <text class='itemContent'>{{showObj.description}}</text>
   </view>
 
@@ -21,10 +21,10 @@
     </view>
   </view>
 
-  <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+  <view style='margin:0 0 20rpx 5%;width:90%'>
     <text class='itemContent'>{{showObj.kind==1?'遗失':'拾取'}}地点：{{showObj.location}}</text>
   </view>
-  <view style='margin:0 0 20rpx 5%;width:90%' hover-class='bg_grey'>
+  <view style='margin:0 0 20rpx 5%;width:90%'>
     <text class='itemContent'>联系方式：{{showObj.contact}}</text>
   </view>
 </view>
