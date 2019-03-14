@@ -156,7 +156,7 @@
       </view>
       <view class='comment'>
           <view class='comment-box' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}">
-            <image src='{{item.isLike?"/image/dianzan_red.png":"/image/dianzan.png"}}' class='icon' bindtap='dianzan' data-myid="{{index}}" data-id="{{item.id}}"></image>
+            <image src='{{item.isLike?"/image/dianzan_red.png":"/image/dianzan.png"}}' class='icon'></image>
             <text class='iconText'>{{item.likeNumber}}</text>
           </view>
           <view class='comment-box' bindtap='toDetail' data-id="{{item.id}}" data-category='0' data-autofoucs='1'>

@@ -175,7 +175,7 @@ App({
               that.updateLoginMsg({
                 account: res.data.result.account,
                 password: res.data.result.password,
-                week: res.data.result.week
+                //week: res.data.result.week
               })
               console.log(global.week)
 

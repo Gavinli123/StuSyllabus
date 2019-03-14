@@ -315,7 +315,7 @@ Page({
         })
       }
 
-      let mode_ = 1
+      let mode_ = 2
       wx.request({
         url: testUrl + 'post_sort',
         method: "GET",
@@ -1859,6 +1859,7 @@ Page({
   },
 
   dianzan:function(e){
+    console.log(e)
     let id=e.currentTarget.dataset.id
     let myid=Number.parseInt(e.currentTarget.dataset.myid)
     let that=this
