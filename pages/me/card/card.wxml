@@ -1,0 +1,55 @@
+<view style="display:flex;height:300rpx;margin-top:20rpx;width:80%;margin-left:10%;background:#2d8cf0;color:#fff;border-radius:20rpx;display:flex;flex-direction:column;">
+  <view style='height:200rpx;width:100%;display:flex;'>
+    <view style='width:50%;height:100%;display:flex;flex-direction:column;justify-content:center;align-items:center;'>
+      <image src='{{avatarUrl}}' style='width:100rpx;height:100rpx;border-radius:50%;'></image>
+      <text style='font-size:30rpx;'>16eyhuang</text>
+    </view>
+    <view style='width:50%;height:100%;display:flex;flex-direction:column;'>
+      <text style='font-size:30rpx;margin-top:40rpx;'>余额：</text>
+      <text style='font-size:70rpx;'>{{balance}}元</text>
+    </view>
+  </view>
+  <view style='height:50rpx;width:100%;text-align:center;font-size:28rpx;'>今日消费：{{todayCost}}元</view>
+  <view style='height:50rpx;width:100%;text-align:center;font-size:28rpx;'>查询时间：{{time}}</view>
+</view>
+
+<view class="bottomtitle">
+  <view style='padding:10rpx 0 10rpx 10rpx;'>消费详情:</view>
+  <view style='position:absolute;right:30rpx;padding-top:10rpx;text-align:right;' wx:if="{{isSelected[0]}}">支出总计：{{out0}}元</view>
+  <view style='position:absolute;right:30rpx;padding-top:10rpx;text-align:right;' wx:if="{{isSelected[1]}}">支出总计：{{out1}}元</view>
+  <view style='position:absolute;right:30rpx;padding-top:10rpx;text-align:right;' wx:if="{{isSelected[2]}}">支出总计：{{out2}}元</view>
+  <view style='position:absolute;right:30rpx;padding-top:10rpx;text-align:right;' wx:if="{{isSelected[3]}}">支出总计：{{out3}}元</view>
+</view>
+
+<view class='top'>
+  <view class='{{isSelected[0]?"selected1":"normal1"}}' bindtap='switch' data-item='0' hover-class='bg_grey'>
+    <text class='{{isSelected[0]?"border2":""}}'>近三日</text>
+  </view>
+  <view class='{{isSelected[1]?"selected1":"normal1"}}' bindtap='switch' data-item='1' hover-class='bg_grey'>
+    <text class='{{isSelected[1]?"border2":""}}'>一周内</text>
+  </view>
+  <view class='{{isSelected[2]?"selected1":"normal1"}}' bindtap='switch' data-item='2' hover-class='bg_grey'>
+    <text class='{{isSelected[2]?"border2":""}}'>一月内</text>
+  </view>
+  <view class='{{isSelected[3]?"selected1":"normal1"}}' bindtap='switch' data-item='3' hover-class='bg_grey'>
+    <text class='{{isSelected[3]?"border2":""}}'>近三月</text>
+  </view>
+</view>
+
+<view style='width:95%;margin-left:2.5%;height:auto;diaplay:flex;flex-direction:column;border-left:1rpx solid #efefef;border-right:1rpx solid #efefef;border-bottom:1rpx solid #efefef;'>
+  <block wx:for="{{isSelected[0]?arr0:isSelected[1]?arr1:isSelected[2]?arr2:isSelected[3]?arr3:''}}" wx:key='arr'>
+  <view style='width:96%;margin-left:2%;display:flex;border-bottom:1rpx solid #efefef;'>
+    <view style='display:flex;flex-direction:column;width:80%;'>
+      <text style='font-size:30rpx;padding:20rpx 0;' wx:if="{{item.kind=='支付宝转帐'}}">{{item.kind}}</text>
+      <text style='font-size:30rpx;padding:20rpx 0;' wx:if="{{item.note==''&&item.kind!='支付宝转帐'}}">{{item.name}}</text>
+      <text style='font-size:30rpx;padding:20rpx 0;' wx:if="{{item.note!=''&&item.kind!='支付宝转帐'}}">{{item.note}}</text>
+      <text style='font-size:25rpx;padding-bottom:20rpx;' decode="{{true}}">{{item.date}}&nbsp;{{item.time}}</text>
+    </view>
+    <view style='display:flex;width:20%;align-items:center;justify-content:center;'>
+      <view style='font-size:30rpx;color:{{item.flow<0?"#f00":"#0f0"}};'>¥{{item.flow}}</view>
+    </view>
+  </view>
+  </block>
+</view>
+
+<view style='height:100rpx;'></view>

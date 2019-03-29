@@ -159,7 +159,7 @@
             <image src='{{item.isLike?"/image/dianzan_red.png":"/image/dianzan.png"}}' class='icon'></image>
             <text class='iconText'>{{item.likeNumber}}</text>
           </view>
-          <view class='comment-box' bindtap='toDetail' data-id="{{item.id}}" data-category='0' data-autofoucs='1'>
+          <view class='comment-box' bindtap='toDetail' data-id="{{item.id}}" data-category='2' data-autofoucs='1'>
             <image src='/image/pinglun.png' class='icon'></image>
             <text class='iconText'>{{item.commentNumber}}</text>
           </view>

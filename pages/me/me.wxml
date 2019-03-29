@@ -76,6 +76,20 @@
             <view class="weui-cell__ft weui-cell__ft_in-access"></view>
           </navigator>
 
+          <navigator wx:if="{{isLogin}}" url="/pages/me/card/card" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd weui-cell_primary">
+              <view>饭卡</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+
+          <navigator url="/pages/me/mystu/mystu" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
+            <view class="weui-cell__bd weui-cell_primary">
+              <view>mystu(直接用web-view组件)</view>
+            </view>
+            <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+          </navigator>
+
           <navigator url="/pages/oa/index/index" class="weui-cell weui-cell_access" hover-class="weui-cell_active">
             <view class="weui-cell__bd weui-cell_primary">
               <view>汕大OA</view>
