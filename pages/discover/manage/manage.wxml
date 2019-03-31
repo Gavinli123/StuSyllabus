@@ -36,7 +36,7 @@
       <view class='time'>{{item.release_time}}</view>
     </view>
     <view class='right'>
-    <image src='../../../image/bianji_cdcdcd.png' style='height:40rpx;width:40rpx;padding-top:50rpx;padding-left:70rpx;' catchtap='modify1' data-id="{{item.id}}" data-content="{{item.description}}" data-mode="{{item.kind==1?'寻物':'寻主'}}" data-photo="{{item.img_link}}" data-title="{{item.title}}" data-uid="{{item.uid}}" data-location="{{item.location}}" data-contact="{{item.contact}}"></image>
+    <image src='../../../image/bianji_cdcdcd.png' style='height:50rpx;width:50rpx;padding-top:50rpx;padding-left:70rpx;' catchtap='modify1' data-id="{{item.id}}" data-content="{{item.description}}" data-mode="{{item.kind==1?'寻物':'寻主'}}" data-photo="{{item.img_link}}" data-title="{{item.title}}" data-uid="{{item.uid}}" data-location="{{item.location}}" data-contact="{{item.contact}}"></image>
     <image src='../../../image/shanchu_cdcdcd.png' style='height:50rpx;width:50rpx;padding-top:50rpx;padding-left:30rpx;' catchtap='delete1' data-id="{{item.id}}" data-index="{{index}}"></image>
     </view>
   </view>

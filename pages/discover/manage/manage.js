@@ -50,7 +50,7 @@ Page({
           let showList = that.data.showList
           console.log(addList)
           showList = showList.concat(addList)
-          wx.setStorageSync('manage0', showList)
+          //wx.setStorageSync('manage0', showList)
           that.setData({
             showList,
             addList
@@ -129,7 +129,7 @@ Page({
             let showList = that.data.showList
             console.log(addList)
             //showList = showList.concat(addList)
-            wx.setStorageSync('manage0', showList)
+            //wx.setStorageSync('manage0', showList)
             that.setData({
               showList,
               addList,
@@ -174,7 +174,7 @@ Page({
           if (res.statusCode == 200) {
             let showList = res.data.data.findlost_list
             console.log(showList)
-            wx.setStorageSync('manage1', showList)
+            //wx.setStorageSync('manage1', showList)
             that.setData({
               showList,
               addList: showList,
@@ -236,14 +236,14 @@ Page({
         title: '加载中',
         mask:true
       })
-      showList=wx.getStorageSync('manage0')||[]
-      if(showList.length==0){
+      //showList=wx.getStorageSync('manage0')||[]
+      if(true){
         wx.request({
           url: testUrl,
           method: 'GET',
           data: {
-            token: testToken,
-            uid: testUid,
+            token: global.classes.token,
+            uid: global.classes.user_id,
             page_index:1,
           },
           success(res) {
@@ -251,7 +251,7 @@ Page({
             if(res.statusCode==200){
               let addList = res.data.data
               let showList = addList
-              wx.setStorageSync('manage0', showList)
+              //wx.setStorageSync('manage0', showList)
               that.setData({
                 showList,
                 addList
@@ -293,9 +293,9 @@ Page({
         title: '加载中',
         mask:true
       })
-      showList = wx.getStorageSync('manage1')||[]
-      console.log(showList)
-      if(showList.length==0){
+      //showList = wx.getStorageSync('manage1')||[]
+      //console.log(showList)
+      if(true){
         wx.request({
           url: findlostUrl,
           method:'GET',
@@ -394,7 +394,7 @@ Page({
           let addList = res.data.data || []
           let showList = that.data.showList
           showList = showList.concat(addList)
-          wx.setStorageSync('manage0', showList)
+          //wx.setStorageSync('manage0', showList)
           that.setData({
             addList,
             showList,
@@ -446,7 +446,7 @@ Page({
           let addList = res.data.data.findlost_list || []
           let showList = that.data.showList
           showList = showList.concat(addList)
-          wx.setStorageSync('manage1', showList)
+          //wx.setStorageSync('manage1', showList)
           that.setData({
             addList,
             showList,
@@ -510,7 +510,7 @@ Page({
                     if(res.statusCode==200){
                       let showList = res.data.data
                       let addList = showList.slice(showList.length - 10)
-                      wx.setStorageSync('manage0', showList)
+                      //wx.setStorageSync('manage0', showList)
                       that.setData({
                         showList,
                         addList,
@@ -599,7 +599,7 @@ Page({
                     if(res.statusCode==200){
                       let showList = res.data.data.findlost_list
                       let addList = showList.slice(showList.length - 10)
-                      wx.setStorageSync('manage1', showList)
+                      //wx.setStorageSync('manage1', showList)
                       that.setData({
                         showList,
                         addList,

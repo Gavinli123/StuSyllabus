@@ -131,8 +131,8 @@ Page({
         }
 
         /*下面进行本地存储 */
-        let str = String('school' + topic_id)
-        wx.setStorageSync(str, showList)
+        // let str = String('school' + topic_id)
+        // wx.setStorageSync(str, showList)
         that.setData({
           schoolSelected,
           showList,
@@ -245,7 +245,7 @@ Page({
             else{
               str='findlost0'
             }
-            wx.setStorageSync(str, showList)
+            //wx.setStorageSync(str, showList)
             that.setData({
               showList,
               addList,
@@ -300,7 +300,7 @@ Page({
           addList.push(list[i])
         }
         let str = 'wall1'
-        wx.setStorageSync(str, currentModeList)
+        //wx.setStorageSync(str, currentModeList)
         that.setData({
           showList,
           currentModeList,
@@ -397,7 +397,7 @@ Page({
         }
 
         /*将数据本地存储，school1代表校园动态的生活，2代表兼职，以此类推 */
-        wx.setStorageSync('school1', showList)
+        //wx.setStorageSync('school1', showList)
         console.log(currentModeList)
         that.setData({
           currentModeList,
@@ -451,7 +451,106 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
+    wx.showLoading({
+      title: '加载中',
+    })
+    let that=this
+    let page_index = 1
 
+    function init_load(list) {
+      let currentModeList = list
+      let showList = []
+      /*addList为增加的数组，用来判断显示加载更多还是已加载完毕 */
+      let addList = []
+      for (let i in currentModeList) {
+        /*图片链接处理 */
+        let imgs = []
+        let imgObj = ''
+        if (currentModeList[i].photo_list_json != '' && currentModeList[i].photo_list_json != null) {
+          imgObj = JSON.parse(currentModeList[i].photo_list_json)
+        }
+        if (imgObj != '') {
+          for (let j = 0; j < imgObj.photo_list.length; j++) {
+            if (imgObj.photo_list[j]["size_big"] != "") {
+              imgs.push(imgObj.photo_list[j]["size_big"])
+            }
+            else {
+              imgs.push(imgObj.photo_list[j]["size_small"])
+            }
+          }
+        }
+        currentModeList[i].imgs = imgs
+
+        currentModeList[i].myid = i
+        currentModeList[i].likeNumber = currentModeList[i].thumb_ups.length
+        currentModeList[i].commentNumber = currentModeList[i].comments.length
+        if (currentModeList[i].user.image == null) {
+          currentModeList[i].user.image = "http://bmob-cdn-23814.b0.upaiyun.com/2019/03/12/fd537d4c400cb2cf803adc71731b4387.jpg"
+        }
+        let isLike = false
+        for (let j in currentModeList[i].thumb_ups) {
+          if (currentModeList[i].thumb_ups[j].uid == global.classes.user_id) {
+            isLike = true
+            break
+          }
+        }
+        currentModeList[i].isLike = isLike
+        showList.push(currentModeList[i])
+        addList.push(currentModeList[i])
+      }
+
+      /*将数据本地存储，school1代表校园动态的生活，2代表兼职，以此类推 */
+      //wx.setStorageSync('school1', showList)
+      console.log(currentModeList)
+      that.setData({
+        currentModeList,
+        showList,
+        addList,
+        isSelected0: true,
+        isSelected1: false,
+        isSelected2: false,
+        jiahao: true,
+        schoolSelected: [true, false, false, false],
+        ThingSelected0: true,
+        ThingSelected1: false,
+        WallSelected0: true,
+        WallSelected1: false,
+        page_index: 1,
+        topic_id: 1,
+      })
+    }
+
+    wx.request({
+      url: testUrl + 'post_sort',
+      method: "GET",
+      data: {
+        topic_id: 1,
+        page_index: 1,
+        page_size: 10
+      },
+      success(res) {
+        console.log(res)
+        if (res.statusCode == 200) {
+          init_load(res.data.data)
+          wx.hideLoading()
+        }
+        else {
+          wx.hideLoading()
+          wx.showToast({
+            title: '出现错误',
+            icon: 'none'
+          })
+        }
+      },
+      fail(res) {
+        wx.hideLoading()
+        wx.showToast({
+          title: '请求失败',
+          icon: 'none',
+          duration: 2000,
+        })
+      }
+    })
   },
 
   /**
@@ -516,7 +615,7 @@ Page({
 
       /*将请求到的数据本地存储 */
       let str=String('school'+topic_id)
-      wx.setStorageSync(str, currentModeList)
+      //wx.setStorageSync(str, currentModeList)
       that.setData({
         showList,
         currentModeList,
@@ -554,7 +653,7 @@ Page({
       else {
         str = 'wall2'
       }
-      wx.setStorageSync(str, currentModeList)
+      //wx.setStorageSync(str, currentModeList)
       that.setData({
         showList,
         currentModeList,
@@ -665,7 +764,7 @@ Page({
             console.log(showList)
             let addList = showList
             let currentModeList = showList
-            wx.setStorageSync(str, showList)
+        //    wx.setStorageSync(str, showList)
             that.setData({
               showList,
               addList,
@@ -806,7 +905,7 @@ Page({
         }
 
         /*将数据存入校园动态——生活 */
-        wx.setStorageSync('school1', currentModeList)
+        //wx.setStorageSync('school1', currentModeList)
         that.setData({
           showList,
           currentModeList,
@@ -832,7 +931,7 @@ Page({
         currentModeList=showList
         addList=showList
         /*将寻找失物存储到本地 */
-        wx.setStorageSync('findlost1', showList)
+        //wx.setStorageSync('findlost1', showList)
         that.setData({
           showList,
           currentModeList,
@@ -860,7 +959,7 @@ Page({
         }
 
         /*将表白墙的按热度存储在本地中 */
-        wx.setStorageSync('wall1', currentModeList)
+        //wx.setStorageSync('wall1', currentModeList)
         that.setData({
           showList,
           currentModeList,
@@ -882,27 +981,27 @@ Page({
         return
       if(e.currentTarget.dataset.item=="1"){
         /*如果本地存储中已有寻找失物的数据，则不再请求 */
-        let dataList = wx.getStorageSync('findlost1') || []
-        if (dataList.length > 0) {
-          let currentModeList = dataList
-          let showList = dataList
-          let addList = []
-          let yu = dataList.length % 10
-          if (yu == 0) {
-            addList = dataList.slice(dataList.lenth - 11)
-          }
-          that.setData({
-            currentModeList,
-            showList,
-            addList,
-            isSelected0: false,
-            isSelected1: true,
-            isSelected2: false,
-            ThingSelected0: true,
-            ThingSelected1: false,
-          })
-          return
-        }
+        // let dataList = wx.getStorageSync('findlost1') || []
+        // if (dataList.length > 0) {
+        //   let currentModeList = dataList
+        //   let showList = dataList
+        //   let addList = []
+        //   let yu = dataList.length % 10
+        //   if (yu == 0) {
+        //     addList = dataList.slice(dataList.lenth - 11)
+        //   }
+        //   that.setData({
+        //     currentModeList,
+        //     showList,
+        //     addList,
+        //     isSelected0: false,
+        //     isSelected1: true,
+        //     isSelected2: false,
+        //     ThingSelected0: true,
+        //     ThingSelected1: false,
+        //   })
+        //   return
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -949,28 +1048,28 @@ Page({
       }
       else if (e.currentTarget.dataset.item == "2") {
         /*如果本地存储中已有表白墙的数据，则不再请求 */
-        let dataList=wx.getStorageSync('wall1')||[]
-        if(dataList.length>0){
-          let currentModeList = dataList
-          let showList = dataList
-          let addList = []
-          let yu=dataList.length%10
-          if(yu==0){
-            addList = dataList.slice(dataList.lenth - 11)
-          }
-          that.setData({
-            currentModeList,
-            showList,
-            addList,
-            topic_id:6,
-            isSelected0: false,
-            isSelected1: false,
-            isSelected2: true,
-            WallSelected0: true,
-            WallSelected1: false,
-          })
-          return
-        }
+        // let dataList=wx.getStorageSync('wall1')||[]
+        // if(dataList.length>0){
+        //   let currentModeList = dataList
+        //   let showList = dataList
+        //   let addList = []
+        //   let yu=dataList.length%10
+        //   if(yu==0){
+        //     addList = dataList.slice(dataList.lenth - 11)
+        //   }
+        //   that.setData({
+        //     currentModeList,
+        //     showList,
+        //     addList,
+        //     topic_id:6,
+        //     isSelected0: false,
+        //     isSelected1: false,
+        //     isSelected2: true,
+        //     WallSelected0: true,
+        //     WallSelected1: false,
+        //   })
+        //   return
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -981,6 +1080,7 @@ Page({
           method: "GET",
           data: {
             mode:2,
+            latest_days: that.DateMinus('2019-1-1'),
             topic_id: 6,
             page_index: 1,
             page_size: 10
@@ -1017,29 +1117,29 @@ Page({
         return
       if (e.currentTarget.dataset.item == "0") {
         /*如果本地存储的校园动态——生活中有数据，则不再请求 */
-        let dataList = wx.getStorageSync('school1')
-        if (dataList.length > 0) {
-          if (dataList.length > 0) {
-            let currentModeList = dataList
-            let showList = dataList
-            let addList = []
-            let yu = dataList.length % 10
-            if (yu == 0) {
-              addList = dataList.slice(dataList.lenth - 11)
-            }
-            that.setData({
-              currentModeList,
-              showList,
-              addList,
-              topic_id: 1,
-              isSelected0: true,
-              isSelected1: false,
-              isSelected2: false,
-              schoolSelected: [true, false, false, false],
-            })
-            return
-          }
-        }
+        // let dataList = wx.getStorageSync('school1')
+        // if (dataList.length > 0) {
+        //   if (dataList.length > 0) {
+        //     let currentModeList = dataList
+        //     let showList = dataList
+        //     let addList = []
+        //     let yu = dataList.length % 10
+        //     if (yu == 0) {
+        //       addList = dataList.slice(dataList.lenth - 11)
+        //     }
+        //     that.setData({
+        //       currentModeList,
+        //       showList,
+        //       addList,
+        //       topic_id: 1,
+        //       isSelected0: true,
+        //       isSelected1: false,
+        //       isSelected2: false,
+        //       schoolSelected: [true, false, false, false],
+        //     })
+        //     return
+        //   }
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -1081,28 +1181,28 @@ Page({
       }
       else if (e.currentTarget.dataset.item == "2") {
         /*如果本地存储中已有表白墙的数据，则不再请求 */
-        let dataList = wx.getStorageSync('wall1') || []
-        if (dataList.length > 0) {
-          let currentModeList = dataList
-          let showList = dataList
-          let addList = []
-          let yu = dataList.length % 10
-          if (yu == 0) {
-            addList = dataList.slice(dataList.lenth - 11)
-          }
-          that.setData({
-            currentModeList,
-            showList,
-            addList,
-            topic_id: 6,
-            isSelected0: false,
-            isSelected1: false,
-            isSelected2: true,
-            WallSelected0: true,
-            WallSelected1: false,
-          })
-          return
-        }
+        // let dataList = wx.getStorageSync('wall1') || []
+        // if (dataList.length > 0) {
+        //   let currentModeList = dataList
+        //   let showList = dataList
+        //   let addList = []
+        //   let yu = dataList.length % 10
+        //   if (yu == 0) {
+        //     addList = dataList.slice(dataList.lenth - 11)
+        //   }
+        //   that.setData({
+        //     currentModeList,
+        //     showList,
+        //     addList,
+        //     topic_id: 6,
+        //     isSelected0: false,
+        //     isSelected1: false,
+        //     isSelected2: true,
+        //     WallSelected0: true,
+        //     WallSelected1: false,
+        //   })
+        //   return
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -1113,6 +1213,7 @@ Page({
           method: "GET",
           data: {
             mode: 2,
+            latest_days: that.DateMinus('2019-1-1'),
             topic_id: 6,
             page_index: 1,
             page_size: 10
@@ -1150,29 +1251,29 @@ Page({
       if (e.currentTarget.dataset.item == "0") {
         
         /*如果本地存储的校园动态——生活中有数据，则不再请求 */
-        let dataList=wx.getStorageSync('school1')
-        if(dataList.length>0){
-          if (dataList.length > 0) {
-            let currentModeList = dataList
-            let showList = dataList
-            let addList = []
-            let yu = dataList.length % 10
-            if (yu == 0) {
-              addList = dataList.slice(dataList.lenth - 11)
-            }
-            that.setData({
-              currentModeList,
-              showList,
-              addList,
-              topic_id: 1,
-              isSelected0: true,
-              isSelected1: false,
-              isSelected2: false,
-              schoolSelected: [true, false, false, false],
-            })
-            return
-          }
-        }
+        // let dataList=wx.getStorageSync('school1')
+        // if(dataList.length>0){
+        //   if (dataList.length > 0) {
+        //     let currentModeList = dataList
+        //     let showList = dataList
+        //     let addList = []
+        //     let yu = dataList.length % 10
+        //     if (yu == 0) {
+        //       addList = dataList.slice(dataList.lenth - 11)
+        //     }
+        //     that.setData({
+        //       currentModeList,
+        //       showList,
+        //       addList,
+        //       topic_id: 1,
+        //       isSelected0: true,
+        //       isSelected1: false,
+        //       isSelected2: false,
+        //       schoolSelected: [true, false, false, false],
+        //     })
+        //     return
+        //   }
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -1215,27 +1316,27 @@ Page({
       }
       else if (e.currentTarget.dataset.item == "1") {
         /*如果本地存储中已有寻找失物的数据，则不再请求 */
-        let dataList = wx.getStorageSync('findlost1') || []
-        if (dataList.length > 0) {
-          let currentModeList = dataList
-          let showList = dataList
-          let addList = []
-          let yu = dataList.length % 10
-          if (yu == 0) {
-            addList = dataList.slice(dataList.lenth - 11)
-          }
-          that.setData({
-            currentModeList,
-            showList,
-            addList,
-            isSelected0: false,
-            isSelected1: true,
-            isSelected2: false,
-            ThingSelected0: true,
-            ThingSelected1: false,
-          })
-          return
-        }
+        // let dataList = wx.getStorageSync('findlost1') || []
+        // if (dataList.length > 0) {
+        //   let currentModeList = dataList
+        //   let showList = dataList
+        //   let addList = []
+        //   let yu = dataList.length % 10
+        //   if (yu == 0) {
+        //     addList = dataList.slice(dataList.lenth - 11)
+        //   }
+        //   that.setData({
+        //     currentModeList,
+        //     showList,
+        //     addList,
+        //     isSelected0: false,
+        //     isSelected1: true,
+        //     isSelected2: false,
+        //     ThingSelected0: true,
+        //     ThingSelected1: false,
+        //   })
+        //   return
+        // }
 
         wx.showLoading({
           title: '加载中',
@@ -1340,7 +1441,7 @@ Page({
       
       /*下面进行本地存储 */
       let str=String('school'+topic_id)
-      wx.setStorageSync(str, showList)
+      //wx.setStorageSync(str, showList)
       //wx.setStorageSync('post_list', currentModeList)
       that.setData({
         schoolSelected,
@@ -1383,27 +1484,27 @@ Page({
     }
 
     /*如果本地存储中有对应的模块的数据，则不请求 */
-    let str = String('school' + topic_id)
-    let dataList = wx.getStorageSync(str)
-    console.log(dataList)
-    if (dataList.length > 0) {
-      let addList=[]
-      let chu=Math.floor(dataList.length/10)
-      let yu=dataList.length%10
-      console.log(yu)
-      if(yu==0){
-        addList=dataList.slice(dataList.lenth-11)
-      }
-      console.log(addList)
-      that.setData({
-        showList: dataList,
-        schoolSelected,
-        currentModeList:dataList,
-        addList,
-        topic_id:current+1
-      })
-      return
-    }
+    // let str = String('school' + topic_id)
+    // let dataList = wx.getStorageSync(str)
+    // console.log(dataList)
+    // if (dataList.length > 0) {
+    //   let addList=[]
+    //   let chu=Math.floor(dataList.length/10)
+    //   let yu=dataList.length%10
+    //   console.log(yu)
+    //   if(yu==0){
+    //     addList=dataList.slice(dataList.lenth-11)
+    //   }
+    //   console.log(addList)
+    //   that.setData({
+    //     showList: dataList,
+    //     schoolSelected,
+    //     currentModeList:dataList,
+    //     addList,
+    //     topic_id:current+1
+    //   })
+    //   return
+    // }
 
     wx.showLoading({
       title: '加载中',
@@ -1453,24 +1554,24 @@ Page({
       return
     if(ThingSelected0&&current==1){
       /*若本地存储中有寻找失主的信息，则不再请求 */
-      let dataList=wx.getStorageSync('findlost0')||[]
-      if(dataList.length>0){
-        let showList=dataList
-        let currentModeList=dataList
-        let addList=[]
-        let yu=showList.length%10
-        if(yu==0){
-          addList=showList.slice(showList.length-11)
-        }
-        that.setData({
-          showList,
-          currentModeList,
-          addList,
-          ThingSelected0:false,
-          ThingSelected1:true
-        })
-        return
-      }
+      // let dataList=wx.getStorageSync('findlost0')||[]
+      // if(dataList.length>0){
+      //   let showList=dataList
+      //   let currentModeList=dataList
+      //   let addList=[]
+      //   let yu=showList.length%10
+      //   if(yu==0){
+      //     addList=showList.slice(showList.length-11)
+      //   }
+      //   that.setData({
+      //     showList,
+      //     currentModeList,
+      //     addList,
+      //     ThingSelected0:false,
+      //     ThingSelected1:true
+      //   })
+      //   return
+      // }
 
       wx.showLoading({
         title: '加载中',
@@ -1505,7 +1606,7 @@ Page({
             }
             let addList=showList
             let currentModeList=showList
-            wx.setStorageSync('findlost0', showList)
+            //wx.setStorageSync('findlost0', showList)
             that.setData({
               showList,
               addList,
@@ -1536,24 +1637,24 @@ Page({
     }
     if (ThingSelected1 && current == 0) {
       /*若本地存储中有寻找失物的信息，则不再请求 */
-      let dataList = wx.getStorageSync('findlost1') || []
-      if (dataList.length > 0) {
-        let showList = dataList
-        let currentModeList = dataList
-        let addList = []
-        let yu = showList.length % 10
-        if (yu == 0) {
-          addList = showList.slice(showList.length - 11)
-        }
-        that.setData({
-          showList,
-          currentModeList,
-          addList,
-          ThingSelected0:true,
-          ThingSelected1:false
-        })
-        return
-      }
+      // let dataList = wx.getStorageSync('findlost1') || []
+      // if (dataList.length > 0) {
+      //   let showList = dataList
+      //   let currentModeList = dataList
+      //   let addList = []
+      //   let yu = showList.length % 10
+      //   if (yu == 0) {
+      //     addList = showList.slice(showList.length - 11)
+      //   }
+      //   that.setData({
+      //     showList,
+      //     currentModeList,
+      //     addList,
+      //     ThingSelected0:true,
+      //     ThingSelected1:false
+      //   })
+      //   return
+      // }
 
       wx.showLoading({
         title: '加载中',
@@ -1651,7 +1752,7 @@ Page({
       else{
         str='wall2'
       }
-      wx.setStorageSync(str, currentModeList)
+      //wx.setStorageSync(str, currentModeList)
       that.setData({
         showList,
         currentModeList,
@@ -1668,28 +1769,28 @@ Page({
     let current = Number.parseInt(e.currentTarget.dataset.item)
     if (WallSelected0 && current == 1) {
       /*如果本地存储中有表白墙——按时间的存储信息，则不再请求 */
-      let dataList=wx.getStorageSync('wall2')
-      if (dataList.length > 0) {
-        let currentModeList = dataList
-        let showList = dataList
-        let addList = []
-        let yu = dataList.length % 10
-        if (yu == 0) {
-          addList = dataList.slice(dataList.lenth - 11)
-        }
-        that.setData({
-          currentModeList,
-          showList,
-          addList,
-          topic_id: 6,
-          isSelected0: false,
-          isSelected1: false,
-          isSelected2: true,
-          WallSelected0: false,
-          WallSelected1: true,
-        })
-        return
-      }
+      // let dataList=wx.getStorageSync('wall2')
+      // if (dataList.length > 0) {
+      //   let currentModeList = dataList
+      //   let showList = dataList
+      //   let addList = []
+      //   let yu = dataList.length % 10
+      //   if (yu == 0) {
+      //     addList = dataList.slice(dataList.lenth - 11)
+      //   }
+      //   that.setData({
+      //     currentModeList,
+      //     showList,
+      //     addList,
+      //     topic_id: 6,
+      //     isSelected0: false,
+      //     isSelected1: false,
+      //     isSelected2: true,
+      //     WallSelected0: false,
+      //     WallSelected1: true,
+      //   })
+      //   return
+      // }
 
       WallSelected0 = false
       WallSelected1 = true
@@ -1701,6 +1802,7 @@ Page({
         url: testUrl + 'post_sort',
         method: "GET",
         data: {
+          latest_days:that.DateMinus('2019-1-1'),
           mode: 1,
           topic_id: 6,
           page_index: 1,
@@ -1733,28 +1835,28 @@ Page({
     }
     else if (WallSelected1 && current == 0) {
       /*如果本地存储中有表白墙——按热度的存储信息，则不再请求 */
-      let dataList = wx.getStorageSync('wall1')||[]
-      if (dataList.length > 0) {
-        let currentModeList = dataList
-        let showList = dataList
-        let addList = []
-        let yu = dataList.length % 10
-        if (yu == 0) {
-          addList = dataList.slice(dataList.lenth - 11)
-        }
-        that.setData({
-          currentModeList,
-          showList,
-          addList,
-          topic_id: 6,
-          isSelected0: false,
-          isSelected1: false,
-          isSelected2: true,
-          WallSelected0: true,
-          WallSelected1: false,
-        })
-        return
-      }
+      // let dataList = wx.getStorageSync('wall1')||[]
+      // if (dataList.length > 0) {
+      //   let currentModeList = dataList
+      //   let showList = dataList
+      //   let addList = []
+      //   let yu = dataList.length % 10
+      //   if (yu == 0) {
+      //     addList = dataList.slice(dataList.lenth - 11)
+      //   }
+      //   that.setData({
+      //     currentModeList,
+      //     showList,
+      //     addList,
+      //     topic_id: 6,
+      //     isSelected0: false,
+      //     isSelected1: false,
+      //     isSelected2: true,
+      //     WallSelected0: true,
+      //     WallSelected1: false,
+      //   })
+      //   return
+      // }
 
       WallSelected0 = true
       WallSelected1 = false
@@ -1767,6 +1869,7 @@ Page({
         method: "GET",
         data: {
           mode: 2,
+          latest_days: that.DateMinus('2019-1-1'),
           topic_id: 6,
           page_index: 1,
           page_size: 10
@@ -1896,7 +1999,7 @@ Page({
             if(flag==0){
               showList[myid].thumb_ups.push({ 'id': res.data.id, 'uid': global.classes.user_id })
             }
-            console.log(showList[myid])
+            console.log(showList)
             that.setData({
               showList
             })
@@ -2038,7 +2141,7 @@ Page({
         showList.push(list[i])
         addList.push(list[i])
       }
-      wx.setStorageSync(str, currentModeList)
+      //wx.setStorageSync(str, currentModeList)
       that.setData({
         addList,
         currentModeList,
@@ -2100,7 +2203,7 @@ Page({
       str='findlost0'
     }
     let dataList=wx.getStorageSync(str)||[]
-    let page_index = Math.floor(dataList.length / 10) + 1
+    let page_index = Math.floor(showList.length / 10) + 1
     /*请求新的一页 */
     wx.request({
       url: findlostUrl,
@@ -2133,7 +2236,7 @@ Page({
             showList[i].imgs = imgs
           }
           console.log(showList)
-          wx.setStorageSync(str, showList)
+        //  wx.setStorageSync(str, showList)
           that.setData({
             showList,
             currentModeList:showList,
@@ -2164,19 +2267,22 @@ Page({
   loadMore2:function(){
     /*init_load()函数的作用主要是为请求回来的数据增加一些参数*/
     function init_load(list) {
-      let dataList=[]
-      if(WallSelected0){
-        dataList=wx.getStorageSync('wall1')
+      if(list.length==0||list==''||list==null){
+        return
       }
-      else{
-        dataList = wx.getStorageSync('wall2')
-      }
+      let dataList=that.data.showList||[]
+      // if(WallSelected0){
+      //   dataList=wx.getStorageSync('wall1')
+      // }
+      // else{
+      //   dataList = wx.getStorageSync('wall2')
+      // }
       let list_length = dataList.length
 
       let currentModeList = dataList
       let showList = dataList
       let addList = []
-      for (let i in list) {
+      for (let i =0;i<list.length;i++) {
         list[i].myid = list_length
         list_length++
         list[i].likeNumber = list[i].thumb_ups.length
@@ -2189,23 +2295,23 @@ Page({
           }
         }
         list[i].isLike = isLike
-        currentModeList.push(list[i])
+        //currentModeList.push(list[i])
         showList.push(list[i])
         addList.push(list[i])
       }
-      let str = ''
-      if (WallSelected0) {
-        str = 'wall1'
-      }
-      else {
-        str = 'wall2'
-      }
-      wx.setStorageSync(str, currentModeList)
+      // let str = ''
+      // if (WallSelected0) {
+      //   str = 'wall1'
+      // }
+      // else {
+      //   str = 'wall2'
+      // }
+      //wx.setStorageSync(str, currentModeList)
       that.setData({
         showList,
-        currentModeList,
+        currentModeList:showList,
         addList,
-        page_index: 1,
+        //page_index: 1,
         topic_id: 6,
         WallSelected0,
         WallSelected1,
@@ -2221,7 +2327,9 @@ Page({
     let page_index=Math.floor(that.data.showList.length/10)+1
     let WallSelected0=that.data.WallSelected0
     let WallSelected1=that.data.WallSelected1
-    let mode=1
+    let mode=WallSelected0?2:1
+
+    let latest_days=that.DateMinus('2019-1-1')
 
     /*请求新的一页 */
     wx.request({
@@ -2229,6 +2337,7 @@ Page({
       method: "GET",
       data: {
         mode:mode,
+        latest_days:latest_days,
         topic_id: topic_id,
         page_index: page_index,
         page_size: 10
@@ -2264,5 +2373,13 @@ Page({
       title: '正在开发',
       icon:'none'
     })
+  },
+
+  DateMinus:function(date1){//date1:小日期
+    var sdate = new Date(date1);
+    var now = new Date();
+    var days = now.getTime() - sdate.getTime();
+    var day = parseInt(days / (1000 * 60 * 60 * 24));
+    return day;
   }
 })

@@ -39,6 +39,7 @@ Page({
    */
   onLoad: function (options) {
     let lesson=JSON.parse(options.lesson)
+    console.log(options)
     let is_comment=Number.parseInt(options.is_comment)
     this.setData({
       is_comment,
@@ -259,63 +260,71 @@ Page({
           uid: global.classes.user_id,
           token: global.classes.token,
           class_id:Number.parseInt(that.data.lesson.id),
-          score:evaluateData.score,
+          score:Math.round(evaluateData.score),
           tags:tagString,
           content:evaluateData.comment
         },
         success(res){
-          // console("新增评价返回值");
-          // console.log(res.data);
-          wx.showToast({
-            title: '成功',
-            icon: "success",
-            duration: 2000,
-            mask: true,
-            complete: function () {
-              let lessonJson = JSON.stringify(that.data.lesson)
-              wx.request({
-                url: LinshiUrl + 'api/v2/eva',
-                method: 'get',
-                header: {
-                  'Content-Type': 'text/plain;charset:utf-8',
-                  'content-type': 'application/x-www-form-urlencoded'
-                },
-                data: {
-                  uid: global.classes.user_id,
-                  token: global.classes.token,
-                },
-                success(res) {
-                  // console.log("获取评论返回值");
-                  // console.log(res.data);
-                  if (res.statusCode == 200) {
-                    wx.setStorage({
-                      key: 'comment_list',
-                      data: res.data.data.eva_list,
-                    })
-                    console.log(res)
-                    wx.redirectTo({
-                      url: '/pages/classes/showEvaluate/showEvaluate?lesson=' + lessonJson,
-                    })
-                  }
-                  else {
+          console.log("新增评价返回值");
+          console.log(res);
+          if(res.statusCode==200){
+            wx.showToast({
+              title: '成功',
+              icon: "success",
+              duration: 2000,
+              mask: true,
+              complete: function () {
+                let lessonJson = JSON.stringify(that.data.lesson)
+                wx.request({
+                  url: LinshiUrl + 'api/v2/eva',
+                  method: 'get',
+                  header: {
+                    'Content-Type': 'text/plain;charset:utf-8',
+                    'content-type': 'application/x-www-form-urlencoded'
+                  },
+                  data: {
+                    uid: global.classes.user_id,
+                    token: global.classes.token,
+                  },
+                  success(res) {
+                    // console.log("获取评论返回值");
+                    // console.log(res.data);
+                    if (res.statusCode == 200) {
+                      wx.setStorage({
+                        key: 'comment_list',
+                        data: res.data.data.eva_list,
+                      })
+                      console.log(res)
+                      wx.redirectTo({
+                        url: '/pages/classes/showEvaluate/showEvaluate?lesson=' + lessonJson,
+                      })
+                    }
+                    else {
+                      wx.showModal({
+                        title: '错误',
+                        content: '请求出错',
+                      })
+                    }
+                  },
+                  fail() {
                     wx.showModal({
                       title: '错误',
                       content: '请求出错',
                     })
                   }
-                },
-                fail() {
-                  wx.showModal({
-                    title: '错误',
-                    content: '请求出错',
-                  })
-                }
-              })
-            }
-          })
+                })
+              }
+            })
+          }
+          else{
+            wx.showModal({
+              title: '错误',
+              content: '请求出错',
+            })
+          }
         },
-        fail(){
-          //console.log(res.data);
+        fail(res){
+          console.log(res);
           wx.showModal({
             title: '错误',
             content: '请求出错',
@@ -346,7 +355,7 @@ Page({
           token: global.classes.token,
           eva_id:eva_id,
           class_id: Number.parseInt(that.data.lesson.id),
-          score: evaluateData.score,
+          score: Math.round(evaluateData.score),
           tags: tagString,
           content: evaluateData.comment
         },
@@ -373,7 +382,7 @@ Page({
                 },
                 success(res) {
                    console.log("获取评价返回值");
-                   console.log(res.data);
+                   console.log(res);
                   if (res.statusCode == 200) {
                     wx.setStorage({
                       key: 'comment_list',
@@ -391,7 +400,8 @@ Page({
                     })
                   }
                 },
-                fail() {
+                fail(res) {
+                  console.log(res)
                   wx.showModal({
                     title: '错误',
                     content: '请求出错',

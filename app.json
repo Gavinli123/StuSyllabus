@@ -33,7 +33,9 @@
     "pages/discover/findlostDetail/findlostDetail",
     "pages/me/grade/grade",
     "pages/me/arrange/arrange",
-    "pages/me/arrange/detail/detail"
+    "pages/me/arrange/detail/detail",
+    "pages/me/card/card",
+    "pages/me/mystu/mystu"
   ],
   "window": {
     "backgroundTextStyle": "light",

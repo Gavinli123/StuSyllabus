@@ -29,7 +29,7 @@ Page({
       ],
       "from_credit_system": true
     },
-    openEva:false,  //暂时关闭课程评价这个功能
+    openEva:true,  //暂时关闭课程评价这个功能
   },
 
   deleteClass(e) {

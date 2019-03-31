@@ -2,13 +2,13 @@
   <view class='top' wx:if="{{choose_class_time}}">
     <view style='margin-top:20rpx;font-size:50rpx;'>{{lesson.name}}</view>
     <view style='display:flex;flex-direction:row;'>
-      <view wx:for="{{starList}}">
+      <view wx:for="{{starList}}" wx:key="star">
         <image class='star' src="{{item}}"></image>
       </view>
       <view style='margin-top:25rpx;'>/{{totalScore}}分</view>
     </view>
     <view style='display:flex;flex-direction:row;'>
-      <view wx:for="{{tag}}">
+      <view wx:for="{{tag}}" wx:key="tag">
         <view class='tag_color'>{{item}}</view>
       </view>
     </view>
