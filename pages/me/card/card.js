@@ -1,4 +1,4 @@
-const stuUrl = 'https://syllabus.candycute.cn/'
+const stuUrl = 'https://class.stuapps.com/'
 Page({
 
   /**
